@@ -1,3 +1,4 @@
+import React from "react";
 import { Fragment } from "react";
 import Hero from "../components/Hero";
 import BestSaleListing from "../components/BestSaleListing";

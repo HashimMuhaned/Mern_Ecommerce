@@ -1,4 +1,4 @@
-// import React, { useState, useEffect } from "react";
+import React from "react";
 import ItemCard from "./ItemCard";
 import { useContext } from "react";
 import { DataContext } from "../context/DataContext";
