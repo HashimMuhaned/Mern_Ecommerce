@@ -9,7 +9,7 @@ const EcommerceRoutes = require("./routes/EcommerceRoutes.js");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 // const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 
