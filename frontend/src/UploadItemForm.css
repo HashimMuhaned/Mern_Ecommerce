@@ -1,0 +1,148 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.add-item-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  .form-container {
+    padding: 10px 0;
+  }
+
+  .add-item-form {
+    padding: 20px;
+  }
+
+  #prod-span {
+    display: none;
+  }
+}
+
+.add-item-form label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.add-item-form input[type="text"],
+.add-item-form textarea,
+.add-item-form select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  outline: none;
+}
+
+.add-item-form textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.add-item-form input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.form-row > div {
+  flex: 1;
+}
+
+.image-upload-grid {
+  display: flex;
+  gap: 10px;
+}
+
+.image-upload-box {
+  width: 80px;
+  height: 80px;
+  border: 2px dashed #d1d1d1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.image-upload-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-sizes {
+  margin-bottom: 20px;
+}
+
+.size-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.size-button {
+  border: 1px solid #d1d1d1;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.size-button.selected {
+  background-color: #eaeaea;
+  border-color: #333;
+}
+
+.bestseller-checkbox {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.submit-btn {
+  width: 70%;
+  padding: 12px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #333;
+}
+
+.clear-btn {
+  width: 25%;
+  background-color: red;
+  color: whitesmoke;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
