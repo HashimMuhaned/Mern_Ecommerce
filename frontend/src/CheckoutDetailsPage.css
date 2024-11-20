@@ -1,0 +1,226 @@
+.checkout-container label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.checkout-container input[type="text"],
+.checkout-container textarea,
+.checkout-container select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  outline: none;
+}
+
+.checkout-container textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.checkout-container input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  outline: none;
+}
+
+.checkout-container {
+  padding: 20px;
+  border-radius: 10px;
+  width: 800px;
+  margin: 20px;
+  -webkit-box-shadow: -2px 2px 7px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -2px 2px 7px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: -2px 2px 7px 0px rgba(0, 0, 0, 0.75);
+}
+
+.checkout-container h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.autofill-btn {
+  background-color: #034749;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.autofill-btn span {
+  float: right;
+  background-color: white;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.checkout-form .form-group {
+  margin-bottom: 15px;
+}
+
+#label {
+  display: block;
+  margin-bottom: 5px;
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
+#input,
+#select {
+  width: 100%;
+  padding: 10px;
+  background-color: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: #fff;
+}
+
+#input::placeholder {
+  color: #888;
+}
+
+small {
+  display: block;
+  color: #999;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.form-group-inline {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.form-group-inline .form-group {
+  flex: 1;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label input {
+  margin-right: 10px;
+}
+
+.order-summary {
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  margin: 20px;
+  -webkit-box-shadow: -2px 2px 7px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -2px 2px 7px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: -2px 2px 7px 0px rgba(0, 0, 0, 0.75);
+}
+
+.order-summary h2 {
+  color: black;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.order-summary p {
+  margin-bottom: 10px;
+  color: black;
+}
+
+.order-summary .order-total {
+  font-size: 18px;
+  color: #f97300;
+}
+
+.order-summary .order-total span {
+  font-size: 20px;
+}
+
+.order-summary a {
+  color: #36a2c9;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.Place-Order-Btn {
+  background-color: #1e1e1e;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  #checkout-details-form-page {
+    flex-direction: column; /* Stack the elements vertically */
+    gap: 10px;
+    overflow-x: hidden;
+    margin-bottom: 100px;
+  }
+
+  .order-summary {
+    order: -1; /* Move the order summary to the top */
+    width: 340px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+  }
+
+  .checkout-container {
+    width: 360px;
+    padding: 10px;
+  }
+
+  .checkout-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .form-group,
+  .form-group-inline {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .form-group-inline {
+    display: flex;
+    flex-direction: column; /* Stack city, state, and ZIP inputs vertically */
+  }
+
+  .Place-Order-Btn,
+  .autofill-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  /* Order summary styling */
+  .order-summary h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .order-summary p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+}

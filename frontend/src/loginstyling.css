@@ -1,0 +1,147 @@
+#login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 110vh;
+  background-color: #f0f4f8;
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin: 100px;
+  height: 500px;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  .login-container {
+    margin: 10px;
+  }
+
+  #login-page {
+    height: 98vh;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.login-form {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.signup-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #357abd;
+}
+
+#buttons {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#back,
+#createAcc {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+#back {
+  border: 1px solid #333;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+
+#back:hover,
+#createAcc:hover {
+  text-decoration: underline;
+}
+
+.signup-image {
+  flex: 1;
+  overflow: hidden;
+}
+
+.signup-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Error message */
+div[style*="color: red"] {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #login-page {
+    flex-direction: column-reverse;
+  }
+
+  .login-container {
+    padding: 1rem;
+  }
+
+  .login-form {
+    max-width: 100%;
+  }
+
+  .signup-image {
+    height: 200px;
+  }
+}
