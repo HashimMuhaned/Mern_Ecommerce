@@ -28,6 +28,17 @@ app.use((req, res, next) => {
 });
 
 // connecting to the database
-connectDB();
+connectDB()
+  .then(() => {
+    console.log("Database connected successfully.");
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err.message);
+  });
 
-app.listen(PORT, console.log("connected the server"));
+// Log when the server is deployed successfully
+console.log("Backend deployed successfully.");
+
+// app.listen(PORT, console.log("connected the server"));
+
+module.exports = app;

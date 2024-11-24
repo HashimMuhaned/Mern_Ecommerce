@@ -2,24 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "server.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server.js"
+      "dest": "api/index.js"
     }
-  ],
-  "env": {
-    "MONGO_URL": "@mongo_url",
-    "TOKEN_SECRET_KEY": "@token_secret_key",
-    "APPPASSWORD": "@app_password",
-    "GMAIL_USER": "@gmail_user"
-  },
-  "ignoreCommand": "echo 'Ignore node_modules and .env files'",
-  "engines": {
-    "node": "18.x"
-  }
+  ]
 }
