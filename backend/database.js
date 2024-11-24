@@ -6,10 +6,7 @@ const LOCALMONGODB = process.env.LOCALMONGODB;
 
 const connectDB = async () => {
   try {
-    const conn = mongoose.connect(MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = mongoose.connect(MONGO_URL);
     console.log("MongoDB connected");
   } catch (err) {
     console.error("Database connection error:", err.message);
