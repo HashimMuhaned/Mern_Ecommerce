@@ -160,8 +160,10 @@ const createUser = async (req, res) => {
   }
 
   try {
-    // Check if user with the same first and last name exists
-    const existingUser = await UserModel.findOne({ fname, lname });
+    const existingUser = await UserModel.findOne({
+      fname: { $regex: new RegExp(`^${fname}$`, "i") },
+      lname: { $regex: new RegExp(`^${lname}$`, "i") },
+    });
     if (existingUser) {
       return res.status(400).json({
         errors: {
@@ -170,22 +172,21 @@ const createUser = async (req, res) => {
       });
     }
 
-    // Create the user but keep account inactive
     const newUser = await UserModel.create({
       fname,
       lname,
       email,
       password,
-      isActive: false, // Mark as inactive until activation
+      isActive: false,
+    });
+    console.log("New user created:", newUser);
+
+    const token = jwt.sign({ email: newUser.email }, token_SECRET_KEY, {
+      expiresIn: "1h",
     });
 
-    // Generate an activation token
-    const token = jwt.sign({ email: newUser.email }, token_SECRET_KEY);
-
-    // Create the activation link
     const activationLink = `http://localhost:5173/ethereal/activate-account?token=${token}`;
 
-    // Set up Nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
@@ -194,27 +195,32 @@ const createUser = async (req, res) => {
       },
     });
 
-    // Set up email options
-    const mailOptions = {
-      from: gmail_user,
-      to: newUser.email,
-      subject: "Account Activation - Ethereal Marketplace",
-      html: `
-        <h3>Hi ${newUser.fname} ${newUser.lname},</h3>
-        <p>Thank you for registering on our site. Please click the link below to activate your account:</p>
-        <a href="${activationLink}">Activate Account</a>
-        <p>This link will expire in 1 hour.</p>
-      `,
-    };
-
-    // Send the email
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail({
+        from: gmail_user,
+        to: newUser.email,
+        subject: "Account Activation - Ethereal Marketplace",
+        html: `
+          <h3>Hi ${newUser.fname} ${newUser.lname},</h3>
+          <p>Please click the link below to activate your account:</p>
+          <a href="${activationLink}">Activate Account</a>
+          <p>This link will expire in 1 hour.</p>
+        `,
+      });
+      console.log("Activation email sent");
+    } catch (emailError) {
+      console.error("Failed to send email:", emailError);
+      return res
+        .status(500)
+        .json({ message: "Failed to send activation email" });
+    }
 
     res.status(201).json({
       message:
         "Account created. Please check your email to activate your account.",
     });
   } catch (err) {
+    console.error("Error during user creation:", err);
     if (err.name === "ValidationError") {
       let errors = {};
       Object.keys(err.errors).forEach((key) => {
@@ -225,9 +231,7 @@ const createUser = async (req, res) => {
 
     if (err.code === 11000 && err.keyValue.email) {
       return res.status(400).json({
-        errors: {
-          email: "This email is already registered.",
-        },
+        errors: { email: "This email is already registered." },
       });
     }
 
