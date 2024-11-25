@@ -189,6 +189,8 @@ const createUser = async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: "Gmail",
+      host: "smtp.gmail.com",
+      port: 465, // Use SSL port
       auth: {
         user: gmail_user,
         pass: apppassword,
