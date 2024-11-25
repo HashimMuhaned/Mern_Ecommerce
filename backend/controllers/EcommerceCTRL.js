@@ -181,27 +181,23 @@ const createUser = async (req, res) => {
     });
     console.log("New user created:", newUser);
 
-    const token = jwt.sign(
-      { email: newUser.email },
-      process.env.TOKEN_SECRET_KEY,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const token = jwt.sign({ email: newUser.email }, token_SECRET_KEY, {
+      expiresIn: "1h",
+    });
 
     const activationLink = `http://localhost:5173/ethereal/activate-account?token=${token}`;
 
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.APPPASSWORD,
+        user: gmail_user,
+        pass: apppassword,
       },
     });
 
     try {
       await transporter.sendMail({
-        from: process.env.GMAIL_USER,
+        from: gmail_user,
         to: newUser.email,
         subject: "Account Activation - Ethereal Marketplace",
         html: `
