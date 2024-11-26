@@ -203,7 +203,7 @@ const createUser = async (req, res) => {
     // Send activation email using SendGrid
     const msg = {
       to: newUser.email,
-      from: "hashimcode123@gmail.com", // Verified sender email
+      from: mailSender, // Verified sender email
       subject: "Account Activation - Ethereal Marketplace",
       html: `
         <h3>Hi ${newUser.fname} ${newUser.lname},</h3>
