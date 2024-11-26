@@ -13,6 +13,10 @@ const gmail_user = process.env.GMAIL_USER;
 const maxAge = 60 * 60 * 24 * 3; // three days
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+const sgMail = require("@sendgrid/mail");
+
+sgMail.setApiKey(SENDGRID_API_KEY);
 
 // const checkUserToken = (req, res, next) => {
 //   const token = req.cookies.cookie; // Accessing the JWT from the cookie
@@ -160,10 +164,12 @@ const createUser = async (req, res) => {
   }
 
   try {
+    // Check for existing user
     const existingUser = await UserModel.findOne({
       fname: { $regex: new RegExp(`^${fname}$`, "i") },
       lname: { $regex: new RegExp(`^${lname}$`, "i") },
     });
+
     if (existingUser) {
       return res.status(400).json({
         errors: {
@@ -172,6 +178,7 @@ const createUser = async (req, res) => {
       });
     }
 
+    // Create a new user
     const newUser = await UserModel.create({
       fname,
       lname,
@@ -181,35 +188,34 @@ const createUser = async (req, res) => {
     });
     console.log("New user created:", newUser);
 
-    const token = jwt.sign({ email: newUser.email }, token_SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    // Generate activation token
+    const token = jwt.sign(
+      { email: newUser.email },
+      process.env.TOKEN_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
 
+    // Activation link
     const activationLink = `http://localhost:5173/ethereal/activate-account?token=${token}`;
 
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      host: "smtp.gmail.com",
-      port: 465, // Use SSL port
-      auth: {
-        user: gmail_user,
-        pass: apppassword,
-      },
-    });
+    // Send activation email using SendGrid
+    const msg = {
+      to: newUser.email,
+      from: "hashimcode123@gmail.com", // Verified sender email
+      subject: "Account Activation - Ethereal Marketplace",
+      html: `
+        <h3>Hi ${newUser.fname} ${newUser.lname},</h3>
+        <p>Please click the link below to activate your account:</p>
+        <a href="${activationLink}">Activate Account</a>
+        <p>This link will expire in 1 hour.</p>
+      `,
+    };
 
     try {
-      await transporter.sendMail({
-        from: gmail_user,
-        to: newUser.email,
-        subject: "Account Activation - Ethereal Marketplace",
-        html: `
-          <h3>Hi ${newUser.fname} ${newUser.lname},</h3>
-          <p>Please click the link below to activate your account:</p>
-          <a href="${activationLink}">Activate Account</a>
-          <p>This link will expire in 1 hour.</p>
-        `,
-      });
-      console.log("Activation email sent");
+      await sgMail.send(msg);
+      console.log("Activation email sent successfully");
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
       return res
@@ -217,12 +223,14 @@ const createUser = async (req, res) => {
         .json({ message: "Failed to send activation email" });
     }
 
+    // Success response
     res.status(201).json({
       message:
         "Account created. Please check your email to activate your account.",
     });
   } catch (err) {
     console.error("Error during user creation:", err);
+
     if (err.name === "ValidationError") {
       let errors = {};
       Object.keys(err.errors).forEach((key) => {
