@@ -12,7 +12,6 @@ const apppassword = process.env.APPPASSWORD;
 const gmail_user = process.env.GMAIL_USER;
 const maxAge = 60 * 60 * 24 * 3; // three days
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 
@@ -623,34 +622,27 @@ const updateUserEmail = async (req, res) => {
     await UserModel.findByIdAndUpdate(user._id, { email: newEmail });
     await user.save();
 
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: gmail_user, // Replace with your Gmail username
-        pass: apppassword, // Replace with your Gmail app password
-      },
-    });
-
-    const mailOptions = {
-      from: gmail_user,
-      to: user.email,
-      subject: "Email has been changes successfully",
+    const msg = {
+      to: newEmail, // New email address
+      from: process.env.SENDGRID_FROM_EMAIL, // Verified SendGrid sender email
+      subject: "Email Updated Successfully",
       html: `
-        <p>You have successfully changed your Email.</p>
-        <p>Your Email has been changed to ${newEmail}</p>
-      `, // Use template literals for dynamic content in HTML
+        <p>You have successfully changed your email address.</p>
+        <p>Your email has been updated to <strong>${newEmail}</strong>.</p>
+      `,
     };
 
     // Send the email to notify the user
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log("Error sending email:", error);
-        return res.status(500).json({ message: "Error sending email." });
-      }
-      res.status(200).json({
-        message: "Password reset successfully, confirmation email sent.",
-      });
-    });
+    try {
+      // Send the email to notify the user
+      await sgMail.send(msg);
+      console.log("Notification email sent successfully");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return res
+        .status(500)
+        .json({ message: "Error sending confirmation email." });
+    }
 
     res.status(200).json({ message: true });
   } catch (error) {
@@ -696,41 +688,47 @@ const updatePassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
     // Update the user's password in the database
-    await UserModel.findByIdAndUpdate(userId, { password: hashedPassword });
-
-    // Send a success response
-    const try_loginUrl = `http://localhost:5173/ethereal/login`; // Ensure URL is a string
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: gmail_user, // Replace with your Gmail username
-        pass: apppassword, // Replace with your Gmail app password
-      },
+    const user = await UserModel.findByIdAndUpdate(userId, {
+      password: hashedPassword,
     });
 
-    const mailOptions = {
-      from: gmail_user,
-      to: user.email,
-      subject: "Password has been updated successfully",
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const tryLoginUrl = `http://localhost:5173/ethereal/login`; // Ensure URL is correct
+
+    // Prepare the email content
+    const msg = {
+      to: user.email, // Recipient email
+      from: process.env.SENDGRID_FROM_EMAIL, // Verified sender email
+      subject: "Password Updated Successfully",
       html: `
-        <p>You have successfully Updated your password.</p>
-        <a href="${try_loginUrl}" target="_blank">Try to login now</a>
+        <p>Hi ${user.fname},</p>
+        <p>You have successfully updated your password.</p>
+        <p>Click the link below to login:</p>
+        <a href="${tryLoginUrl}" target="_blank">Try to login now</a>
         <p>Make sure you save your password somewhere safe.</p>
-      `, // Use template literals for dynamic content in HTML
+        <p>If you didn't request this change, please contact support immediately.</p>
+      `,
     };
 
-    // Send the email to notify the user
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log("Error sending email:", error);
-        return res.status(500).json({ message: "Error sending email." });
-      }
-      res.status(200).json({
-        message: "Password reset successfully, confirmation email sent.",
-      });
-    });
+    // Send the email
+    try {
+      await sgMail.send(msg);
+      console.log("Password update email sent successfully");
 
-    return res.json({ success: true });
+      res.status(200).json({
+        success: true,
+        message: "Password updated successfully. Confirmation email sent.",
+      });
+    } catch (emailError) {
+      console.error("Error sending confirmation email:", emailError);
+      res.status(500).json({
+        success: false,
+        message: "Password updated, but email could not be sent.",
+      });
+    }
   } catch (error) {
     console.error("Error updating password:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -1785,8 +1783,8 @@ const updateItemStatus = async (req, res) => {
 
 const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
+
   try {
-    console.log(email);
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res
@@ -1794,7 +1792,7 @@ const requestPasswordReset = async (req, res) => {
         .json({ message: "User with this email does not exist." });
     }
 
-    // Generate a token
+    // Generate a reset token
     const resetToken = crypto.randomBytes(20).toString("hex");
 
     // Set token and expiration time
@@ -1803,39 +1801,34 @@ const requestPasswordReset = async (req, res) => {
 
     await user.save();
 
-    // Send the reset email
+    // Generate the reset URL
     const resetUrl = `http://localhost:5173/ethereal/reset-password/${resetToken}`;
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: gmail_user,
-        pass: apppassword,
-      },
-    });
 
-    const mailOptions = {
-      from: gmail_user,
-      to: user.email,
+    // Configure SendGrid email content
+    const msg = {
+      to: user.email, // Recipient's email
+      from: process.env.SENDGRID_FROM_EMAIL, // Verified sender email
       subject: "Password Reset Request",
       html: `
-    <p>You requested a password reset. Click the link below to reset your password:</p>
-    <a href=${resetUrl} target="_blank">
-      Reset your password
-    </a>
-    <p>If you didn't request this, you can ignore this email.</p>
-  `,
+        <p>You requested a password reset. Click the link below to reset your password:</p>
+        <a href="${resetUrl}" target="_blank">Reset your password</a>
+        <p>If you didn't request this, you can ignore this email.</p>
+      `,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({ message: "Error sending email." });
-      }
+    // Send the email
+    try {
+      await sgMail.send(msg);
+      console.log("Password reset email sent successfully");
       res
         .status(200)
         .json({ message: "Password reset link sent to your email." });
-    });
+    } catch (emailError) {
+      console.error("Error sending password reset email:", emailError);
+      res.status(500).json({ message: "Error sending password reset email." });
+    }
   } catch (error) {
+    console.error("Error processing password reset request:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -1869,7 +1862,7 @@ const resetPassword = async (req, res) => {
     // Find the user by reset token and ensure the token is not expired
     const user = await UserModel.findOne({
       resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
+      resetPasswordExpires: { $gt: Date.now() }, // Check token expiration
     });
 
     if (!user) {
@@ -1878,10 +1871,7 @@ const resetPassword = async (req, res) => {
         .json({ message: "Invalid or expired reset token." });
     }
 
-    // Log the new plain password (for debugging purposes, remove in production)
-    console.log("Plain new password:", newPassword);
-
-    // Hash the new password before updating
+    // Hash the new password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
@@ -1892,36 +1882,32 @@ const resetPassword = async (req, res) => {
       resetPasswordExpires: undefined,
     });
 
-    const try_loginUrl = `http://localhost:5173/ethereal/login`; // Ensure URL is a string
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: gmail_user, // Replace with your Gmail username
-        pass: apppassword, // Replace with your Gmail app password
-      },
-    });
+    // Generate the login URL
+    const try_loginUrl = `http://localhost:5173/ethereal/login`;
 
-    const mailOptions = {
-      from: gmail_user,
-      to: user.email,
-      subject: "Password has been reset successfully",
+    // Configure SendGrid email
+    const msg = {
+      to: user.email, // Recipient's email
+      from: process.env.SENDGRID_FROM_EMAIL, // Verified sender email
+      subject: "Password Reset Successfully",
       html: `
         <p>You have successfully reset your password.</p>
         <a href="${try_loginUrl}" target="_blank">Try to login now</a>
         <p>Make sure you save your password somewhere safe.</p>
-      `, // Use template literals for dynamic content in HTML
+      `,
     };
 
-    // Send the email to notify the user
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log("Error sending email:", error);
-        return res.status(500).json({ message: "Error sending email." });
-      }
-      res.status(200).json({
-        message: "Password reset successfully, confirmation email sent.",
+    // Send the email
+    try {
+      await sgMail.send(msg);
+      console.log("Password reset confirmation email sent successfully.");
+      return res.status(200).json({
+        message: "Password reset successfully. Confirmation email sent.",
       });
-    });
+    } catch (emailError) {
+      console.error("Error sending confirmation email:", emailError);
+      return res.status(500).json({ message: "Error sending email." });
+    }
   } catch (error) {
     console.error("Error during password reset:", error);
     res.status(500).json({ message: "Server error" });
