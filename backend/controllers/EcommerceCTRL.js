@@ -9,11 +9,12 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const token_SECRET_KEY = process.env.TOKEN_SECRET_KEY;
 const apppassword = process.env.APPPASSWORD;
-const gmail_user = process.env.GMAIL_USER;
+// const gmail_user = process.env.GMAIL_USER;
 const maxAge = 60 * 60 * 24 * 3; // three days
 const crypto = require("crypto");
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
+const mailSender = process.env.SENDGRID_FROM_EMAIL;
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -202,7 +203,7 @@ const createUser = async (req, res) => {
     // Send activation email using SendGrid
     const msg = {
       to: newUser.email,
-      from: "hashimcode123@gmail.com", // Verified sender email
+      from: mailSender, // Verified sender email
       subject: "Account Activation - Ethereal Marketplace",
       html: `
         <h3>Hi ${newUser.fname} ${newUser.lname},</h3>
