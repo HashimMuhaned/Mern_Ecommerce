@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import registerImage from "../assets/registerImage.jpg";
+require("dotenv").config();
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -45,11 +46,15 @@ const SignUpPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/signup", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `${process.env.BACKEND_API}/signup`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // Display the backend message if the account is created successfully
       toast.success(response.data.message); // Use the message from the backend response
