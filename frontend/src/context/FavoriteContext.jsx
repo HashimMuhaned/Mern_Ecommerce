@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CheckUserContext } from "./CheckUserToken";
+require("dotenv").config();
 
 export const FavoriteContext = createContext();
 
@@ -13,7 +14,7 @@ export const FavoriteProvider = ({ children }) => {
     const fetchFavoriteItems = async () => {
       if (isLoggedin) {
         try {
-          const response = await axios.get("/api/favorites/get", {
+          const response = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
             withCredentials: true,
           });
           setFavoriteItems(response.data); // Assuming response.data is the array of favorite items

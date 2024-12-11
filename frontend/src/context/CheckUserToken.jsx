@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { updateUserField, updateUserEmailField } from "../services/userAPI";
 import { toast } from "react-toastify";
+require("dotenv").config();
 
 export const CheckUserContext = createContext();
 
@@ -12,7 +13,7 @@ export const CheckUserProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await axios.get("/api/validate-user", {
+        const response = await axios.get(`${process.env.BACKEND_API}validate-user`, {
           withCredentials: true,
         });
 
@@ -20,7 +21,7 @@ export const CheckUserProvider = ({ children }) => {
           setIsLoggedin(true);
 
           // Fetch user details after validation
-          const userResponse = await axios.get("/api/user-details", {
+          const userResponse = await axios.get(`${process.env.BACKEND_API}/user-details`, {
             withCredentials: true,
           });
           setUserInfo(userResponse.data);
@@ -74,7 +75,7 @@ export const CheckUserProvider = ({ children }) => {
 
   const handleSignOut = async (toast, navigate) => {
     try {
-      const response = await axios.get("/api/auth/signout", {
+      const response = await axios.get(`${process.env.BACKEND_API}/auth/signout`, {
         withCredentials: true,
       });
       if (response.status === 200) {

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CheckUserContext } from "./CheckUserToken";
+require("dotenv").config();
 
 export const CartContext = createContext();
 
@@ -20,7 +21,7 @@ export const CartProvider = ({ children }) => {
     const fetchCartItems = async () => {
       if (isLoggedin) {
         try {
-          const response = await axios.get("/api/cart", {
+          const response = await axios.get(`${process.env.BACKEND_API}/cart`, {
             withCredentials: true,
           });
           setCartItems(response.data.items);
@@ -35,7 +36,9 @@ export const CartProvider = ({ children }) => {
   // Function to clear the cart both locally and on the server
   const clearCart = async (buyer) => {
     try {
-      await axios.delete("/api/cart", buyer, { withCredentials: true });
+      await axios.delete(`${process.env.BACKEND_API}/cart`, buyer, {
+        withCredentials: true,
+      });
       setCartItems([]); // Clear the cart locally
     } catch (error) {
       console.error("Error clearing cart:", error);

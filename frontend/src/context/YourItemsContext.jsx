@@ -2,6 +2,7 @@ import React from "react";
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CheckUserContext } from "./CheckUserToken";
+require("dotenv").config(); 
 
 export const YourItemsContext = createContext();
 
@@ -13,7 +14,7 @@ export const YourItemsProvider = ({ children }) => {
     const fetchYourItems = async () => {
       if (isLoggedin) {
         try {
-          const res = await axios.get("/api/yourItems/get", {
+          const res = await axios.get(`${process.env.BACKEND_API}/yourItems/get`, {
             withCredentials: true,
           });
           setYourItems(res.data);
