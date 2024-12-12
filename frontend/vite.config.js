@@ -4,9 +4,11 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: "dist", // Default for Vite, but ensure it's clear
+    outDir: "dist", // Ensure this matches your intended output directory
   },
   define: {
-    'process.env.BACKEND_URL': JSON.stringify(process.env.BACKEND_URL || ""), // Optional for client-side usage
+    'process.env.BACKEND_API': JSON.stringify(
+      process.env.BACKEND_API || "https://mern-ecommerce-backend-kappa.vercel.app/api"
+    ),
   },
 });
