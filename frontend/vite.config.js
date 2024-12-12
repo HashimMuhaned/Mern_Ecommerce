@@ -1,32 +1,13 @@
-// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+require("dotenv").config();
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:8080",
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-        configure: (proxy, _options) => {
-          proxy.on("error", (err, _req, _res) => {
-            console.log("proxy error", err);
-          });
-          proxy.on("proxyReq", (proxyReq, req, _res) => {
-            console.log("Sending Request to the Target:", req.method, req.url);
-          });
-          proxy.on("proxyRes", (proxyRes, req, _res) => {
-            console.log(
-              "Received Response from the Target:",
-              proxyRes.statusCode,
-              req.url
-            );
-          });
-        },
-      },
-    },
+  build: {
+    outDir: "dist", // Default for Vite, but ensure it's clear
+  },
+  define: {
+    'process.env.BACKEND_URL': JSON.stringify(process.env.BACKEND_URL || ""), // Optional for client-side usage
   },
 });
