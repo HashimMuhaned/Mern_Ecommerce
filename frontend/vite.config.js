@@ -8,8 +8,9 @@ export default defineConfig({
     outDir: "dist", // Ensure this matches your intended output directory
   },
   define: {
-    'process.env.BACKEND_API': JSON.stringify(
-      process.env.BACKEND_API || "https://mern-ecommerce-backend-kappa.vercel.app/api"
+    "process.env.BACKEND_API": JSON.stringify(
+      process.env.BACKEND_API ||
+        "https://mern-ecommerce-backend-kappa.vercel.app/api"
     ),
   },
 });
