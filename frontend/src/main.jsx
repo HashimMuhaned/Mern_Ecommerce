@@ -9,6 +9,7 @@ import { FavoriteProvider } from "./context/FavoriteContext.jsx";
 import { ToastProvider } from "./context/ToastContext";
 import { YourItemsProvider } from "./context/YourItemsContext.jsx";
 
+console.log("App is mounting...");
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <DataProvider>
