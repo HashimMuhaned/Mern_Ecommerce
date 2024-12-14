@@ -115,7 +115,9 @@ const AddItemForm = () => {
     e.preventDefault();
 
     axios
-      .post(`${process.env.BACKEND_API}/upload-item`, formData)
+      .post(`${process.env.BACKEND_API}/upload-item`, formData, {
+        withCredentials: true,
+      })
       .then((res) => {
         toast.success("Item Created successfully");
 
