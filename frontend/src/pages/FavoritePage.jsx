@@ -14,7 +14,7 @@ const FavoritePage = () => {
   useEffect(() => {
     const fetchFavoriteItems = async () => {
       try {
-        const response = await axios.get("/api/favorites/get", {
+        const response = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
           withCredentials: true,
         });
         setFavoriteItems(response.data);

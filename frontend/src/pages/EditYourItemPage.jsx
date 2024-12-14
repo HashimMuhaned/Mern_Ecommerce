@@ -40,7 +40,7 @@ const EditYourItemPage = () => {
   useEffect(() => {
     const fillEditFormWithExistingItemData = async () => {
       try {
-        const response = await axios.get(`/api/getYourItemToEdit/${id}`, {
+        const response = await axios.get(`${process.env.BACKEND_API}/getYourItemToEdit/${id}`, {
           withCredentials: true,
         });
 
@@ -118,7 +118,7 @@ const EditYourItemPage = () => {
     e.preventDefault();
 
     axios
-      .put(`/api/editYourItem/${id}`, formData)
+      .put(`${process.env.BACKEND_API}/editYourItem/${id}`, formData)
       .then(async (res) => {
         console.log("Item updated successfully:", res.data);
 
@@ -128,22 +128,22 @@ const EditYourItemPage = () => {
         navigate("/ethereal/profile/yourItems");
 
         // Updating favorite items, cart, and your items to reflect the changes
-        const updatedFavoriteItems = await axios.get("/api/favorites/get", {
+        const updatedFavoriteItems = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
           withCredentials: true,
         });
         setFavoriteItems(updatedFavoriteItems.data);
 
-        const updatedCartItems = await axios.get("/api/cart", {
+        const updatedCartItems = await axios.get(`${process.env.BACKEND_API}/cart`, {
           withCredentials: true,
         });
         setCartItems(updatedCartItems.data.items);
 
-        const updatedYourItems = await axios.get("/api/yourItems/get", {
+        const updatedYourItems = await axios.get(`${process.env.BACKEND_API}/yourItems/get`, {
           withCredentials: true,
         });
         setYourItems(updatedYourItems.data);
 
-        const updatedData = await axios.get("/api", {
+        const updatedData = await axios.get(`${process.env.BACKEND_API}`, {
           withCredentials: true,
         });
         setData(updatedData.data);

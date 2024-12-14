@@ -14,7 +14,7 @@ const ConfirmEmailToResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/request-password-reset", {
+      const response = await axios.post(`${process.env.BACKEND_API}/request-password-reset`, {
         email,
       });
       toast.success(response.data.message);

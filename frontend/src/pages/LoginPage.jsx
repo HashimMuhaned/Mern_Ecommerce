@@ -23,7 +23,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/login", formData, {
+      const response = await axios.post(`${process.env.BACKEND_API}/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },

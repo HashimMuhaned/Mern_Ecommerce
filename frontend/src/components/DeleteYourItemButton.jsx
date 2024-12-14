@@ -14,7 +14,7 @@ const DeleteYourItemButton = ({ productId }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`/api/yourItem/delete/${productId}`, {
+      const response = await axios.delete(`${process.env.BACKEND_API}/yourItem/delete/${productId}`, {
         withCredentials: true,
       });
 
@@ -26,12 +26,12 @@ const DeleteYourItemButton = ({ productId }) => {
       setShowModal(false);
 
       // updating the favorite Items to reflect the changes
-      const updatedFavoriteItems = await axios.get("/api/favorites/get", {
+      const updatedFavoriteItems = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
         withCredentials: true,
       });
       setFavoriteItems(updatedFavoriteItems.data);
 
-      const updatedCartItems = await axios.get("/api/cart", {
+      const updatedCartItems = await axios.get(`${process.env.BACKEND_API}/cart`, {
         withCredentials: true,
       });
       setCartItems(updatedCartItems.data.items);

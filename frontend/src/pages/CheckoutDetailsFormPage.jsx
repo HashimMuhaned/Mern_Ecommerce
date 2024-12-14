@@ -61,7 +61,7 @@ const CheckoutDetailsFormPage = () => {
     };
 
     try {
-      const response = await axios.post("/api/submitOrder", order, {
+      const response = await axios.post(`${process.env.BACKEND_API}/submitOrder`, order, {
         withCredentials: true,
       });
       console.log("Order placed successfully:", response.data);

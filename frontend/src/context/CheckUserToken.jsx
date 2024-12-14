@@ -12,7 +12,7 @@ export const CheckUserProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_API}validate-user`, {
+        const response = await axios.get(`${process.env.BACKEND_API}/validate-user`, {
           withCredentials: true,
         });
 

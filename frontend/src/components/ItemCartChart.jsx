@@ -30,7 +30,7 @@ const ItemCartChart = ({ itemId, filterDate }) => {
     const fetchCarts = async () => {
       try {
         const response = await axios.get(
-          `/api/getItemCartCountLast${filterDate}/${itemId}`,
+          `${process.env.BACKEND_API}/getItemCartCountLast${filterDate}/${itemId}`,
           {
             withCredentials: true,
           }

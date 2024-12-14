@@ -48,7 +48,7 @@ const ResetPasswordPage = () => {
 
     try {
       const response = await axios.post(
-        `/api/reset-password/${token}`,
+        `${process.env.BACKEND_API}/reset-password/${token}`,
         { newPassword },
         {
           headers: {

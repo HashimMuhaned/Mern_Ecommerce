@@ -37,7 +37,7 @@ const CartPage = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get("/api/cart", {
+        const response = await axios.get(`${process.env.BACKEND_API}/cart`, {
           withCredentials: true,
         });
         setCartItems(response.data.items);
@@ -55,7 +55,7 @@ const CartPage = () => {
     try {
       setUpdating(true); // Set loading state
       const response = await axios.put(
-        "/api/cart/itemQuantityUpdate",
+        `${process.env.BACKEND_API}/cart/itemQuantityUpdate`,
         { productId, quantity: newQuantity },
         { withCredentials: true }
       );
@@ -79,7 +79,7 @@ const CartPage = () => {
     try {
       setUpdating(true); // Set loading state
       const response = await axios.put(
-        "/api/cart/itemSizeUpdate", // Ensure the correct URL is used
+        `${process.env.BACKEND_API}/cart/itemSizeUpdate`, // Ensure the correct URL is used
         { productId, sizeChosen: selectedSize },
         { withCredentials: true }
       );

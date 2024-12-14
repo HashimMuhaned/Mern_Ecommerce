@@ -21,7 +21,7 @@ const BuyerOrderpage = () => {
   const fetchBuyerOrders = async (buyerId) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/ordersBuyer?buyerId=${buyerId}`, {
+      const response = await axios.get(`${process.env.BACKEND_API}/ordersBuyer?buyerId=${buyerId}`, {
         withCredentials: true,
       });
       setOrders(response.data.orders);

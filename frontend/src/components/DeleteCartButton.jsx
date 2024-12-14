@@ -11,7 +11,7 @@ const DeleteCartButton = ({ productId, cartItems, setCartItems }) => {
   const [showModal, setShowModal] = useState(false);
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`/api/cart/delete/${productId}`, {
+      const response = await axios.delete(`${process.env.BACKEND_API}/cart/delete/${productId}`, {
         withCredentials: true,
       });
 

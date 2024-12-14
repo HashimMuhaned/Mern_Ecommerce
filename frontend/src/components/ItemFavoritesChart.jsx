@@ -30,7 +30,7 @@ const ItemFavoritesChart = ({ itemId, filterDate }) => {
     const fetchFavorites = async () => {
       try {
         const response = await axios.get(
-          `/api/getItemFavoritesLast${filterDate}/${itemId}`,
+          `${process.env.BACKEND_API}/getItemFavoritesLast${filterDate}/${itemId}`,
           {
             withCredentials: true,
           }

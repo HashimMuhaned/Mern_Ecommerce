@@ -52,7 +52,7 @@ const PasswordChangeForm = () => {
 
     try {
       // First, verify the current password
-      const response = await axios.post("/api/verify-password", {
+      const response = await axios.post(`${process.env.BACKEND_API}/verify-password`, {
         password: currentPassword,
       });
 
@@ -60,7 +60,7 @@ const PasswordChangeForm = () => {
         console.log("Password matches. Proceed with updating the password.");
 
         // If the password matches, only then proceed to update the password
-        const updateResponse = await axios.post("/api/update-password", {
+        const updateResponse = await axios.post(`${process.env.BACKEND_API}/update-password`, {
           newPassword,
         });
 

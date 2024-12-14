@@ -26,7 +26,7 @@ const AddToFavoriteButton = ({ productId }) => {
       } else {
         // Add to favorites
         const response = await axios.post(
-          "/api/favorites/add",
+          `${process.env.BACKEND_API}/favorites/add`,
           { productId },
           { withCredentials: true }
         );

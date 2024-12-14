@@ -30,7 +30,7 @@ const ProductDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/categories/${category}/${id}`);
+        const res = await fetch(`${process.env.BACKEND_API}/categories/${category}/${id}`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }

@@ -90,9 +90,12 @@ const AddItemForm = () => {
 
   const fetchYourItems = async () => {
     try {
-      const response = await axios.get("/api/yourItems/get", {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${process.env.BACKEND_API}/yourItems/get`,
+        {
+          withCredentials: true,
+        }
+      );
       setYourItems(response.data);
     } catch (error) {
       console.error("Error fetching items after creation:", error);
@@ -101,7 +104,7 @@ const AddItemForm = () => {
 
   const fetchHomePageItems = async () => {
     try {
-      const response = await axios.get("/api");
+      const response = await axios.get(`${process.env.BACKEND_API}`);
       setData(response.data);
     } catch (error) {
       console.log("Error fetching home page items", err);
@@ -112,7 +115,7 @@ const AddItemForm = () => {
     e.preventDefault();
 
     axios
-      .post("/api/upload-item", formData)
+      .post(`${process.env.BACKEND_API}/upload-item`, formData)
       .then((res) => {
         toast.success("Item Created successfully");
 

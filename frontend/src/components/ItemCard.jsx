@@ -34,7 +34,7 @@ const ItemCard = ({ item }) => {
             location.pathname !== "/ethereal/profile/yourItems"
               ? async () => {
                   try {
-                    await axios.patch(`/api/increment-views/${item._id}`);
+                    await axios.patch(`${process.env.BACKEND_API}/increment-views/${item._id}`);
                   } catch (error) {
                     console.error("Error incrementing views", error);
                   }

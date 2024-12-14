@@ -18,7 +18,7 @@ const OrdersPage = () => {
 
   const fetchSellerOrders = async (sellerId) => {
     try {
-      const response = await axios.get(`/api/orders?sellerId=${sellerId}`, {
+      const response = await axios.get(`${process.env.BACKEND_API}/orders?sellerId=${sellerId}`, {
         withCredentials: true,
       });
       setOrders(response.data.orders);
@@ -31,7 +31,7 @@ const OrdersPage = () => {
     try {
       // Call your API to update the item's status
       await axios.patch(
-        `/api/orders/${orderId}/items/${productId}/updateStatus`,
+        `${process.env.BACKEND_API}/orders/${orderId}/items/${productId}/updateStatus`,
         {
           status: newStatus,
         }
