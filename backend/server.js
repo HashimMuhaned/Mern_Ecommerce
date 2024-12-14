@@ -38,6 +38,14 @@ app.use(
 
 app.options("*", cors());
 
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.sendStatus(204); // Respond successfully
+  } else {
+    next();
+  }
+});
+
 // middle ware
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "10mb" }));

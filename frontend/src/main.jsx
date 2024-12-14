@@ -11,19 +11,19 @@ import { YourItemsProvider } from "./context/YourItemsContext.jsx";
 
 console.log("App is mounting...");
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <DataProvider>
-      <CheckUserProvider>
-        <CartProvider>
-          <FavoriteProvider>
-            <YourItemsProvider>
-              <ToastProvider>
-                <App />
-              </ToastProvider>
-            </YourItemsProvider>
-          </FavoriteProvider>
-        </CartProvider>
-      </CheckUserProvider>
-    </DataProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <DataProvider>
+    <CheckUserProvider>
+      <CartProvider>
+        <FavoriteProvider>
+          <YourItemsProvider>
+            <ToastProvider>
+              <App />
+            </ToastProvider>
+          </YourItemsProvider>
+        </FavoriteProvider>
+      </CartProvider>
+    </CheckUserProvider>
+  </DataProvider>
+  // </React.StrictMode>
 );
