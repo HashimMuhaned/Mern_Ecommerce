@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { updateUserField, updateUserEmailField } from "../services/userAPI";
 import { toast } from "react-toastify";
-require("dotenv").config();
 
 export const CheckUserContext = createContext();
 

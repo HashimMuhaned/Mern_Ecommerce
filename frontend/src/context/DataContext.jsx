@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from "react";
-require("dotenv").config(); 
 
 export const DataContext = createContext();
 

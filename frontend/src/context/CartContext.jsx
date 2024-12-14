@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CheckUserContext } from "./CheckUserToken";
-require("dotenv").config();
+
 
 export const CartContext = createContext();
 
