@@ -92,7 +92,7 @@ router.get("/yourItems/get", checkUserToken, yourItems);
 router.get("/getYourItemToEdit/:id", checkUserToken, getYourItemToEdit);
 router.put("/editYourItem/:id", checkUserToken, editYourItem);
 router.delete("/yourItem/delete/:productId", checkUserToken, deleteYourItem);
-router.patch("/increment-views/:productId", checkUserToken, incrementView);
+router.patch("/increment-views/:productId", incrementView);
 router.get("/getItemViewsLastDay/:itemId", checkUserToken, getViewsLastDay);
 router.get("/getItemViewsLastWeek/:itemId", checkUserToken, getViewsLastWeek);
 router.get("/getItemViewsLastMonth/:itemId", checkUserToken, getViewsLastMonth);
