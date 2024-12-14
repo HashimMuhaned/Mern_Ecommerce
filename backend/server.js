@@ -13,8 +13,30 @@ const PORT = process.env.PORT || 8080;
 // const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:4173", // Development frontend
+  "https://mern-ecommerce-frontend-rosy.vercel.app/", // Deployed frontend
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like Postman or server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(
+          new Error("CORS policy: This origin is not allowed"),
+          false
+        );
+      }
+    },
+    credentials: true, // If you're using cookies or other credentials
+  })
+);
+
 // middle ware
-app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
