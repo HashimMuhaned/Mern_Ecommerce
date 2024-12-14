@@ -29,10 +29,9 @@ import ConfirmEmailToResetPassword from "./pages/ConfirmEmailToResetPassword";
 import ActivateAccountPage from "./pages/ActivateAccountPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
-
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/ethereal">
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainLayout />}>
