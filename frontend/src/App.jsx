@@ -31,7 +31,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
-    <BrowserRouter basename="/ethereal">
+    <BrowserRouter>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainLayout />}>
