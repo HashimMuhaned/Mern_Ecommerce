@@ -52,9 +52,14 @@ const ItemFavoritesChart = ({ itemId, filterDate }) => {
     } else if (filterDate === "Week") {
       return favoriteDate.toLocaleDateString(); // For weeks, show day
     } else if (filterDate === "Month") {
-      return `${favoriteDate.getDate()} ${favoriteDate.toLocaleString('default', { month: 'short' })}`; // For months, show day and month
+      return `${favoriteDate.getDate()} ${favoriteDate.toLocaleString(
+        "default",
+        { month: "short" }
+      )}`; // For months, show day and month
     } else if (filterDate === "Year") {
-      return `${favoriteDate.toLocaleString('default', { month: 'short' })} ${favoriteDate.getFullYear()}`; // For year, show month and year
+      return `${favoriteDate.toLocaleString("default", {
+        month: "short",
+      })} ${favoriteDate.getFullYear()}`; // For year, show month and year
     }
   };
 
