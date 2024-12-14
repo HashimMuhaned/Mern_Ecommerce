@@ -27,6 +27,7 @@ const LoginPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true,
       });
       // console.log(response.data);
       setIsLoggedin(true);
