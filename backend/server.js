@@ -36,6 +36,8 @@ app.use(
   })
 );
 
+app.options("*", cors());
+
 // middle ware
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "10mb" }));
