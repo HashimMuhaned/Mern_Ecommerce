@@ -3,9 +3,12 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/ethereal/", // Set the base path to match your deployment subpath
+  base: "/ethereal/", // Use this if your app is served from '/ethereal/'
   build: {
-    outDir: "dist", // Ensure this matches your intended output directory
+    outDir: "dist",
+    rollupOptions: {
+      input: "./index.html", // Ensure Rollup knows your entry point
+    },
   },
   define: {
     "process.env.BACKEND_API": JSON.stringify(
