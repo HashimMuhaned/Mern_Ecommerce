@@ -9,13 +9,13 @@ const EcommerceRoutes = require("./routes/EcommerceRoutes.js");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-const PORT = process.env.PORT || 8080;
+// const PORT = process.env.PORT || 8080;
 // const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 
 const allowedOrigins = [
   "http://localhost:4173", // Development frontend
-  "https://mern-ecommerce-frontend-five-lyart.vercel.app", // Deployed frontend
+  "https://mern-ecommerce-frontend-five-lyart.vercel.app/", // Deployed frontend
 ];
 
 app.use(

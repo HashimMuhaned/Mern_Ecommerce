@@ -8,7 +8,7 @@ const Order = require("../model/OrdersModel.js");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const token_SECRET_KEY = process.env.TOKEN_SECRET_KEY;
-const apppassword = process.env.APPPASSWORD;
+// const apppassword = process.env.APPPASSWORD;
 // const gmail_user = process.env.GMAIL_USER;
 const maxAge = 60 * 60 * 24 * 3; // three days
 const crypto = require("crypto");
