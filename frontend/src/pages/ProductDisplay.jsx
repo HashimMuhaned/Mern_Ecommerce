@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import ItemCard from "../components/ItemCard";
 import AddToCartButton from "../components/AddToCartButton";
-import Spinner from "../components/Spinner";
 
 const ProductDisplay = () => {
   const { category, id } = useParams();
@@ -15,9 +14,6 @@ const ProductDisplay = () => {
   const [initialImage, setInitialImage] = useState(""); // Store the original main image (image1)
   const [randomItems, setRandomItems] = useState([]);
 
-  if (!data) {
-    return <Spinner />;
-  }
 
   useEffect(() => {
     // Shuffle and pick 4 random items
