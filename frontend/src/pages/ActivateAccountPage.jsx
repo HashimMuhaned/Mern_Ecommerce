@@ -18,7 +18,10 @@ const ActivateAccountPage = () => {
         setIsLoading(true);
         // Send request to backend to activate the account
         const response = await axios.get(
-          `${process.env.BACKEND_API}/activate-account?token=${token}`
+          `${process.env.BACKEND_API}/activate-account?token=${token}`,
+          {
+            withCredentials: true,
+          }
         );
         setMessage(response.data.message);
 

@@ -48,7 +48,10 @@ const NavBar = () => {
 
   const fetchSuggestions = async (query) => {
     // Replace with actual API call or filtering logic
-    const response = await fetch(`${process.env.BACKEND_API}/suggestions?query=${query}`);
+    const response = await fetch(
+      `${process.env.BACKEND_API}/suggestions?query=${query}`,
+      { withCredentials: true }
+    );
     const data = await response.json();
     setSuggestions(data);
   };

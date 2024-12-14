@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import ItemCard from "../components/ItemCard";
 import AddToCartButton from "../components/AddToCartButton";
+import Spinner from "../components/Spinner";
 
 const ProductDisplay = () => {
   const { category, id } = useParams();
@@ -13,6 +14,10 @@ const ProductDisplay = () => {
   const [mainImage, setMainImage] = useState(""); // For the currently displayed image
   const [initialImage, setInitialImage] = useState(""); // Store the original main image (image1)
   const [randomItems, setRandomItems] = useState([]);
+
+  if (!data) {
+    return <Spinner />;
+  }
 
   useEffect(() => {
     // Shuffle and pick 4 random items
@@ -30,7 +35,9 @@ const ProductDisplay = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.BACKEND_API}/categories/${category}/${id}`);
+        const res = await fetch(
+          `${process.env.BACKEND_API}/categories/${category}/${id}`
+        );
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }

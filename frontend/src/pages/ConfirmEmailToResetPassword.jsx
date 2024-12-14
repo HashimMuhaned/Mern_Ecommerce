@@ -14,9 +14,15 @@ const ConfirmEmailToResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.BACKEND_API}/request-password-reset`, {
-        email,
-      });
+      const response = await axios.post(
+        `${process.env.BACKEND_API}/request-password-reset`,
+        {
+          email,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response.data.message);

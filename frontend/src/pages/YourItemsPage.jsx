@@ -17,7 +17,7 @@ const YourItemsPage = () => {
           to={"/ethereal/login"}
           style={{ color: "blue", textDecoration: "underline" }}
         >
-          Login to view your cart.
+          Login to view your Items.
         </NavLink>
       </p>
     );

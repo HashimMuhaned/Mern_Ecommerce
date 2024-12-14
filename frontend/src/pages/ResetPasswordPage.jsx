@@ -54,6 +54,9 @@ const ResetPasswordPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
+        },
+        {
+          withCredentials: true,
         }
       );
       toast.success("Password reset successfully!");
