@@ -34,9 +34,9 @@ const ItemCard = ({ item }) => {
             location.pathname !== "/ethereal/profile/yourItems"
               ? async () => {
                   try {
-                    await axios.patch(`${process.env.BACKEND_API}/increment-views/${item._id}`, {
-                      withCredentials: true,
-                    });
+                    await axios.patch(
+                      `${process.env.BACKEND_API}/increment-views/${item._id}`
+                    );
                   } catch (error) {
                     console.error("Error incrementing views", error);
                   }
@@ -57,7 +57,7 @@ const ItemCard = ({ item }) => {
         {location.pathname === "/ethereal/profile/yourItems" ? (
           <div id="Edit_delete_ItemCard">
             <button
-            id="editItemButton"
+              id="editItemButton"
               style={{
                 backgroundColor: "green",
                 border: "none",
@@ -73,7 +73,7 @@ const ItemCard = ({ item }) => {
             >
               Edit Item
             </button>
-            <DeleteYourItemButton productId={item._id} id="deleteItemButton"/>
+            <DeleteYourItemButton productId={item._id} id="deleteItemButton" />
           </div>
         ) : location.pathname === "/ethereal/profile/item-analysis" ? (
           <NavLink
