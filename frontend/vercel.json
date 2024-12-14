@@ -21,7 +21,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://mern-ecommerce-frontend-five-lyart.vercel.app/"
+          "value": "https://mern-ecommerce-frontend-hazel.vercel.app/"
         },
         {
           "key": "Access-Control-Allow-Methods",

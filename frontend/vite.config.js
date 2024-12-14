@@ -12,7 +12,7 @@ export default defineConfig({
   define: {
     "process.env.BACKEND_API": JSON.stringify(
       process.env.BACKEND_API ||
-        "https://mern-ecommerce-backend-kappa.vercel.app/api"
+        "https://mern-ecommerce-backend-nine.vercel.app/api"
     ),
   },
 });
