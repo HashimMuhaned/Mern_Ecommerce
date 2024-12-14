@@ -15,7 +15,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:4173", // Development frontend
-  "https://mern-ecommerce-frontend-three-beta.vercel.app/", // Deployed frontend
+  "https://mern-ecommerce-frontend-three-beta.vercel.app", // Deployed frontend
 ];
 
 app.use(
