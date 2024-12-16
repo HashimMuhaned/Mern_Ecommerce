@@ -218,33 +218,33 @@ HTML {
   }
 
   #whishListIcon {
-    position: absolute;
-    bottom: 20px;
-    right: 25px;
-    cursor: pointer;
-    font-size: 25px;
-    z-index: 1;
-    transition: color 0.3s ease;
+    position: absolute !important;
+    bottom: 20px !important;
+    right: 25px !important;
+    cursor: pointer !important;
+    font-size: 25px !important;
+    z-index: 1 !important;
+    transition: color 0.3s ease !important;
   }
 
   #whishListIcon #favoriteBTN {
-    position: absolute;
-    bottom: 20px;
-    right: 25px;
-    cursor: pointer;
-    font-size: 25px;
-    z-index: 1;
-    transition: color 0.3s ease;
+    position: absolute !important;
+    bottom: 20px !important;
+    right: 25px !important;
+    cursor: pointer !important;
+    font-size: 25px !important;
+    z-index: 1 !important;
+    transition: color 0.3s ease !important;
   }
 
   #favoriteBTN {
-    position: absolute;
-    bottom: 20px;
-    right: 25px;
-    cursor: pointer;
-    font-size: 25px;
-    z-index: 1;
-    transition: color 0.3s ease;
+    position: absolute !important;
+    bottom: 20px !important;
+    right: 25px !important;
+    cursor: pointer !important;
+    font-size: 25px !important;
+    z-index: 1 !important;
+    transition: color 0.3s ease !important;
   }
 }
 
