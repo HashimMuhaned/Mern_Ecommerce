@@ -2101,7 +2101,6 @@ const getItemsTotalSalesByPeriod = async (req, res) => {
 
 const signOut = async (req, res) => {
   res.clearCookie("cookie", {
-    domain: ".vercel.app", // Share cookie across subdomains
     httpOnly: true,
     secure: true,
     sameSite: "none", // Required for cross-origin cookies
