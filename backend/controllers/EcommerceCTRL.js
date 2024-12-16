@@ -285,7 +285,6 @@ const userLogin = async (req, res) => {
 
     const token = createToken(user._id);
     res.cookie("cookie", token, {
-      domain: ".vercel.app", // Share cookie across subdomains
       httpOnly: true,
       secure: true,
       sameSite: "none", // Required for cross-origin cookies
