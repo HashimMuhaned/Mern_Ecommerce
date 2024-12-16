@@ -95,7 +95,7 @@ const ItemCard = ({ item }) => {
             Analyse this Item
           </NavLink>
         ) : (
-          <AddToFavoriteButton productId={item._id} id="whishListIcon favoriteBTN" />
+          <AddToFavoriteButton productId={item._id} id="favoriteBTN" />
         )}
       </div>
     </div>
