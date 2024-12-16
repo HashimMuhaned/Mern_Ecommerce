@@ -217,14 +217,6 @@ HTML {
     padding: 20px 20px 10px 20px !important;
   }
 
-  #whishListIcon {
-    position: absolute !important;
-    bottom: 40px !important;
-    cursor: pointer !important;
-    z-index: 1 !important;
-    transition: color 0.3s ease !important;
-  }
-
   #favoriteBTN {
     position: absolute !important;
     bottom: 20px !important;
