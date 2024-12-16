@@ -286,8 +286,8 @@ const userLogin = async (req, res) => {
     const token = createToken(user._id);
     res.cookie("cookie", token, {
       httpOnly: true,
-      secure: false, // Required for cookies over HTTPS
-      sameSite: "lax", // Needed for cross-origin cookies
+      secure: true, // Required for cookies over HTTPS
+      sameSite: "none", // Needed for cross-origin cookies
       maxAge: maxAge * 1000,
     });
 
