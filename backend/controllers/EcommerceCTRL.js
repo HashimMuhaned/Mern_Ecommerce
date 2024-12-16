@@ -2100,12 +2100,12 @@ const getItemsTotalSalesByPeriod = async (req, res) => {
 };
 
 const signOut = async (req, res) => {
-  // Clear the JWT cookie
   res.clearCookie("cookie", {
-    httpOnly: true,
+    httpOnly: true, // Must match the original cookie
+    secure: true, // Must match 'secure' (HTTPS-only)
+    sameSite: "none", // Must match the 'sameSite' setting
   });
 
-  // Send response to confirm sign out
   res.status(200).json({ message: "Signed out successfully" });
 };
 
