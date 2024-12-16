@@ -285,10 +285,11 @@ const userLogin = async (req, res) => {
 
     const token = createToken(user._id);
     res.cookie("cookie", token, {
-      httpOnly: true, // Prevent client-side JavaScript access
-      secure: true, // Cookie only sent over HTTPS
-      sameSite: "none", // Allow cross-origin cookies
-      maxAge: maxAge * 1000, // Expiry time in milliseconds
+      domain: ".vercel.app", // Share cookie across subdomains
+      httpOnly: true,
+      secure: true,
+      sameSite: "none", // Required for cross-origin cookies
+      maxAge: maxAge * 1000,
     });
 
     res.status(200).json({ message: "Login successful" });
@@ -2101,9 +2102,10 @@ const getItemsTotalSalesByPeriod = async (req, res) => {
 
 const signOut = async (req, res) => {
   res.clearCookie("cookie", {
-    httpOnly: true, // Must match the original cookie
-    secure: true, // Must match 'secure' (HTTPS-only)
-    sameSite: "none", // Must match the 'sameSite' setting
+    domain: ".vercel.app", // Share cookie across subdomains
+    httpOnly: true,
+    secure: true,
+    sameSite: "none", // Required for cross-origin cookies
   });
 
   res.status(200).json({ message: "Signed out successfully" });
