@@ -289,7 +289,6 @@ const userLogin = async (req, res) => {
       secure: true, // Required for cookies over HTTPS
       sameSite: "none", // Needed for cross-origin cookies
       maxAge: maxAge * 1000,
-      domain: ".vercel.app", // Share cookies across all subdomains of vercel.app
     });
 
     res.status(200).json({ message: "Login successful" });
