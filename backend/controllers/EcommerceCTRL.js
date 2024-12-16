@@ -292,6 +292,7 @@ const userLogin = async (req, res) => {
       domain: ".vercel.app", // Shared across subdomains of vercel.app
       path: "/", // Make cookie available throughout the site
     });
+    console.log(document.cookie); // Check if cookie is available
 
     res.status(200).json({ message: "Login successful" });
   } catch (error) {
