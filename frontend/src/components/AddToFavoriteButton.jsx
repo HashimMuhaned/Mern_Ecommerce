@@ -16,7 +16,7 @@ const AddToFavoriteButton = ({ productId }) => {
       if (isFavorite) {
         // Remove from favorites
         await axios.post(
-          "/api/favorites/remove",
+          `${process.env.BACKEND_API}/favorites/remove`,
           { productId },
           { withCredentials: true }
         );

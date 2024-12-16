@@ -82,7 +82,7 @@ const ItemCard = ({ item }) => {
                 ? `/ethereal/profile/item-analysis/dashboard/${item._id}`
                 : ProductURL
             }
-            id="whishListIcon"
+            id="whishListIcon analyseButton"
             style={{
               fontSize: "15px",
               color: "white",
