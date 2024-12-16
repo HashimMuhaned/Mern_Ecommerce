@@ -227,7 +227,7 @@ HTML {
     transition: color 0.3s ease;
   } */
 
-  #favoriteBTN {
+  #whishListIcon #favoriteBTN {
     position: absolute;
     bottom: 20px;
     right: 25px;
