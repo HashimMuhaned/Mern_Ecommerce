@@ -219,8 +219,8 @@ HTML {
 
   #whishListIcon {
     position: absolute !important;
-    bottom: 20px !important;
-    right: 25px !important;
+    bottom: 25px !important;
+    right: 40px !important;
     cursor: pointer !important;
     z-index: 1 !important;
     transition: color 0.3s ease !important;
