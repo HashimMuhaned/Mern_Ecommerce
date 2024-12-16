@@ -219,7 +219,7 @@ HTML {
 
   #whishListIcon {
     position: absolute;
-    bottom: 40px;
+    bottom: 20px;
     right: 25px;
     cursor: pointer;
     font-size: 25px;
@@ -279,7 +279,7 @@ HTML {
 
 #whishListIcon {
   position: absolute;
-  bottom: 20px;
+  bottom: 40px;
   right: 25px;
   cursor: pointer;
   font-size: 25px;
