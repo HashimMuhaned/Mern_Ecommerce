@@ -222,7 +222,6 @@ HTML {
     bottom: 20px !important;
     right: 25px !important;
     cursor: pointer !important;
-    font-size: 25px !important;
     z-index: 1 !important;
     transition: color 0.3s ease !important;
   }
