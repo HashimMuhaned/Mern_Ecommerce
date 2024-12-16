@@ -219,17 +219,7 @@ HTML {
 
   #whishListIcon {
     position: absolute;
-    bottom: 20px;
-    right: 25px;
-    cursor: pointer;
-    font-size: 25px;
-    z-index: 1;
-    transition: color 0.3s ease;
-  }
-
-  #whishListIcon #analyseButton {
-    position: absolute;
-    bottom: 30px;
+    bottom: 22px;
     right: 25px;
     cursor: pointer;
     font-size: 25px;
@@ -290,16 +280,6 @@ HTML {
 #whishListIcon {
   position: absolute;
   bottom: 40px;
-  right: 25px;
-  cursor: pointer;
-  font-size: 25px;
-  z-index: 1;
-  transition: color 0.3s ease;
-}
-
-#whishListIcon #analyseButton {
-  position: absolute;
-  bottom: 30px;
   right: 25px;
   cursor: pointer;
   font-size: 25px;
