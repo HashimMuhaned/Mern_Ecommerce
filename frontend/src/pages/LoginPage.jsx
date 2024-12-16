@@ -23,12 +23,16 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.BACKEND_API}/login`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `${process.env.BACKEND_API}/login`,
+        formData,
+        {
+          withCredentials: true, // This ensures cookies are sent and received
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       // console.log(response.data);
       setIsLoggedin(true);
       toast.success("Logged In Successfully");
