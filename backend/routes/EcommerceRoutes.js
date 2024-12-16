@@ -65,7 +65,7 @@ router.get("/", getItems);
 
 router.get("/");
 
-router.get("/validate-user", checkUserToken, (req, res) => {
+router.get("/validate-user", (req, res) => {
   res.status(200).json({ valid: true }); // User is authenticated, return `valid: true`
 });
 router.post("/signup", createUser);
