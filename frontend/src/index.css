@@ -217,14 +217,14 @@ HTML {
     padding: 20px 20px 10px 20px !important;
   }
 
-  #favoriteBTN {
-    position: absolute !important;
-    bottom: 20px !important;
-    right: 25px !important;
-    cursor: pointer !important;
-    font-size: 25px !important;
-    z-index: 1 !important;
-    transition: color 0.3s ease !important;
+  #whishListIcon {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    cursor: pointer;
+    font-size: 25px;
+    z-index: 1;
+    transition: color 0.3s ease;
   }
 }
 
@@ -279,17 +279,7 @@ HTML {
 
 #whishListIcon {
   position: absolute;
-  bottom: 40px;
-  right: 25px;
-  cursor: pointer;
-  font-size: 25px;
-  z-index: 1;
-  transition: color 0.3s ease;
-}
-
-#favoriteBTN {
-  position: absolute;
-  bottom: 40px;
+  bottom: 50px;
   right: 25px;
   cursor: pointer;
   font-size: 25px;
