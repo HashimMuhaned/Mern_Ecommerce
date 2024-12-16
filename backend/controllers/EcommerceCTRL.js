@@ -286,9 +286,11 @@ const userLogin = async (req, res) => {
     const token = createToken(user._id);
     res.cookie("cookie", token, {
       httpOnly: true,
-      secure: true, // Required for cookies over HTTPS
-      sameSite: "none", // Needed for cross-origin cookies
-      maxAge: maxAge * 1000,
+      secure: true, // Ensure HTTPS
+      sameSite: "none", // Cross-origin cookies
+      maxAge: maxAge * 1000, // Cookie expiry
+      domain: ".vercel.app", // Shared across subdomains of vercel.app
+      path: "/", // Make cookie available throughout the site
     });
 
     res.status(200).json({ message: "Login successful" });
