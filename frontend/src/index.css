@@ -226,6 +226,16 @@ HTML {
     z-index: 1;
     transition: color 0.3s ease;
   } */
+
+  #favoriteBTN {
+    position: absolute;
+    bottom: 20px;
+    right: 25px;
+    cursor: pointer;
+    font-size: 25px;
+    z-index: 1;
+    transition: color 0.3s ease;
+  }
 }
 
 #product1 {
