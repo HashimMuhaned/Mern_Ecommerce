@@ -12,17 +12,23 @@ export const CheckUserProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_API}/validate-user`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${process.env.BACKEND_API}/validate-user`,
+          {
+            withCredentials: true,
+          }
+        );
 
         if (response.data.valid) {
           setIsLoggedin(true);
 
           // Fetch user details after validation
-          const userResponse = await axios.get(`${process.env.BACKEND_API}/user-details`, {
-            withCredentials: true,
-          });
+          const userResponse = await axios.get(
+            `${process.env.BACKEND_API}/user-details`,
+            {
+              withCredentials: true,
+            }
+          );
           setUserInfo(userResponse.data);
         } else {
           setIsLoggedin(false);
@@ -74,9 +80,12 @@ export const CheckUserProvider = ({ children }) => {
 
   const handleSignOut = async (toast, navigate) => {
     try {
-      const response = await axios.get(`${process.env.BACKEND_API}/auth/signout`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${process.env.BACKEND_API}/auth/signout`,
+        {
+          withCredentials: true,
+        }
+      );
       if (response.status === 200) {
         setIsLoggedin(false); // Update the context to reflect the user is signed out
         setUserInfo([]); // Clear user information if needed

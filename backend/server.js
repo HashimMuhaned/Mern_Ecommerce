@@ -13,25 +13,9 @@ const cookieParser = require("cookie-parser");
 // const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:4173", // Development frontend
-  "https://mern-ecommerce-frontend-three-beta.vercel.app", // Deployed frontend
-];
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman or server-to-server)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(
-          new Error("CORS policy: This origin is not allowed"),
-          false
-        );
-      }
-    },
+    origin: "https://mern-ecommerce-frontend-three-beta.vercel.app",
     credentials: true, // If you're using cookies or other credentials
   })
 );

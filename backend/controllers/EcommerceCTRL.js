@@ -58,7 +58,7 @@ const checkUserToken = (req, res, next) => {
 };
 
 const createToken = (id) => {
-  return jwt.sign({ id }, "this the best marketplace ethereal", {
+  return jwt.sign({ id }, token_SECRET_KEY, {
     expiresIn: maxAge,
   });
 };
