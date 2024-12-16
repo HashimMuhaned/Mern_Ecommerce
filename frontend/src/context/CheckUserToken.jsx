@@ -15,7 +15,7 @@ export const CheckUserProvider = ({ children }) => {
         const response = await axios.get(
           `${process.env.BACKEND_API}/validate-user`,
           {
-            withCredentials: true,
+            withCredentials: true, // Ensures cookies are sent with the GET request
           }
         );
 

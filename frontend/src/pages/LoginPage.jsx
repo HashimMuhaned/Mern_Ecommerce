@@ -27,7 +27,7 @@ const LoginPage = () => {
         `${process.env.BACKEND_API}/login`,
         formData,
         {
-          withCredentials: true, // This ensures cookies are sent and received
+          withCredentials: true, // Ensures cookies are sent and received
           headers: {
             "Content-Type": "application/json",
           },
