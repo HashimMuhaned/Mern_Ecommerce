@@ -27,6 +27,8 @@ const NavBar = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const token = localStorage.getItem("authToken");
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -49,8 +51,7 @@ const NavBar = () => {
   const fetchSuggestions = async (query) => {
     // Replace with actual API call or filtering logic
     const response = await fetch(
-      `${process.env.BACKEND_API}/suggestions?query=${query}`,
-      { withCredentials: true }
+      `${process.env.BACKEND_API}/suggestions?query=${query}`
     );
     const data = await response.json();
     setSuggestions(data);

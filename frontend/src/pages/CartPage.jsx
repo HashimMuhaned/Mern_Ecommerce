@@ -18,6 +18,7 @@ const CartPage = () => {
   const [updating, setUpdating] = useState(false); // To show if an item is being updated
   const navigate = useNavigate();
   const [randomItems, setRandomItems] = useState([]);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     // Shuffle and pick 4 random items
@@ -38,7 +39,9 @@ const CartPage = () => {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get(`${process.env.BACKEND_API}/cart`, {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         setCartItems(response.data.items);
         setLoading(false); // Data has been fetched
@@ -57,7 +60,11 @@ const CartPage = () => {
       const response = await axios.put(
         `${process.env.BACKEND_API}/cart/itemQuantityUpdate`,
         { productId, quantity: newQuantity },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       setCartItems(response.data.items);
@@ -81,7 +88,11 @@ const CartPage = () => {
       const response = await axios.put(
         `${process.env.BACKEND_API}/cart/itemSizeUpdate`, // Ensure the correct URL is used
         { productId, sizeChosen: selectedSize },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       // Update the cart items with the latest response

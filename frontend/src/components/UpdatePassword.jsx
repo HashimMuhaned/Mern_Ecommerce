@@ -10,6 +10,7 @@ const PasswordChangeForm = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
+  const token = localStorage.getItem("authToken");
   const [errors, setErrors] = useState({
     currentPasswordError: "",
     newPasswordNotMatch: "",
@@ -58,7 +59,9 @@ const PasswordChangeForm = () => {
           password: currentPassword,
         },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -72,7 +75,9 @@ const PasswordChangeForm = () => {
             newPassword,
           },
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 

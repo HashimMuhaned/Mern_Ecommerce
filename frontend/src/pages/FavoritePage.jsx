@@ -11,11 +11,15 @@ const FavoritePage = () => {
   const { isLoggedin } = useContext(CheckUserContext);
   const { favoriteItems, setFavoriteItems } = useContext(FavoriteContext);
   const [loading, setLoading] = useState(true); // Add a loading state
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchFavoriteItems = async () => {
       try {
         const response = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         setFavoriteItems(response.data);
       } catch (error) {

@@ -8,12 +8,18 @@ const DeleteCartButton = ({ productId, cartItems, setCartItems }) => {
   //   const { isLoggedin } = useContext(CheckUserContext);
   // const { cartItems, setCartItems } = useContext(CartContext);
 
+  const token = localStorage.getItem("authToken");
   const [showModal, setShowModal] = useState(false);
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${process.env.BACKEND_API}/cart/delete/${productId}`, {
-        withCredentials: true,
-      });
+      const response = await axios.delete(
+        `${process.env.BACKEND_API}/cart/delete/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         // Remove the deleted item from the cartItems state

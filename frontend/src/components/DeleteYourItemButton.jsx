@@ -11,12 +11,18 @@ const DeleteYourItemButton = ({ productId }) => {
   const { yourItems, setYourItems } = useContext(YourItemsContext);
   const { setFavoriteItems } = useContext(FavoriteContext);
   const { setCartItems } = useContext(CartContext);
+  const token = localStorage.getItem("authToken");
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${process.env.BACKEND_API}/yourItem/delete/${productId}`, {
-        withCredentials: true,
-      });
+      const response = await axios.delete(
+        `${process.env.BACKEND_API}/yourItem/delete/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         // Remove the deleted item from the yourItems state
@@ -26,14 +32,24 @@ const DeleteYourItemButton = ({ productId }) => {
       setShowModal(false);
 
       // updating the favorite Items to reflect the changes
-      const updatedFavoriteItems = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
-        withCredentials: true,
-      });
+      const updatedFavoriteItems = await axios.get(
+        `${process.env.BACKEND_API}/favorites/get`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setFavoriteItems(updatedFavoriteItems.data);
 
-      const updatedCartItems = await axios.get(`${process.env.BACKEND_API}/cart`, {
-        withCredentials: true,
-      });
+      const updatedCartItems = await axios.get(
+        `${process.env.BACKEND_API}/cart`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setCartItems(updatedCartItems.data.items);
     } catch (error) {
       console.error("Error deleting item:", error);

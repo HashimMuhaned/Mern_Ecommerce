@@ -25,6 +25,7 @@ ChartJS.register(
 
 const ItemViewsChart = ({ itemId, filterDate }) => {
   const [viewHistory, setViewHistory] = useState([]);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchViews = async () => {
@@ -32,7 +33,9 @@ const ItemViewsChart = ({ itemId, filterDate }) => {
         const response = await axios.get(
           `${process.env.BACKEND_API}/getItemViewsLast${filterDate}/${itemId}`,
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setViewHistory(response.data.views);

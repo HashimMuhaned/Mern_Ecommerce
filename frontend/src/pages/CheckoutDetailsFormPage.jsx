@@ -10,6 +10,7 @@ const CheckoutDetailsFormPage = () => {
   const { cartItems, totalCartCost, clearCart } = useContext(CartContext); // Access cart items and clearCart
   const cartItemsNumber = cartItems.length;
   const { userInfo } = useContext(CheckUserContext);
+  const token = localStorage.getItem("authToken");
 
   const navigate = useNavigate();
   const [address, setAddress] = useState({
@@ -62,7 +63,9 @@ const CheckoutDetailsFormPage = () => {
 
     try {
       const response = await axios.post(`${process.env.BACKEND_API}/submitOrder`, order, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       console.log("Order placed successfully:", response.data);
       toast.success("Order placed successfully!");

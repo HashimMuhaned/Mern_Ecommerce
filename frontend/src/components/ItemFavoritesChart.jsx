@@ -25,6 +25,7 @@ ChartJS.register(
 
 const ItemFavoritesChart = ({ itemId, filterDate }) => {
   const [favoritesHistory, setFavoritesHistory] = useState([]);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -32,7 +33,9 @@ const ItemFavoritesChart = ({ itemId, filterDate }) => {
         const response = await axios.get(
           `${process.env.BACKEND_API}/getItemFavoritesLast${filterDate}/${itemId}`,
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setFavoritesHistory(response.data.favorites);

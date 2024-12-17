@@ -25,6 +25,7 @@ ChartJS.register(
 
 const ItemCartChart = ({ itemId, filterDate }) => {
   const [cartHistory, setCartHistory] = useState([]);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -32,7 +33,9 @@ const ItemCartChart = ({ itemId, filterDate }) => {
         const response = await axios.get(
           `${process.env.BACKEND_API}/getItemCartCountLast${filterDate}/${itemId}`,
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setCartHistory(response.data.carts);

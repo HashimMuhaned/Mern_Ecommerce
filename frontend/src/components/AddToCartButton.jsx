@@ -6,6 +6,7 @@ import { CartContext } from "../context/CartContext";
 const AddToCartButton = ({ productId, quantity, sizeChosen }) => {
   const { isLoggedin } = useContext(CheckUserContext);
   const { setCartItems } = useContext(CartContext); // Access CartContext to update items
+  const token = localStorage.getItem("authToken");
 
   const handleAddToCart = async () => {
     if (!isLoggedin) {
@@ -17,7 +18,11 @@ const AddToCartButton = ({ productId, quantity, sizeChosen }) => {
       const response = await axios.post(
         `${process.env.BACKEND_API}/cart/add`,
         { productId, quantity, sizeChosen },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       // If the item is successfully added, update the cart items
       setCartItems(response.data.items); // Update cartItems in the CartContext

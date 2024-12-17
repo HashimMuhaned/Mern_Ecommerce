@@ -8,13 +8,16 @@ export const YourItemsContext = createContext();
 export const YourItemsProvider = ({ children }) => {
   const [yourItems, setYourItems] = useState([]);
   const { isLoggedin } = useContext(CheckUserContext);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchYourItems = async () => {
       if (isLoggedin) {
         try {
           const res = await axios.get(`${process.env.BACKEND_API}/yourItems/get`, {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
           setYourItems(res.data);
         } catch (error) {

@@ -10,6 +10,7 @@ const BuyerOrderpage = () => {
   const [loading, setLoading] = useState(true); // Add loading state
   const { userInfo, isLoggedin } = useContext(CheckUserContext); // Assuming the context provides the logged-in user's (buyer's) ID
   const buyerId = userInfo._id;
+  const token = localStorage.getItem("authToken");
 
   // Fetch the orders for the logged-in buyer
   useEffect(() => {
@@ -22,7 +23,9 @@ const BuyerOrderpage = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${process.env.BACKEND_API}/ordersBuyer?buyerId=${buyerId}`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       setOrders(response.data.orders);
     } catch (error) {

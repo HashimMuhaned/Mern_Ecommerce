@@ -11,6 +11,7 @@ const AddItemForm = () => {
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
+  const token = localStorage.getItem("authToken");
 
   if (!isLoggedin) {
     return (
@@ -93,7 +94,9 @@ const AddItemForm = () => {
       const response = await axios.get(
         `${process.env.BACKEND_API}/yourItems/get`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       setYourItems(response.data);
@@ -116,7 +119,9 @@ const AddItemForm = () => {
 
     axios
       .post(`${process.env.BACKEND_API}/upload-item`, formData, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
       .then((res) => {
         toast.success("Item Created successfully");

@@ -2,11 +2,11 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CheckUserContext } from "./CheckUserToken";
 
-
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const token = localStorage.getItem("authToken");
   const totalCartCost = cartItems
     ? cartItems
         .reduce(
@@ -22,7 +22,9 @@ export const CartProvider = ({ children }) => {
       if (isLoggedin) {
         try {
           const response = await axios.get(`${process.env.BACKEND_API}/cart`, {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           });
           setCartItems(response.data.items);
         } catch (error) {
@@ -37,7 +39,9 @@ export const CartProvider = ({ children }) => {
   const clearCart = async (buyer) => {
     try {
       await axios.delete(`${process.env.BACKEND_API}/cart`, buyer, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       setCartItems([]); // Clear the cart locally
     } catch (error) {

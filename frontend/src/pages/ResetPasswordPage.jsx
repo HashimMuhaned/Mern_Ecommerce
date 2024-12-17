@@ -12,6 +12,7 @@ const ResetPasswordPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const authToken = localStorage.getItem("authToken");
 
   const [criteria, setCriteria] = useState({
     minLength: false,
@@ -53,10 +54,8 @@ const ResetPasswordPage = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
           },
-        },
-        {
-          withCredentials: true,
         }
       );
       toast.success("Password reset successfully!");

@@ -25,6 +25,7 @@ ChartJS.register(
 
 const ItemSalesChart = ({ itemId, filterDate }) => {
   const [salesHistory, setSalesHistory] = useState([]);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchSales = async () => {
@@ -32,7 +33,9 @@ const ItemSalesChart = ({ itemId, filterDate }) => {
         const response = await axios.get(
           `${process.env.BACKEND_API}/getItemsTotalSalesByPeriod/${filterDate}/${itemId}`, // Adjusted API route
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setSalesHistory(response.data.sales);

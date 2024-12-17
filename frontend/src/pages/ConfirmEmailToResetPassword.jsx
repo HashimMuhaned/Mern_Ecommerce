@@ -9,6 +9,8 @@ const ConfirmEmailToResetPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
+  const token = localStorage.getItem("authToken");
+
   //   const [errors, setErrors] = useState();
 
   const handleSubmit = async (e) => {
@@ -20,7 +22,9 @@ const ConfirmEmailToResetPassword = () => {
           email,
         },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       toast.success(response.data.message);

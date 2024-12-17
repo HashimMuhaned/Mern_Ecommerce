@@ -8,6 +8,7 @@ const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const { userInfo, isLoggedin } = useContext(CheckUserContext);
   const sellerId = userInfo._id;
+  const token = localStorage.getItem("authToken");
 
   // Fetch the orders for the logged-in seller
   useEffect(() => {
@@ -19,7 +20,9 @@ const OrdersPage = () => {
   const fetchSellerOrders = async (sellerId) => {
     try {
       const response = await axios.get(`${process.env.BACKEND_API}/orders?sellerId=${sellerId}`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       setOrders(response.data.orders);
     } catch (error) {

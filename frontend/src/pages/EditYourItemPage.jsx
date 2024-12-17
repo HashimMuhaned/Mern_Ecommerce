@@ -15,6 +15,7 @@ const EditYourItemPage = () => {
   const { setCartItems } = useContext(CartContext);
   const { setData } = useContext(DataContext);
   const { id } = useParams();
+  const token = localStorage.getItem("authToken");
   // Initial form data structure
   const initialFormData = {
     name: "",
@@ -40,9 +41,14 @@ const EditYourItemPage = () => {
   useEffect(() => {
     const fillEditFormWithExistingItemData = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_API}/getYourItemToEdit/${id}`, {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${process.env.BACKEND_API}/getYourItemToEdit/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const itemData = response.data;
         const fetchedData = {
@@ -128,23 +134,40 @@ const EditYourItemPage = () => {
         navigate("/ethereal/profile/yourItems");
 
         // Updating favorite items, cart, and your items to reflect the changes
-        const updatedFavoriteItems = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
-          withCredentials: true,
-        });
+        const updatedFavoriteItems = await axios.get(
+          `${process.env.BACKEND_API}/favorites/get`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setFavoriteItems(updatedFavoriteItems.data);
 
-        const updatedCartItems = await axios.get(`${process.env.BACKEND_API}/cart`, {
-          withCredentials: true,
-        });
+        const updatedCartItems = await axios.get(
+          `${process.env.BACKEND_API}/cart`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setCartItems(updatedCartItems.data.items);
 
-        const updatedYourItems = await axios.get(`${process.env.BACKEND_API}/yourItems/get`, {
-          withCredentials: true,
-        });
+        const updatedYourItems = await axios.get(
+          `${process.env.BACKEND_API}/yourItems/get`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setYourItems(updatedYourItems.data);
 
         const updatedData = await axios.get(`${process.env.BACKEND_API}`, {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         setData(updatedData.data);
 
