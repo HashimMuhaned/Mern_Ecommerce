@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 export const DataContext = createContext();
 
@@ -8,7 +9,7 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.BACKEND_API}`);
+        const res = await axios.get(`${process.env.BACKEND_API}`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
