@@ -124,30 +124,42 @@ const AddItemForm = () => {
         },
       })
       .then((res) => {
-        toast.success("Item Created successfully");
+        console.log("Server Response:", res); // Debug the response
 
-        // Clear the form after submission and local storage
-        setFormData({
-          name: "",
-          description: "",
-          price: "",
-          category: "men",
-          subCategory: "Top Wear",
-          size: [],
-          isBestseller: false,
-          image1: "",
-          image2: "",
-          image3: "",
-          image4: "",
-          image5: "",
-        });
-        localStorage.removeItem("formData");
+        if (
+          res.status === 201 &&
+          res.data.message === "Item created successfully"
+        ) {
+          toast.success("Item Created successfully");
 
-        fetchYourItems();
-        fetchHomePageItems();
+          // Clear the form after submission and local storage
+          setFormData({
+            name: "",
+            description: "",
+            price: "",
+            category: "men",
+            subCategory: "Top Wear",
+            size: [],
+            isBestseller: false,
+            image1: "",
+            image2: "",
+            image3: "",
+            image4: "",
+            image5: "",
+          });
+          localStorage.removeItem("formData");
+
+          fetchYourItems();
+          fetchHomePageItems();
+        } else {
+          toast.error("Unexpected response from the server.");
+        }
       })
       .catch((err) => {
-        toast.error("Failed to add item, please try again");
+        console.error("Error Response:", err.response || err.message);
+        toast.error(
+          err.response?.data?.message || "Failed to add item, please try again"
+        );
       });
   };
 
