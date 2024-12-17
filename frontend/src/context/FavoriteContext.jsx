@@ -7,7 +7,7 @@ export const FavoriteContext = createContext();
 export const FavoriteProvider = ({ children }) => {
   const [favoriteItems, setFavoriteItems] = useState([]);
   const { isLoggedin } = useContext(CheckUserContext);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
 
   // Fetch favorite items when the component mounts
   useEffect(() => {

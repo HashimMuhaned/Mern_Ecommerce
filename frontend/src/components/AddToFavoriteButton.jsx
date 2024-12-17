@@ -6,7 +6,7 @@ import { IoHeartOutline, IoHeart } from "react-icons/io5";
 const AddToFavoriteButton = ({ productId }) => {
   const { favoriteItems, setFavoriteItems } = useContext(FavoriteContext);
   const [isFavorite, setIsFavorite] = useState(false);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     setIsFavorite(favoriteItems.some((item) => item._id === productId));
