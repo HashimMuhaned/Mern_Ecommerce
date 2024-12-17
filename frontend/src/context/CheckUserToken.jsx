@@ -12,10 +12,23 @@ export const CheckUserProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
+        // Get token from localStorage
+        const token = localStorage.getItem("authToken");
+
+        // If no token, reset states and exit
+        if (!token) {
+          setIsLoggedin(false);
+          setUserInfo([]);
+          return;
+        }
+
+        // Validate the user token
         const response = await axios.get(
           `${process.env.BACKEND_API}/validate-user`,
           {
-            withCredentials: true, // Ensures cookies are sent with the GET request
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in Authorization header
+            },
           }
         );
 
@@ -26,22 +39,28 @@ export const CheckUserProvider = ({ children }) => {
           const userResponse = await axios.get(
             `${process.env.BACKEND_API}/user-details`,
             {
-              withCredentials: true,
+              headers: {
+                Authorization: `Bearer ${token}`, // Send token for authenticated request
+              },
             }
           );
           setUserInfo(userResponse.data);
         } else {
+          // If not valid, clear states and token
           setIsLoggedin(false);
           setUserInfo([]);
+          localStorage.removeItem("authToken");
         }
       } catch (error) {
+        console.error("Authentication failed:", error.message);
         setIsLoggedin(false);
         setUserInfo([]);
+        localStorage.removeItem("authToken"); // Clear invalid token
       }
     };
 
     checkAuthStatus();
-  }, [isLoggedin]);
+  }, [isLoggedin]); // Trigger on login state changes
 
   const handleFieldUpdate = async (field, newName) => {
     let otherName = "";

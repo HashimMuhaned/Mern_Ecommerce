@@ -8,7 +8,6 @@ import registerImage from "../assets/registerImage.jpg";
 
 const LoginPage = () => {
   const { setIsLoggedin } = useContext(CheckUserContext);
-
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -27,15 +26,22 @@ const LoginPage = () => {
         `${process.env.BACKEND_API}/login`,
         formData,
         {
-          withCredentials: true, // Ensures cookies are sent and received
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      // console.log(response.data);
+
+      // Extract the token from the response
+      const { token } = response.data;
+
+      // Save the token in localStorage
+      localStorage.setItem("authToken", token);
+
+      // Update login state
       setIsLoggedin(true);
       toast.success("Logged In Successfully");
+
       return navigate("/ethereal");
     } catch (error) {
       if (error.response && error.response.data.message) {

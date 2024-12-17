@@ -37,22 +37,20 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 // };
 
 const checkUserToken = (req, res, next) => {
-  const token = req.cookies.cookie;
-  // console.log("Token received:", token); // Debugging line
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    console.log("No token found, unauthorized access.");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  const token = authHeader.split(" ")[1];
+
   jwt.verify(token, token_SECRET_KEY, (err, decoded) => {
     if (err) {
-      console.log("Token verification failed:", err.message);
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // console.log("Token verified successfully:", decoded); // Debugging line
-    req.userId = decoded.id; // Assuming the JWT contains the user's id
+    req.userId = decoded.id; // Attach user ID to request
     next();
   });
 };
@@ -283,18 +281,12 @@ const userLogin = async (req, res) => {
         .json({ message: "Please activate your account to log in." });
     }
 
-    const token = createToken(user._id);
-    res.cookie("cookie", token, {
-      httpOnly: true,
-      secure: true, // Ensure HTTPS
-      sameSite: "none", // Cross-origin cookies
-      maxAge: maxAge * 1000, // Cookie expiry
-      domain: ".vercel.app", // Shared across subdomains of vercel.app
-      path: "/", // Make cookie available throughout the site
-    });
-    console.log("Set-Cookie header:", res.getHeaders()["set-cookie"]);
+    const token = createToken(user._id); // Generate JWT token
 
-    res.status(200).json({ message: "Login successful" });
+    res.status(200).json({
+      message: "Login successful",
+      token, // Send token to the client
+    });
   } catch (error) {
     console.error("Login error:", error);
 
