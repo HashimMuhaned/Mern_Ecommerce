@@ -18,7 +18,11 @@ const AddToFavoriteButton = ({ productId }) => {
         await axios.post(
           `${process.env.BACKEND_API}/favorites/remove`,
           { productId },
-          { withCredentials: true }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in the header
+            },
+          }
         );
         setFavoriteItems((prevItems) =>
           prevItems.filter((item) => item._id !== productId)
@@ -28,7 +32,11 @@ const AddToFavoriteButton = ({ productId }) => {
         const response = await axios.post(
           `${process.env.BACKEND_API}/favorites/add`,
           { productId },
-          { withCredentials: true }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Send token in the header
+            },
+          }
         );
 
         setFavoriteItems((prevItems) => [

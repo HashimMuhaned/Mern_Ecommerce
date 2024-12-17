@@ -6,7 +6,9 @@ const authMiddleware = (req, res, next) => {
   const token = req.cookies.token; // Assuming the JWT is stored in a cookie
 
   if (!token) {
-    return res.status(401).json({ message: 'Access denied, no token provided' });
+    return res
+      .status(401)
+      .json({ message: "Access denied, no token provided" });
   }
 
   try {
@@ -14,9 +16,8 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(400).json({ message: 'Invalid token' });
+    res.status(400).json({ message: "Invalid token" });
   }
 };
-
 
 module.exports = { authMiddleware };
