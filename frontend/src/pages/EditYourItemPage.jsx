@@ -124,7 +124,11 @@ const EditYourItemPage = () => {
     e.preventDefault();
 
     axios
-      .put(`${process.env.BACKEND_API}/editYourItem/${id}`, formData)
+      .put(`${process.env.BACKEND_API}/editYourItem/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(async (res) => {
         console.log("Item updated successfully:", res.data);
 

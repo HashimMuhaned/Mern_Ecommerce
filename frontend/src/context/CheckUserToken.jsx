@@ -9,65 +9,71 @@ export const CheckUserProvider = ({ children }) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        // Get token from localStorage
-        const token = localStorage.getItem("authToken");
+  // Function to validate the token and fetch user details
+  const checkAuthStatus = async () => {
+    try {
+      // Retrieve token from localStorage
+      const token = localStorage.getItem("authToken");
 
-        // If no token, reset states and exit
-        if (!token) {
-          setIsLoggedin(false);
-          setUserInfo([]);
-          return;
+      if (!token) {
+        // If no token, reset login state
+        setIsLoggedin(false);
+        setUserInfo([]);
+        return;
+      }
+
+      // Validate the token with the backend
+      const response = await axios.get(
+        `${process.env.BACKEND_API}/validate-user`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Token sent via Authorization header
+          },
         }
+      );
 
-        // Validate the user token
-        const response = await axios.get(
-          `${process.env.BACKEND_API}/validate-user`,
+      if (response.data.valid) {
+        setIsLoggedin(true);
+
+        // Fetch user details if the token is valid
+        const userResponse = await axios.get(
+          `${process.env.BACKEND_API}/user-details`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Send token in Authorization header
+              Authorization: `Bearer ${token}`, // Token sent with every authenticated request
             },
           }
         );
-
-        if (response.data.valid) {
-          setIsLoggedin(true);
-
-          // Fetch user details after validation
-          const userResponse = await axios.get(
-            `${process.env.BACKEND_API}/user-details`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`, // Send token for authenticated request
-              },
-            }
-          );
-          setUserInfo(userResponse.data);
-        } else {
-          // If not valid, clear states and token
-          setIsLoggedin(false);
-          setUserInfo([]);
-          localStorage.removeItem("authToken");
-        }
-      } catch (error) {
-        console.error("Authentication failed:", error.message);
+        setUserInfo(userResponse.data);
+      } else {
+        // If token validation fails, reset state and remove token
         setIsLoggedin(false);
         setUserInfo([]);
-        localStorage.removeItem("authToken"); // Clear invalid token
+        localStorage.removeItem("authToken");
       }
-    };
+    } catch (error) {
+      console.error("Authentication failed:", error.message);
 
+      // Reset state and remove invalid token
+      setIsLoggedin(false);
+      setUserInfo([]);
+      localStorage.removeItem("authToken");
+    }
+  };
+
+  // Trigger the auth validation on component mount
+  useEffect(() => {
     checkAuthStatus();
-  }, [isLoggedin]); // Trigger on login state changes
+  }, []);
 
+  // Function to update user fields (e.g., first name, last name)
   const handleFieldUpdate = async (field, newName) => {
     let otherName = "";
+
     if (field === "fname") {
-      otherName = userInfo.lname; // Get the current last name
+      otherName = userInfo.lname; // Current last name
     } else if (field === "lname") {
-      otherName = userInfo.fname; // Get the current first name
+      otherName = userInfo.fname; // Current first name
     }
 
     const result = await updateUserField(field, newName, otherName);
@@ -83,6 +89,7 @@ export const CheckUserProvider = ({ children }) => {
     }
   };
 
+  // Function to update user email
   const handleEmailUpdate = async (newEmail) => {
     const result = await updateUserEmailField(newEmail);
 
@@ -97,22 +104,30 @@ export const CheckUserProvider = ({ children }) => {
     }
   };
 
+  // Function to handle user sign-out
   const handleSignOut = async (toast, navigate) => {
     try {
       const response = await axios.get(
         `${process.env.BACKEND_API}/auth/signout`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
       );
+
       if (response.status === 200) {
-        setIsLoggedin(false); // Update the context to reflect the user is signed out
-        setUserInfo([]); // Clear user information if needed
+        // Reset context state and clear token
+        setIsLoggedin(false);
+        setUserInfo([]);
+        localStorage.removeItem("authToken");
+
         navigate("/ethereal/login");
         toast.success("Signed out successfully");
       }
     } catch (error) {
-      console.error("Error during sign out", error);
+      console.error("Error during sign out:", error.message);
+      toast.error("Failed to sign out. Please try again.");
     }
   };
 
