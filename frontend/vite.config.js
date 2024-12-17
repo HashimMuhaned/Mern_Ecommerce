@@ -9,6 +9,17 @@ export default defineConfig({
   build: {
     outDir: "dist",
   },
+  server: {
+    proxy: {
+      "/api": {
+        target:
+          process.env.BACKEND_API ||
+          "https://mern-ecommerce-backend-nine.vercel.app/api",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
   define: {
     "process.env.BACKEND_API": JSON.stringify(
       process.env.BACKEND_API ||

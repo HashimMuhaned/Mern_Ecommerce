@@ -294,7 +294,6 @@ const userLogin = async (req, res) => {
     });
     console.log("Set-Cookie header:", res.getHeaders()["set-cookie"]);
 
-
     res.status(200).json({ message: "Login successful" });
   } catch (error) {
     console.error("Login error:", error);
