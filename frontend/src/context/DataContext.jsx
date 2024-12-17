@@ -8,7 +8,9 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.BACKEND_API}`);
+        const res = await fetch(
+          "https://mern-ecommerce-backend-nine.vercel.app/api"
+        );
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
