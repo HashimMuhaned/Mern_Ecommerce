@@ -62,6 +62,7 @@ const createToken = (id) => {
 };
 
 const createItem = async (req, res) => {
+  console.log("Creating a new item...");
   try {
     // Destructure the request body to get item details
     const {

@@ -114,8 +114,14 @@ const AddItemForm = () => {
     }
   };
 
+  const [loading, setLoading] = useState(false);
   const handleSubmit = (e) => {
+    console.log("Form Data:", formData); // Debug the form data
     e.preventDefault();
+
+    if (loading) return; // Prevent multiple submissions
+
+    setLoading(true);
 
     axios
       .post(`${process.env.BACKEND_API}/upload-item`, formData, {
@@ -156,6 +162,7 @@ const AddItemForm = () => {
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.error("Error Response:", err.response || err.message);
         toast.error(
           err.response?.data?.message || "Failed to add item, please try again"
