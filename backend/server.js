@@ -32,8 +32,8 @@ app.use((req, res, next) => {
 
 // middle ware
 app.use(cookieParser());
-app.use(bodyParser.json({ limit: "20mb" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "20mb" }));
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 app.use(express.json());
 app.use("/api", EcommerceRoutes);
 
