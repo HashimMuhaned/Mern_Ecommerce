@@ -86,7 +86,7 @@ const upload = multer({
 });
 
 // Define route to handle file uploads
-app.post(
+router.post(
   "/upload-item",
   checkUserToken,
   upload.fields([
