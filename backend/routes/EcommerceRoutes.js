@@ -1,6 +1,9 @@
 const experess = require("express");
 const router = experess.Router();
 const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+
 const {
   createItem,
   getItems,
@@ -60,7 +63,12 @@ const {
 // Configure storage for uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Directory where files will be stored
+    const uploadDir = path.join(__dirname, "uploads");
+    // Check if the directory exists, if not, create it
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir); // Directory where files will be stored
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
