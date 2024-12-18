@@ -63,7 +63,7 @@ const {
 // Configure storage for uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, "uploads");
+    const uploadDir = path.join(__dirname, '../uploads'); // Going up one directory level to the root
     // Check if the directory exists, if not, create it
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
