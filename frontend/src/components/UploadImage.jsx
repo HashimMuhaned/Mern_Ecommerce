@@ -133,7 +133,7 @@ const AddItemForm = () => {
     formData.size.forEach((size) => formDataToSend.append("size", size));
 
     // Define allowed image file types
-    const allowedFileTypes = ["image/jpeg", "image/png", "image/gif"];
+    const allowedFileTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
 
     // Check and append each image file if it exists
     const invalidFileType = [
