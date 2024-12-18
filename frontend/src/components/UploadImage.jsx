@@ -62,14 +62,12 @@ const AddItemForm = () => {
   const handleFileUpload = (e, imageField) => {
     const file = e.target.files[0];
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
+    if (file) {
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: reader.result,
+        [imageField]: file, // Store the file object directly
       }));
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -115,59 +113,89 @@ const AddItemForm = () => {
   };
 
   const [loading, setLoading] = useState(false);
-  const handleSubmit = (e) => {
-    console.log("Form Data:", formData); // Debug the form data
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (loading) return; // Prevent multiple submissions
 
     setLoading(true);
 
-    axios
-      .post(`${process.env.BACKEND_API}/upload-item`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log("Server Response:", res); // Debug the response
+    // Prepare form data as FormData object
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("subCategory", formData.subCategory);
+    formDataToSend.append("isBestseller", formData.isBestseller);
 
-        if (
-          res.status === 201 &&
-          res.data.message === "Item created successfully"
-        ) {
-          toast.success("Item Created successfully");
+    // Append sizes as an array (backend should handle array parsing)
+    formData.size.forEach((size) => formDataToSend.append("size", size));
 
-          // Clear the form after submission and local storage
-          setFormData({
-            name: "",
-            description: "",
-            price: "",
-            category: "men",
-            subCategory: "Top Wear",
-            size: [],
-            isBestseller: false,
-            image1: "",
-            image2: "",
-            image3: "",
-            image4: "",
-            image5: "",
-          });
-          localStorage.removeItem("formData");
+    // Define allowed image file types
+    const allowedFileTypes = ["image/jpeg", "image/png", "image/gif"];
 
-          fetchYourItems();
-          fetchHomePageItems();
-        } else {
-          toast.error("Unexpected response from the server.");
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.error("Error Response:", err.response || err.message);
+    // Check and append each image file if it exists
+    const invalidFileType = [
+      "image1",
+      "image2",
+      "image3",
+      "image4",
+      "image5",
+    ].find((field) => {
+      const file = formData[field];
+      if (file && !allowedFileTypes.includes(file.type)) {
         toast.error(
-          err.response?.data?.message || "Failed to add item, please try again"
+          `Invalid file type for ${field}. Only JPEG, PNG, or GIF allowed.`
         );
-      });
+        return true;
+      }
+      return false;
+    });
+
+    if (invalidFileType) {
+      setLoading(false);
+      return; // Stop form submission if invalid file is detected
+    }
+
+    // Append valid files to the form data
+    ["image1", "image2", "image3", "image4", "image5"].forEach((field) => {
+      if (formData[field]) {
+        formDataToSend.append(field, formData[field]);
+      }
+    });
+
+    try {
+      const response = await axios.post(
+        `${process.env.BACKEND_API}/upload-item`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Required for Multer
+          },
+        }
+      );
+
+      console.log("Server Response:", response); // Debug response
+      if (response.status === 201) {
+        toast.success("Item created successfully!");
+
+        // Reset form
+        clearFormInputs();
+        fetchYourItems();
+        fetchHomePageItems();
+      } else {
+        toast.error("Unexpected response from server.");
+      }
+    } catch (err) {
+      console.error("Error Response:", err.response || err.message);
+      toast.error(
+        err.response?.data?.message || "Failed to add item, please try again"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const clearFormInputs = () => {

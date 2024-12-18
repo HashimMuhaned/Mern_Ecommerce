@@ -1,5 +1,6 @@
 const experess = require("express");
 const router = experess.Router();
+const multer = require("multer");
 const {
   createItem,
   getItems,
@@ -56,7 +57,47 @@ const {
   activateAccount,
 } = require("../controllers/EcommerceCTRL");
 
-router.post("/upload-item", checkUserToken, createItem);
+// Configure storage for uploaded files
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Directory where files will be stored
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 5 MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(
+        new Error("Invalid file type, only JPEG, PNG, or GIF allowed"),
+        false
+      );
+    }
+    cb(null, true);
+  },
+});
+
+// Define route to handle file uploads
+app.post(
+  "/upload-item",
+  checkUserToken,
+  upload.fields([
+    { name: "image1", maxCount: 1 },
+    { name: "image2", maxCount: 1 },
+    { name: "image3", maxCount: 1 },
+    { name: "image4", maxCount: 1 },
+    { name: "image5", maxCount: 1 },
+  ]),
+  createItem
+);
 
 // router.post("/upload-item", checkUserToken, uploadItem);
 

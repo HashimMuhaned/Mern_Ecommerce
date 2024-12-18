@@ -64,8 +64,44 @@ const createToken = (id) => {
 const createItem = async (req, res) => {
   console.log("Creating a new item...");
   try {
-    // Destructure the request body to get item details
     const {
+      name,
+      description,
+      price,
+      category,
+      subCategory,
+      size,
+      isBestseller,
+    } = req.body;
+    const files = req.files;
+
+    // Ensure required fields are provided
+    if (
+      !name ||
+      !description ||
+      !price ||
+      !category ||
+      !subCategory ||
+      !size.length ||
+      !files?.image1
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields" });
+    }
+
+    // Extract file paths or URLs
+    const image1 = files.image1 ? files.image1[0].path : null;
+    const image2 = files.image2 ? files.image2[0].path : null;
+    const image3 = files.image3 ? files.image3[0].path : null;
+    const image4 = files.image4 ? files.image4[0].path : null;
+    const image5 = files.image5 ? files.image5[0].path : null;
+
+    // Get the userId from the request (assuming it's attached via middleware)
+    const userId = req.userId;
+
+    // Create a new item
+    const newItem = new ItemModel({
       name,
       description,
       price,
@@ -78,41 +114,7 @@ const createItem = async (req, res) => {
       image3,
       image4,
       image5,
-    } = req.body;
-
-    // Get the userId from the request (assuming it's attached via middleware, e.g., after JWT verification)
-    const userId = req.userId;
-
-    // Ensure required fields are provided
-    if (
-      !name ||
-      !description ||
-      !price ||
-      !category ||
-      !subCategory ||
-      !size.length ||
-      !image1
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Please fill all required fields" });
-    }
-
-    // Create a new item
-    const newItem = new ItemModel({
-      name,
-      description,
-      price,
-      category,
-      subCategory,
-      size,
-      isBestseller,
-      image1, // Main image
-      image2, // Additional images
-      image3,
-      image4,
-      image5,
-      user: userId, // Set the user who created the item
+      user: userId,
     });
 
     // Save the new item to the database
