@@ -116,6 +116,7 @@ const createItem = async (req, res) => {
 
     // Save the new item to the database
     const savedItem = await newItem.save();
+    console.log("Item created successfully:", savedItem);
 
     // Send success response
     res.status(201).json({
