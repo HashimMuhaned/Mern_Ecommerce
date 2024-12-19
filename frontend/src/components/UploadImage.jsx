@@ -9,23 +9,23 @@ import { CheckUserContext } from "../context/CheckUserToken";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-const firebaseConfig = {
-  apiKey: process.env.apiKey,
-  authDomain: process.env.authDomain,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId,
-  measurementId: process.env.measurementId,
-};
-
-console.log("Firebase Config:", firebaseConfig);
-console.log("Storage Bucket:", firebaseConfig.storageBucket);
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-
 const AddItemForm = () => {
+  const firebaseConfig = {
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    projectId: process.env.projectId,
+    storageBucket: process.env.storageBucket,
+    messagingSenderId: process.env.messagingSenderId,
+    appId: process.env.appId,
+    measurementId: process.env.measurementId,
+  };
+
+  console.log("Firebase Config:", firebaseConfig);
+  console.log("Storage Bucket:", firebaseConfig.storageBucket);
+
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
+
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
