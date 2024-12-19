@@ -14,7 +14,7 @@ const AddItemForm = () => {
     apiKey: process.env.apiKey,
     authDomain: process.env.authDomain,
     projectId: process.env.projectId,
-    storageBucket: "ethreal-1a9e9.firebasestorage.app",
+    storageBucket: process.env.storageBucket,
     messagingSenderId: process.env.messagingSenderId,
     appId: process.env.appId,
     measurementId: process.env.measurementId,
