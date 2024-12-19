@@ -11,12 +11,13 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AddItemForm = () => {
   const firebaseConfig = {
-    apiKey: "AIzaSyAtaxCUK0g_r5qY_gmbPVAY4DMHrLIkWOc",
-    authDomain: "ethereal-e7564.firebaseapp.com",
-    projectId: "ethereal-e7564",
-    storageBucket: "gs://ethereal-e7564.appspot.com",
-    messagingSenderId: "88051888091",
-    appId: "1:88051888091:web:578a04a259d13f54b341fe"
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    projectId: process.env.projectId,
+    storageBucket: "ethereal-1a9e9.appspot.com",
+    messagingSenderId: process.env.messagingSenderId,
+    appId: process.env.appId,
+    measurementId: process.env.measurementId,
   };
 
   console.log("Firebase Config:", firebaseConfig);
