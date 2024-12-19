@@ -24,7 +24,7 @@ const AddItemForm = () => {
   console.log("Storage Bucket:", firebaseConfig.storageBucket);
 
   const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app, "gs://ethreal-1a9e9.appspot.com");
+  const storage = getStorage(app, "ethreal-1a9e9.firebasestorage.app");
 
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);

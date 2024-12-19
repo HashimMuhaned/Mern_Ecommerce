@@ -14,7 +14,7 @@ try {
       auth_provider_x509_cert_url: process.env.auth_provider_x509_cert_url,
       client_x509_cert_url: process.env.client_x509_cert_url,
     }),
-    storageBucket: "gs://ethreal-1a9e9.appspot.com", // Ensure this environment variable is set
+    storageBucket: "ethreal-1a9e9.firebasestorage.app", // Ensure this environment variable is set
   });
 
   console.log("Firebase Admin initialized successfully");
