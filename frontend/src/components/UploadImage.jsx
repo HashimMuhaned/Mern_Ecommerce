@@ -10,26 +10,26 @@ import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AddItemForm = () => {
-  const firebaseConfig = {
-    apiKey: process.env.apiKey,
-    authDomain: process.env.authDomain,
-    projectId: process.env.projectId,
-    storageBucket: process.env.storageBucket,
-    messagingSenderId: process.env.messagingSenderId,
-    appId: process.env.appId,
-    measurementId: process.env.measurementId,
-  };
+  // const firebaseConfig = {
+  //   apiKey: process.env.apiKey,
+  //   authDomain: process.env.authDomain,
+  //   projectId: process.env.projectId,
+  //   storageBucket: process.env.storageBucket,
+  //   messagingSenderId: process.env.messagingSenderId,
+  //   appId: process.env.appId,
+  //   measurementId: process.env.measurementId,
+  // };
 
-  console.log("Firebase Config:", firebaseConfig);
-  console.log("Storage Bucket:", firebaseConfig.storageBucket);
+  // console.log("Firebase Config:", firebaseConfig);
+  // console.log("Storage Bucket:", firebaseConfig.storageBucket);
 
-  const app = initializeApp(firebaseConfig);
+  // const app = initializeApp(firebaseConfig);
   const storage = firebase
     .app({
       apiKey: process.env.apiKey,
       authDomain: process.env.authDomain,
       projectId: process.env.projectId,
-      storageBucket: process.env.storageBucket,
+      // storageBucket: process.env.storageBucket,
       messagingSenderId: process.env.messagingSenderId,
       appId: process.env.appId,
       measurementId: process.env.measurementId,
