@@ -14,7 +14,7 @@ const AddItemForm = () => {
     apiKey: process.env.apiKey,
     authDomain: process.env.authDomain,
     projectId: process.env.projectId,
-    storageBucket: process.env.storageBucket,
+    storageBucket: "ethreal-1a9e9.firebasestorage.app",
     messagingSenderId: process.env.messagingSenderId,
     appId: process.env.appId,
     measurementId: process.env.measurementId,
@@ -24,7 +24,7 @@ const AddItemForm = () => {
   console.log("Storage Bucket:", firebaseConfig.storageBucket);
 
   const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app, "ethreal-1a9e9.firebasestorage.app");
+  const storage = getStorage(app);
 
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
