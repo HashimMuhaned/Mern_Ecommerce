@@ -14,7 +14,7 @@ const AddItemForm = () => {
     apiKey: "AIzaSyAtaxCUK0g_r5qY_gmbPVAY4DMHrLIkWOc",
     authDomain: "ethereal-e7564.firebaseapp.com",
     projectId: "ethereal-e7564",
-    storageBucket: "ethereal-e7564.firebasestorage.app",
+    storageBucket: "gs://ethereal-e7564.appspot.com",
     messagingSenderId: "88051888091",
     appId: "1:88051888091:web:578a04a259d13f54b341fe"
   };
