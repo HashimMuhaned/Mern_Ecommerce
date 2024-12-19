@@ -19,6 +19,9 @@ const firebaseConfig = {
   measurementId: process.env.measurementId,
 };
 
+console.log("Firebase Config:", firebaseConfig);
+console.log("Storage Bucket:", firebaseConfig.storageBucket);
+
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
