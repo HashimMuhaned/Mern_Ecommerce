@@ -6,6 +6,21 @@ import { YourItemsContext } from "../context/YourItemsContext";
 import { DataContext } from "../context/DataContext";
 import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+const firebaseConfig = {
+  apiKey: process.env.apiKey,
+  authDomain: process.env.authDomain,
+  projectId: process.env.projectId,
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
+  measurementId: process.env.measurementId,
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 const AddItemForm = () => {
   const { setYourItems } = useContext(YourItemsContext);
@@ -59,14 +74,43 @@ const AddItemForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileUpload = (e, imageField) => {
+  const handleFileUpload = async (e, imageField) => {
     const file = e.target.files[0];
 
-    if (file) {
+    if (!file) return;
+
+    // Validate file type
+    const allowedFileTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/jpg",
+    ];
+    if (!allowedFileTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only JPEG, PNG, or GIF allowed.");
+      return;
+    }
+
+    try {
+      // Create a storage reference
+      const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
+
+      // Upload the file
+      await uploadBytes(storageRef, file);
+
+      // Get the download URL
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // Update the form data with the download URL
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: file, // Store the file object directly
+        [imageField]: downloadURL, // Store the URL instead of the file object
       }));
+
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading file to Firebase:", error);
+      toast.error("Failed to upload image. Please try again.");
     }
   };
 
@@ -120,69 +164,22 @@ const AddItemForm = () => {
 
     setLoading(true);
 
-    // Prepare form data as FormData object
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("price", formData.price);
-    formDataToSend.append("category", formData.category);
-    formDataToSend.append("subCategory", formData.subCategory);
-    formDataToSend.append("isBestseller", formData.isBestseller);
-
-    // Append sizes as an array (backend should handle array parsing)
-    formData.size.forEach((size) => formDataToSend.append("size", size));
-
-    // Define allowed image file types
-    const allowedFileTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/gif",
-      "image/jpg",
-    ];
-
-    // Check and append each image file if it exists
-    const invalidFileType = [
-      "image1",
-      "image2",
-      "image3",
-      "image4",
-      "image5",
-    ].find((field) => {
-      const file = formData[field];
-      if (file && !allowedFileTypes.includes(file.type)) {
-        toast.error(
-          `Invalid file type for ${field}. Only JPEG, PNG, or GIF allowed.`
-        );
-        return true;
-      }
-      return false;
-    });
-
-    if (invalidFileType) {
-      setLoading(false);
-      return; // Stop form submission if invalid file is detected
-    }
-
-    // Append valid files to the form data
-    ["image1", "image2", "image3", "image4", "image5"].forEach((field) => {
-      if (formData[field]) {
-        formDataToSend.append(field, formData[field]);
-      }
-    });
-
+    // Send form data with image URLs to the backend
     try {
       const response = await axios.post(
         `${process.env.BACKEND_API}/upload-item`,
-        formDataToSend,
+        {
+          ...formData,
+          size: JSON.stringify(formData.size), // Convert array to string if required by backend
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", // Required for Multer
+            "Content-Type": "application/json",
           },
         }
       );
 
-      console.log("Server Response:", response); // Debug response
       if (response.status === 201) {
         toast.success("Item created successfully!");
 

@@ -15,6 +15,7 @@ const crypto = require("crypto");
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 const mailSender = process.env.SENDGRID_FROM_EMAIL;
+const bucket = require("../firebaseAdmin.js");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -62,7 +63,6 @@ const createToken = (id) => {
 };
 
 const createItem = async (req, res) => {
-  console.log("Creating a new item...");
   try {
     const {
       name,
@@ -75,7 +75,6 @@ const createItem = async (req, res) => {
     } = req.body;
     const files = req.files;
 
-    // Ensure required fields are provided
     if (
       !name ||
       !description ||
@@ -90,17 +89,35 @@ const createItem = async (req, res) => {
         .json({ message: "Please fill all required fields" });
     }
 
-    // Extract file paths or URLs
-    const image1 = files.image1 ? files.image1[0].path : null;
-    const image2 = files.image2 ? files.image2[0].path : null;
-    const image3 = files.image3 ? files.image3[0].path : null;
-    const image4 = files.image4 ? files.image4[0].path : null;
-    const image5 = files.image5 ? files.image5[0].path : null;
+    const uploadToFirebase = async (file) => {
+      const fileName = `uploads/${Date.now()}-${file.originalname}`;
+      const fileUpload = bucket.file(fileName);
 
-    // Get the userId from the request (assuming it's attached via middleware)
+      await fileUpload.save(file.buffer, {
+        contentType: file.mimetype,
+        public: true,
+      });
+
+      return `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+    };
+
+    // Concurrently upload all images
+    const imageUploadPromises = Object.keys(files).map(async (key) => {
+      const file = files[key][0];
+      const url = await uploadToFirebase(file);
+      return { key, url };
+    });
+
+    const imageUrls = (await Promise.all(imageUploadPromises)).reduce(
+      (acc, { key, url }) => {
+        acc[key] = url;
+        return acc;
+      },
+      {}
+    );
+
     const userId = req.userId;
 
-    // Create a new item
     const newItem = new ItemModel({
       name,
       description,
@@ -109,19 +126,16 @@ const createItem = async (req, res) => {
       subCategory,
       size,
       isBestseller,
-      image1,
-      image2,
-      image3,
-      image4,
-      image5,
+      image1: imageUrls.image1 || null,
+      image2: imageUrls.image2 || null,
+      image3: imageUrls.image3 || null,
+      image4: imageUrls.image4 || null,
+      image5: imageUrls.image5 || null,
       user: userId,
     });
 
-    // Save the new item to the database
     const savedItem = await newItem.save();
-    console.log("Item created successfully:", savedItem);
 
-    // Send success response
     res.status(201).json({
       message: "Item created successfully",
       item: savedItem,

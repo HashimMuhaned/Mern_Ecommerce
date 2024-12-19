@@ -1,8 +1,7 @@
 const experess = require("express");
 const router = experess.Router();
 const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
+
 
 const {
   createItem,
@@ -60,34 +59,17 @@ const {
   activateAccount,
 } = require("../controllers/EcommerceCTRL");
 
-// Configure storage for uploaded files
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Use /tmp directory on Vercel (for serverless environments)
-    const uploadDir = '/tmp/uploads';
-
-    // Ensure the directory exists
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    cb(null, uploadDir); // Directory where files will be stored
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + "-" + file.originalname);
-  },
-});
-
 const upload = multer({
-  storage,
   limits: {
     fileSize: 10 * 1024 * 1024, // Limit to 10 MB per file
   },
   fileFilter: (req, file, cb) => {
     const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
     if (!allowedTypes.includes(file.mimetype)) {
-      return cb(new Error("Invalid file type, only JPEG, PNG, or GIF allowed"), false);
+      return cb(
+        new Error("Invalid file type, only JPEG, PNG, or GIF allowed"),
+        false
+      );
     }
     cb(null, true);
   },

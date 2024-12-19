@@ -12,3 +12,6 @@ build/
 
 # Environment variables
 .env
+
+#config files
+config
