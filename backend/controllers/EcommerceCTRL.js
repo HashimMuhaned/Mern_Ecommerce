@@ -15,7 +15,6 @@ const crypto = require("crypto");
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 const mailSender = process.env.SENDGRID_FROM_EMAIL;
-const bucket = require("../firebaseAdmin.js");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -72,8 +71,12 @@ const createItem = async (req, res) => {
       subCategory,
       size,
       isBestseller,
+      image1,
+      image2,
+      image3,
+      image4,
+      image5,
     } = req.body;
-    const files = req.files;
 
     if (
       !name ||
@@ -82,39 +85,12 @@ const createItem = async (req, res) => {
       !category ||
       !subCategory ||
       !size.length ||
-      !files?.image1
+      !image1
     ) {
       return res
         .status(400)
         .json({ message: "Please fill all required fields" });
     }
-
-    const uploadToFirebase = async (file) => {
-      const fileName = `uploads/${Date.now()}-${file.originalname}`;
-      const fileUpload = bucket.file(fileName);
-
-      await fileUpload.save(file.buffer, {
-        contentType: file.mimetype,
-        public: true,
-      });
-
-      return `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-    };
-
-    // Concurrently upload all images
-    const imageUploadPromises = Object.keys(files).map(async (key) => {
-      const file = files[key][0];
-      const url = await uploadToFirebase(file);
-      return { key, url };
-    });
-
-    const imageUrls = (await Promise.all(imageUploadPromises)).reduce(
-      (acc, { key, url }) => {
-        acc[key] = url;
-        return acc;
-      },
-      {}
-    );
 
     const userId = req.userId;
 
@@ -126,11 +102,11 @@ const createItem = async (req, res) => {
       subCategory,
       size,
       isBestseller,
-      image1: imageUrls.image1 || null,
-      image2: imageUrls.image2 || null,
-      image3: imageUrls.image3 || null,
-      image4: imageUrls.image4 || null,
-      image5: imageUrls.image5 || null,
+      image1,
+      image2,
+      image3,
+      image4,
+      image5,
       user: userId,
     });
 

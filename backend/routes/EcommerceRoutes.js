@@ -1,7 +1,5 @@
 const experess = require("express");
 const router = experess.Router();
-const multer = require("multer");
-
 
 const {
   createItem,
@@ -59,35 +57,8 @@ const {
   activateAccount,
 } = require("../controllers/EcommerceCTRL");
 
-const upload = multer({
-  limits: {
-    fileSize: 10 * 1024 * 1024, // Limit to 10 MB per file
-  },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/jpg"];
-    if (!allowedTypes.includes(file.mimetype)) {
-      return cb(
-        new Error("Invalid file type, only JPEG, PNG, or GIF allowed"),
-        false
-      );
-    }
-    cb(null, true);
-  },
-});
-
 // Define route to handle file uploads
-router.post(
-  "/upload-item",
-  checkUserToken,
-  upload.fields([
-    { name: "image1", maxCount: 1 },
-    { name: "image2", maxCount: 1 },
-    { name: "image3", maxCount: 1 },
-    { name: "image4", maxCount: 1 },
-    { name: "image5", maxCount: 1 },
-  ]),
-  createItem
-);
+router.post("/upload-item", checkUserToken, createItem);
 
 // router.post("/upload-item", checkUserToken, uploadItem);
 
