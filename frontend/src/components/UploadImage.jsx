@@ -69,7 +69,6 @@ const AddItemForm = () => {
 
     if (!file) return;
 
-    // Validate file type
     const allowedFileTypes = [
       "image/jpeg",
       "image/png",
@@ -77,30 +76,24 @@ const AddItemForm = () => {
       "image/jpg",
     ];
     if (!allowedFileTypes.includes(file.type)) {
-      toast.error("Invalid file type. Only JPEG, PNG, or GIF allowed.");
+      toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
       return;
     }
 
     try {
-      // Create a storage reference
       const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
-
-      // Upload the file
       await uploadBytes(storageRef, file);
-
-      // Get the download URL
       const downloadURL = await getDownloadURL(storageRef);
 
-      // Update the form data with the download URL
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: downloadURL, // Store the URL instead of the file object
+        [imageField]: downloadURL, // Store URL instead of the file object
       }));
 
       toast.success("Image uploaded successfully!");
     } catch (error) {
-      console.error("Error uploading file to Firebase:", error);
-      toast.error("Failed to upload image. Please try again.");
+      console.error("Error uploading file:", error);
+      toast.error("Failed to upload image.");
     }
   };
 
@@ -148,43 +141,27 @@ const AddItemForm = () => {
 
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
-    if (loading) return; // Prevent multiple submissions
-
-    setLoading(true);
-
-    // Send form data with image URLs to the backend
     try {
       const response = await axios.post(
         `${process.env.BACKEND_API}/upload-item`,
         {
           ...formData,
-          size: JSON.stringify(formData.size), // Convert array to string if required by backend
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          size: JSON.stringify(formData.size),
         }
       );
 
       if (response.status === 201) {
         toast.success("Item created successfully!");
-
-        // Reset form
-        clearFormInputs();
-        fetchYourItems();
-        fetchHomePageItems();
-      } else {
-        toast.error("Unexpected response from server.");
+        clearFormInputs(); // Reset form
+        fetchYourItems(); // Reload your items
+        fetchHomePageItems(); // Reload home page items
       }
-    } catch (err) {
-      console.error("Error Response:", err.response || err.message);
-      toast.error(
-        err.response?.data?.message || "Failed to add item, please try again"
-      );
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to create item.");
     } finally {
       setLoading(false);
     }
