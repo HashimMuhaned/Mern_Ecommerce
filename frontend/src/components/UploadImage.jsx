@@ -6,24 +6,10 @@ import { YourItemsContext } from "../context/YourItemsContext";
 import { DataContext } from "../context/DataContext";
 import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
-import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import app from "../firebase-config";
 
 const AddItemForm = () => {
-  const firebaseConfig = {
-    apiKey: process.env.apiKey,
-    authDomain: process.env.authDomain,
-    projectId: process.env.projectId,
-    storageBucket: "ethereal-1a9e9.appspot.com",
-    messagingSenderId: process.env.messagingSenderId,
-    appId: process.env.appId,
-    measurementId: process.env.measurementId,
-  };
-
-  console.log("Firebase Config:", firebaseConfig);
-  console.log("Storage Bucket:", firebaseConfig.storageBucket);
-
-  const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
 
   const { setYourItems } = useContext(YourItemsContext);
