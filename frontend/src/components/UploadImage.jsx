@@ -15,13 +15,6 @@ const AddItemForm = () => {
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
-  const [loadingImages, setLoadingImages] = useState({
-    image1: false,
-    image2: false,
-    image3: false,
-    image4: false,
-    image5: false,
-  });
   const token = localStorage.getItem("authToken");
 
   if (!isLoggedin) {
@@ -88,12 +81,6 @@ const AddItemForm = () => {
     }
 
     try {
-      // Set loading for the specific image
-      setLoadingImages((prevState) => ({
-        ...prevState,
-        [imageField]: true,
-      }));
-
       const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
@@ -107,12 +94,6 @@ const AddItemForm = () => {
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("Failed to upload image.");
-    } finally {
-      // Reset loading for the specific image
-      setLoadingImages((prevState) => ({
-        ...prevState,
-        [imageField]: false,
-      }));
     }
   };
 
