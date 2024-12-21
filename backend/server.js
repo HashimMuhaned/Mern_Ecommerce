@@ -15,7 +15,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://mern-ecommerce-frontend-rouge.vercel.app",
+    origin:
+      "https://mern-ecommerce-frontend-lkugdd60x-hashims-projects-1d68b3df.vercel.app",
     credentials: true, // If you're using cookies or other credentials
   })
 );
