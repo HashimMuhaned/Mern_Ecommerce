@@ -7,9 +7,12 @@ import { FavoriteContext } from "../context/FavoriteContext";
 import { YourItemsContext } from "../context/YourItemsContext";
 import { CartContext } from "../context/CartContext";
 import { DataContext } from "../context/DataContext";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import app from "../firebase-config";
 
 const EditYourItemPage = () => {
   const navigate = useNavigate();
+  const storage = getStorage(app);
   const { setYourItems } = useContext(YourItemsContext);
   const { setFavoriteItems } = useContext(FavoriteContext);
   const { setCartItems } = useContext(CartContext);
@@ -89,17 +92,37 @@ const EditYourItemPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileUpload = (e, imageField) => {
+  const handleFileUpload = async (e, imageField) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
 
-    reader.onloadend = () => {
+    if (!file) return;
+
+    const allowedFileTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/jpg",
+    ];
+    if (!allowedFileTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
+      return;
+    }
+
+    try {
+      const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: reader.result, // Store the base64 string
+        [imageField]: downloadURL, // Store URL instead of the file object
       }));
-    };
-    reader.readAsDataURL(file); // Convert the file to base64
+
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast.error("Failed to upload image.");
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -133,11 +156,11 @@ const EditYourItemPage = () => {
         console.log("Item updated successfully:", res.data);
 
         // Clear the form data after successful submission
-        setFormData(originalFormData); // Reset form to the original data
-        localStorage.setItem("formDataEdit", JSON.stringify(originalFormData)); // Update localStorage with original data
+        setFormData(originalFormData);
+        localStorage.setItem("formDataEdit", JSON.stringify(originalFormData));
         navigate("/ethereal/profile/yourItems");
 
-        // Updating favorite items, cart, and your items to reflect the changes
+        // Updating favorite items, cart, and your items
         const updatedFavoriteItems = await axios.get(
           `${process.env.BACKEND_API}/favorites/get`,
           {
