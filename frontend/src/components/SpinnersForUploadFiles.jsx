@@ -6,8 +6,8 @@ const override = {
   margin: "auto",
 };
 
-const SpinnersForBtn = () => {
+const SpinnersForUploadFiles = () => {
   return <ClipLoader color="green" cssOverride={override} size={30} />;
 };
 
-export default SpinnersForBtn;
+export default SpinnersForUploadFiles;
