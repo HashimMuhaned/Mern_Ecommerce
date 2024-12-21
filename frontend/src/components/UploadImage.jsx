@@ -147,10 +147,7 @@ const AddItemForm = () => {
     try {
       const response = await axios.post(
         `${process.env.BACKEND_API}/upload-item`,
-        {
-          ...formData,
-          size: JSON.stringify(formData.size),
-        },
+        formData,
         {
           headers: {
             "Content-Type": "application/json",
