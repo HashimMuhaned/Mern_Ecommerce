@@ -7,7 +7,7 @@ import { DataContext } from "../context/DataContext";
 import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import app from "../firebase-config";
+import app from "../firebase-config"
 
 const AddItemForm = () => {
   const storage = getStorage(app);
