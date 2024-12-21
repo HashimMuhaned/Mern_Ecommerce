@@ -212,10 +212,7 @@ const AddItemForm = () => {
                   <div>
                     {num === 1 ? (
                       <p>Main Image</p>
-                    ) : (
-                      <p style={{ paddingLeft: "10px" }}>Upload Image {num}</p>
-                    )}{" "}
-                    {fileLoading ? (
+                    ) : fileLoading ? (
                       <SpinnersForButtons />
                     ) : (
                       <p style={{ paddingLeft: "10px" }}>Upload Image {num}</p>
