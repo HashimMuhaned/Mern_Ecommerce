@@ -16,7 +16,13 @@ const AddItemForm = () => {
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
-  const [fileLoading, setFileLoading] = useState(false);
+  const [loadingImages, setLoadingImages] = useState({
+    image1: false,
+    image2: false,
+    image3: false,
+    image4: false,
+    image5: false,
+  });
   const token = localStorage.getItem("authToken");
 
   if (!isLoggedin) {
@@ -83,7 +89,12 @@ const AddItemForm = () => {
     }
 
     try {
-      setFileLoading(true);
+      // Set loading for the specific image
+      setLoadingImages((prevState) => ({
+        ...prevState,
+        [imageField]: true,
+      }));
+
       const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
@@ -98,7 +109,11 @@ const AddItemForm = () => {
       console.error("Error uploading file:", error);
       toast.error("Failed to upload image.");
     } finally {
-      setFileLoading(false);
+      // Reset loading for the specific image
+      setLoadingImages((prevState) => ({
+        ...prevState,
+        [imageField]: false,
+      }));
     }
   };
 
@@ -212,7 +227,7 @@ const AddItemForm = () => {
                   <div>
                     {num === 1 ? (
                       <p>Main Image</p>
-                    ) : fileLoading ? (
+                    ) : loadingImages[`image${num}`] ? (
                       <SpinnersForButtons />
                     ) : (
                       <p style={{ paddingLeft: "10px" }}>Upload Image {num}</p>
