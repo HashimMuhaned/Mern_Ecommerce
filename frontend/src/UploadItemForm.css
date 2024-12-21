@@ -75,6 +75,7 @@
   gap: 10px;
 }
 
+
 .image-upload-box {
   position: relative; /* Ensure proper positioning for the spinner */
   width: 80px;
@@ -148,15 +149,11 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: flex;
-  justify-content: space-between; /* Ensures text and spinner align properly */
+  justify-content: center;
   align-items: center;
-  gap: 10px; /* Adds spacing between text and spinner */
   position: relative;
 }
 
-.submit-btn > div {
-  margin-left: auto; /* Ensures spinner stays on the right side */
-}
 
 .submit-btn:hover {
   background-color: #333;
