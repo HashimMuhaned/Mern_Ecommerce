@@ -3,7 +3,8 @@ import React from "react";
 
 const override = {
   display: "flex",
-  alignPropType: "end",
+  justifyContent: "center", // Corrected property
+  alignItems: "center", // Added for proper centering
 };
 
 const SpinnersForButtons = () => {
