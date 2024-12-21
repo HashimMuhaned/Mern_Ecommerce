@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import app from "../firebase-config";
+import SpinnersForUploadFiles from "./SpinnersForUploadFiles";
 import SpinnersForBtn from "./SpinnersForBtn";
 
 const AddItemForm = () => {
@@ -17,6 +18,7 @@ const AddItemForm = () => {
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
   const token = localStorage.getItem("authToken");
+  const [loading, setLoading] = useState(false);
   const [loadingImages, setLoadingImages] = useState({
     image1: false,
     image2: false,
@@ -159,7 +161,7 @@ const AddItemForm = () => {
     }
   };
 
-  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -227,7 +229,7 @@ const AddItemForm = () => {
               <label htmlFor={`file-upload-${num}`}>
                 {loadingImages[`image${num}`] ? (
                   <div className="spinner-overlay">
-                    <SpinnersForBtn />
+                    <SpinnersForUploadFiles />
                   </div>
                 ) : formData[`image${num}`] ? (
                   <img
@@ -349,7 +351,12 @@ const AddItemForm = () => {
           }}
         >
           <button type="submit" className="submit-btn">
-            ADD
+            <span className="btn-text">ADD</span>
+            {loading && (
+              <span className="btn-spinner">
+                <SpinnersForBtn />
+              </span>
+            )}
           </button>
           <button type="button" className="clear-btn" onClick={clearFormInputs}>
             Clear Form
