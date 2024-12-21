@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+require("dotenv").config();
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,
