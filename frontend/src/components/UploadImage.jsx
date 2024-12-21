@@ -212,7 +212,15 @@ const AddItemForm = () => {
     <div className="form-container">
       <form className="add-item-form" onSubmit={handleSubmit}>
         {/* Image Inputs */}
-        <label>Upload Images</label>
+        <label
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            marginBottom: "10px",
+          }}
+        >
+          Upload Images
+        </label>
         <div className="image-upload-grid">
           {[1, 2, 3, 4, 5].map((num) => (
             <div key={num} className="image-upload-box">
@@ -228,9 +236,7 @@ const AddItemForm = () => {
                     className="image-preview"
                   />
                 ) : (
-                  <p style={{ marginLeft: "20px" }}>
-                    {num === 1 ? "Main Image" : `Upload Image ${num}`}
-                  </p>
+                  <p>{num === 1 ? "Main Image" : `Image ${num}`}</p>
                 )}
               </label>
               <input
