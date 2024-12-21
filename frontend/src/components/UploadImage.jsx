@@ -161,7 +161,6 @@ const AddItemForm = () => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
