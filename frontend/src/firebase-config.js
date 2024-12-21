@@ -10,6 +10,8 @@ const firebaseConfig = {
   measurementId: process.env.measurementId,
 };
 
+console.log(firebaseConfig);
+
 const app = initializeApp(firebaseConfig);
 
 export default app;
