@@ -148,19 +148,14 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: flex;
-  justify-content: center;
+  justify-content: space-between; /* Ensures text and spinner align properly */
   align-items: center;
+  gap: 10px; /* Adds spacing between text and spinner */
   position: relative;
 }
 
-.btn-text {
-  margin-right: 10px; /* Adds spacing between the text and the spinner */
-}
-
-.btn-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.submit-btn > div {
+  margin-left: auto; /* Ensures spinner stays on the right side */
 }
 
 .submit-btn:hover {

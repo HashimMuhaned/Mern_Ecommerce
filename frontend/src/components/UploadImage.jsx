@@ -350,12 +350,8 @@ const AddItemForm = () => {
           }}
         >
           <button type="submit" className="submit-btn">
-            <span className="btn-text">ADD</span>
-            {loading && (
-              <span className="btn-spinner">
-                <SpinnersForBtn />
-              </span>
-            )}
+            ADD
+            {loading && <SpinnersForBtn />}
           </button>
           <button type="button" className="clear-btn" onClick={clearFormInputs}>
             Clear Form
