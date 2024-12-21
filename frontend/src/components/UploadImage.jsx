@@ -7,6 +7,7 @@ import { DataContext } from "../context/DataContext";
 import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import SpinnersForButtons from "./SpinnersForButtons";
 import app from "../firebase-config";
 
 const AddItemForm = () => {
@@ -15,6 +16,7 @@ const AddItemForm = () => {
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
+  const [fileLoading, setFileLoading] = useState(false);
   const token = localStorage.getItem("authToken");
 
   if (!isLoggedin) {
@@ -81,6 +83,7 @@ const AddItemForm = () => {
     }
 
     try {
+      setFileLoading(true);
       const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
@@ -94,6 +97,8 @@ const AddItemForm = () => {
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("Failed to upload image.");
+    } finally {
+      setFileLoading(false);
     }
   };
 
@@ -207,6 +212,11 @@ const AddItemForm = () => {
                   <div>
                     {num === 1 ? (
                       <p>Main Image</p>
+                    ) : (
+                      <p style={{ paddingLeft: "10px" }}>Upload Image {num}</p>
+                    )}{" "}
+                    {fileLoading ? (
+                      <SpinnersForButtons />
                     ) : (
                       <p style={{ paddingLeft: "10px" }}>Upload Image {num}</p>
                     )}
