@@ -228,7 +228,9 @@ const AddItemForm = () => {
                     className="image-preview"
                   />
                 ) : (
-                  <p>{num === 1 ? "Main Image" : `Upload Image ${num}`}</p>
+                  <p style={{ marginLeft: "20px" }}>
+                    {num === 1 ? "Main Image" : `Upload Image ${num}`}
+                  </p>
                 )}
               </label>
               <input
