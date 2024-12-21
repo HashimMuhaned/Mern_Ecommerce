@@ -14,11 +14,14 @@ export const YourItemsProvider = ({ children }) => {
     const fetchYourItems = async () => {
       if (isLoggedin) {
         try {
-          const res = await axios.get(`${process.env.BACKEND_API}/yourItems/get`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const res = await axios.get(
+            `${process.env.BACKEND_API}/yourItems/get`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           setYourItems(res.data);
         } catch (error) {
           console.log("Error getting Your Items", error);

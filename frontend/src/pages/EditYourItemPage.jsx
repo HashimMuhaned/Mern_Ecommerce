@@ -7,7 +7,13 @@ import { FavoriteContext } from "../context/FavoriteContext";
 import { YourItemsContext } from "../context/YourItemsContext";
 import { CartContext } from "../context/CartContext";
 import { DataContext } from "../context/DataContext";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import app from "../firebase-config";
 
 const EditYourItemPage = () => {
@@ -17,6 +23,7 @@ const EditYourItemPage = () => {
   const { setFavoriteItems } = useContext(FavoriteContext);
   const { setCartItems } = useContext(CartContext);
   const { setData } = useContext(DataContext);
+  const [oldImages, setOldImages] = useState({});
   const { id } = useParams();
   const token = localStorage.getItem("authToken");
   // Initial form data structure
@@ -34,6 +41,17 @@ const EditYourItemPage = () => {
     image4: "",
     image5: "",
   };
+
+  useEffect(() => {
+    // Set the old image URLs when loading the item for editing
+    setOldImages({
+      image1: formData.image1 || "",
+      image2: formData.image2 || "",
+      image3: formData.image3 || "",
+      image4: formData.image4 || "",
+      image5: formData.image5 || "",
+    });
+  }, [formData]);
 
   const [formData, setFormData] = useState(
     JSON.parse(localStorage.getItem("formDataEdit")) || initialFormData
@@ -109,18 +127,32 @@ const EditYourItemPage = () => {
     }
 
     try {
+      // Delete the old image if it exists
+      if (oldImages[imageField]) {
+        const oldImageRef = ref(storage, oldImages[imageField]);
+        await deleteObject(oldImageRef);
+        console.log(`Deleted old image: ${oldImages[imageField]}`);
+      }
+
+      // Upload the new file
       const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
 
+      // Update the formData and oldImages state
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: downloadURL, // Store URL instead of the file object
+        [imageField]: downloadURL, // Store the new image URL
+      }));
+
+      setOldImages((prevOldImages) => ({
+        ...prevOldImages,
+        [imageField]: downloadURL, // Update the oldImages with the new URL
       }));
 
       toast.success("Image uploaded successfully!");
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error uploading or deleting image:", error);
       toast.error("Failed to upload image.");
     }
   };
