@@ -217,22 +217,18 @@ const AddItemForm = () => {
           {[1, 2, 3, 4, 5].map((num) => (
             <div key={num} className="image-upload-box">
               <label htmlFor={`file-upload-${num}`}>
-                {formData[`image${num}`] ? (
+                {loadingImages[`image${num}`] ? (
+                  <div className="spinner-overlay">
+                    <SpinnersForBtn />
+                  </div>
+                ) : formData[`image${num}`] ? (
                   <img
                     src={formData[`image${num}`]}
                     alt={`Preview ${num}`}
                     className="image-preview"
                   />
                 ) : (
-                  <div>
-                    {num === 1 ? (
-                      <p>Main Image</p>
-                    ) : loadingImages[`image${num}`] ? (
-                      <SpinnersForBtn />
-                    ) : (
-                      <p style={{ paddingLeft: "10px" }}>Upload Image {num}</p>
-                    )}
-                  </div>
+                  <p>{num === 1 ? "Main Image" : `Upload Image ${num}`}</p>
                 )}
               </label>
               <input
