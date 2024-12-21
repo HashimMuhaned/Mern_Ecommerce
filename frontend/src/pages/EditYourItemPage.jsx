@@ -42,6 +42,10 @@ const EditYourItemPage = () => {
     image5: "",
   };
 
+  const [formData, setFormData] = useState(
+    JSON.parse(localStorage.getItem("formDataEdit")) || initialFormData
+  );
+
   useEffect(() => {
     // Set the old image URLs when loading the item for editing
     setOldImages({
@@ -53,9 +57,6 @@ const EditYourItemPage = () => {
     });
   }, [formData]);
 
-  const [formData, setFormData] = useState(
-    JSON.parse(localStorage.getItem("formDataEdit")) || initialFormData
-  );
   const [originalFormData, setOriginalFormData] = useState(null); // To store the original fetched data
 
   // Fetch existing item data to populate the form
