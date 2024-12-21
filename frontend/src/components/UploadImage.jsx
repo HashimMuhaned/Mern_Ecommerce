@@ -7,7 +7,8 @@ import { DataContext } from "../context/DataContext";
 import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import SpinnersForButtons from "../components/SpinnersForButtons";
+import { SpinnersForButtons } from "./SpinnersForButtons";
+
 import app from "../firebase-config";
 
 const AddItemForm = () => {
