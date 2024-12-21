@@ -7,9 +7,6 @@ import { DataContext } from "../context/DataContext";
 import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import SpinnersForButtons  from "./SpinnersForButtons";
-import Spinners from "./Spinners";
-
 import app from "../firebase-config";
 
 const AddItemForm = () => {
@@ -229,8 +226,6 @@ const AddItemForm = () => {
                   <div>
                     {num === 1 ? (
                       <p>Main Image</p>
-                    ) : loadingImages[`image${num}`] ? (
-                      <Spinners />
                     ) : (
                       <p style={{ paddingLeft: "10px" }}>Upload Image {num}</p>
                     )}
