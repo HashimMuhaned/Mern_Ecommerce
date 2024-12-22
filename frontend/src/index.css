@@ -1602,7 +1602,7 @@ footer .copyright {
   opacity: 1;
 }
 
-@media screen and (min-width: 1020px) and (max-width: 1366px) {
+@media screen and (min-width: 800px) and (max-width: 1366px) {
   #navbar {
     display: flex;
     justify-content: center !important;
@@ -1690,7 +1690,7 @@ footer .copyright {
   }
 }
 
-@media screen and (min-width: 800px) and (max-width: 1025px) {
+@media screen and (min-width: 750px) and (max-width: 1025px) {
   #categories {
     display: grid;
     grid-template-columns: repeat(3, 1fr) !important;
