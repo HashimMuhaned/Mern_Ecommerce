@@ -350,7 +350,7 @@ const AddItemForm = () => {
           }}
         >
           <button type="submit" className="submit-btn" disabled={loading}>
-            Add Item {loading && <SpinnersForBtn />}
+            Add Item
           </button>
           <button type="button" className="clear-btn" onClick={clearFormInputs}>
             Clear Form

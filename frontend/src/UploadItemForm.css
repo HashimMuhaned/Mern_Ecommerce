@@ -75,7 +75,6 @@
   gap: 10px;
 }
 
-
 .image-upload-box {
   position: relative; /* Ensure proper positioning for the spinner */
   width: 80px;
@@ -153,7 +152,6 @@
   align-items: center;
   position: relative;
 }
-
 
 .submit-btn:hover {
   background-color: #333;
