@@ -3,9 +3,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const override = {
   display: "block",
-  position: "absolute",
-  top: "50%",
-  left: "70%",
+  marginLeft: "100px",
 };
 
 const SpinnersForBtn = () => {
