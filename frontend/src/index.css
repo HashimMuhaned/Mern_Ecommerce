@@ -75,7 +75,7 @@ HTML {
 }
 
 /*Phone*/
-@media screen and (min-width: 380px) and (max-width: 500px) {
+@media screen and (min-width: 355px) and (max-width: 500px) {
   #navbar {
     justify-content: start !important;
   }
@@ -599,7 +599,7 @@ a {
   display: none;
 }
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and (min-width: 320px) and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
   #notFound_img {
     width: 400px;
     height: 300px;
@@ -1690,7 +1690,7 @@ footer .copyright {
   }
 }
 
-@media screen and (max-width: 1025px) and (min-width: 480px) {
+@media screen and (min-width: 480px) and (max-width: 1025px) {
   #categories {
     display: grid;
     grid-template-columns: repeat(3, 1fr) !important;
@@ -2329,7 +2329,7 @@ footer .copyright {
   height: 370px;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
   #filter_box {
     display: flex;
     flex-direction: row !important;
