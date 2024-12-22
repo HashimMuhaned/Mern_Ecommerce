@@ -117,11 +117,12 @@ export const CheckUserProvider = ({ children }) => {
       );
 
       if (response.status === 200) {
-        // Reset context state and clear token
-        setIsLoggedin(false);
-        setUserInfo([]);
+        // Clear localStorage and reset states
         localStorage.removeItem("authToken");
+        setIsLoggedin(false);
+        setUserInfo(null);
 
+        // Navigate to the login page and show a success message
         navigate("/ethereal/login");
         toast.success("Signed out successfully");
       }

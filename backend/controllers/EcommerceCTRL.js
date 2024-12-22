@@ -2095,12 +2095,14 @@ const getItemsTotalSalesByPeriod = async (req, res) => {
 };
 
 const signOut = async (req, res) => {
-  res.clearCookie("cookie", {
+  // Clear cookies (if applicable)
+  res.clearCookie("authToken", {
     httpOnly: true,
     secure: true,
     sameSite: "none", // Required for cross-origin cookies
   });
 
+  // Send a sign-out response
   res.status(200).json({ message: "Signed out successfully" });
 };
 

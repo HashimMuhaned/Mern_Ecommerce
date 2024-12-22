@@ -20,6 +20,7 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
+    localStorage.removeItem("authToken");
     e.preventDefault();
     try {
       const response = await axios.post(
