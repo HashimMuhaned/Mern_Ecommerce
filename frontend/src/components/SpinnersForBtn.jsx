@@ -2,8 +2,9 @@ import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const override = {
-  display: "block",
-  margin: "auto",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 const SpinnersForBtn = () => {
