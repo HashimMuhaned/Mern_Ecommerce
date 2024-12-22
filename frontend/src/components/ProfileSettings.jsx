@@ -6,6 +6,7 @@ import "../profilePageStyle.css";
 import EditNameButton from "./EditNameButton";
 import UpdatePassword from "./UpdatePassword";
 import EditEmailButton from "./EditEmailButton";
+import Spinners from "./Spinners";
 
 const ProfileSettings = () => {
   const { userInfo } = useContext(CheckUserContext);
@@ -33,7 +34,7 @@ const ProfileSettings = () => {
   };
 
   if (!userInfo) {
-    return <div>Loading...</div>;
+    return <Spinners />;
   }
 
   return (

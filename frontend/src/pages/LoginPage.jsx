@@ -7,7 +7,7 @@ import { CheckUserContext } from "../context/CheckUserToken";
 import registerImage from "../assets/registerImage.jpg";
 
 const LoginPage = () => {
-  const { setIsLoggedin } = useContext(CheckUserContext);
+  const { setIsLoggedin, setUserInfo } = useContext(CheckUserContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -40,6 +40,20 @@ const LoginPage = () => {
 
       // Update login state
       setIsLoggedin(true);
+
+      // Fetch user details immediately after login
+      const userResponse = await axios.get(
+        `${process.env.BACKEND_API}/user-details`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Update userInfo in context
+      setUserInfo(userResponse.data);
+
       toast.success("Logged In Successfully");
 
       return navigate("/ethereal");
@@ -52,6 +66,7 @@ const LoginPage = () => {
       }
     }
   };
+
   return (
     <div id="login-page">
       <div className="login-container">
