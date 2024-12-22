@@ -349,8 +349,12 @@ const AddItemForm = () => {
             width: "100%",
           }}
         >
-          <button type="submit" className="submit-btn" disabled={loading}>
-            Add Item {loading && <SpinnersForBtn />}
+          <button
+            type="submit"
+            className={`submit-btn ${loading ? "loading" : ""}`}
+            disabled={loading}
+          >
+            Add Item
           </button>
           <button type="button" className="clear-btn" onClick={clearFormInputs}>
             Clear Form

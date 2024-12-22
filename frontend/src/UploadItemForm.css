@@ -157,6 +157,11 @@
   background-color: #333;
 }
 
+.submit-btn.loading {
+  background-color: #333;
+  cursor: not-allowed; /* Optional: Indicates the button is disabled */
+}
+
 .clear-btn {
   width: 25%;
   background-color: red;
