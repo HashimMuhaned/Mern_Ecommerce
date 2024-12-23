@@ -196,7 +196,7 @@ const createUser = async (req, res) => {
     );
 
     // Activation link
-    const activationLink = `https://mern-ecommerce-frontend-three-beta.vercel.app/ethereal/activate-account?token=${token}`;
+    const activationLink = `https://mern-ecommerce-frontend-murex.vercel.app/ethereal/activate-account?token=${token}`;
 
     // Send activation email using SendGrid
     const msg = {
@@ -695,7 +695,7 @@ const updatePassword = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const tryLoginUrl = `https://mern-ecommerce-frontend-three-beta.vercel.app/ethereal/login`; // Ensure URL is correct
+    const tryLoginUrl = `https://mern-ecommerce-frontend-murex.vercel.app/ethereal/login`; // Ensure URL is correct
 
     // Prepare the email content
     const msg = {
@@ -1801,7 +1801,7 @@ const requestPasswordReset = async (req, res) => {
     await user.save();
 
     // Generate the reset URL
-    const resetUrl = `https://mern-ecommerce-frontend-three-beta.vercel.app/ethereal/reset-password/${resetToken}`;
+    const resetUrl = `https://mern-ecommerce-frontend-murex.vercel.app/ethereal/reset-password/${resetToken}`;
 
     // Configure SendGrid email content
     const msg = {
@@ -1882,7 +1882,7 @@ const resetPassword = async (req, res) => {
     });
 
     // Generate the login URL
-    const try_loginUrl = `https://mern-ecommerce-frontend-three-beta.vercel.app/ethereal/login`;
+    const try_loginUrl = `https://mern-ecommerce-frontend-murex.vercel.app/ethereal/login`;
 
     // Configure SendGrid email
     const msg = {

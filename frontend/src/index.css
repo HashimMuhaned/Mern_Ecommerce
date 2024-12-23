@@ -2371,6 +2371,12 @@ footer .copyright {
     font-size: 14px;
   }
 
+  #filter_box > label {
+    font-size: 10px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
   #filter_box_section {
     padding-left: 10px;
     padding-right: 10px;
