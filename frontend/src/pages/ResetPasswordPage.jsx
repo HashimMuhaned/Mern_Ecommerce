@@ -65,6 +65,11 @@ const ResetPasswordPage = () => {
         toast.error(error.response.data.message);
       } else {
         toast.error("Something went wrong. Please try again.");
+        const errorMessage =
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : "Something went wrong. Please try again.";
+        setErrors((prevErrors) => ({ ...prevErrors, general: errorMessage }));
       }
     }
   };
@@ -100,6 +105,11 @@ const ResetPasswordPage = () => {
               </div>
             )}
           </div>
+          {errors.general && (
+            <div style={{ color: "red", marginTop: "10px" }}>
+              {errors.general}
+            </div>
+          )}
           <div className="input-container">
             <ul
               style={{

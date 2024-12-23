@@ -8,10 +8,9 @@ import { toast } from "react-toastify";
 const ConfirmEmailToResetPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState({});
 
   const token = localStorage.getItem("authToken");
-
-  //   const [errors, setErrors] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +28,13 @@ const ConfirmEmailToResetPassword = () => {
       );
       toast.success(response.data.message);
     } catch (error) {
+      toast.error(error);
       toast.error(error.response.data.message);
+      const errorMessage =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : "Something went wrong. Please try again.";
+      setErrors({ general: errorMessage });
     }
   };
   return (
@@ -49,6 +54,11 @@ const ConfirmEmailToResetPassword = () => {
               required
             />
           </div>
+          {errors.general && (
+            <div style={{ color: "red", marginTop: "10px" }}>
+              {errors.general}
+            </div>
+          )}
           <div id="buttons">
             <button type="submit" className="signup-button">
               Reset Password

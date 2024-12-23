@@ -7,7 +7,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import registerImage from "../assets/registerImage.jpg";
 
-
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
     fname: "",
