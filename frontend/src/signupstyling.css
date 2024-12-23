@@ -20,14 +20,14 @@
 
   #signup-page {
     display: flex;
-    height: 110vh;
+    height: 130vh;
     align-items: center;
     justify-content: center;
     width: 400px;
   }
 
   .signup-form {
-    width: 400px !important;
+    width: 380px !important;
   }
 }
 
@@ -125,12 +125,24 @@
   margin-top: 0.25rem;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
   .signup-form {
     max-width: 100%;
   }
 
   .signup-image {
     display: none !important;
+  }
+
+  .signup-container {
+    margin: 10px;
+  }
+
+  #signup-page {
+    display: flex;
+    height: 130vh;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
   }
 }

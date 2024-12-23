@@ -74,8 +74,35 @@ HTML {
   align-items: center;
 }
 
+@media screen and (min-width: 355px) and (max-width: 385px) {
+  #hero {
+    height: 70vh !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    display: block;
+  }
+  #Hero_buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+  }
+}
+
 /*Phone*/
-@media screen and (min-width: 355px) and (max-width: 500px) {
+@media screen and (min-width: 355px) and (max-width: 800px) {
   #navbar {
     justify-content: start !important;
   }
@@ -569,7 +596,7 @@ a {
   }
 } */
 
-@media only screen and (max-width: 480px) {
+@media only screen and (min-width: 360px) and (min-width: 768px) {
   #itemsCard {
     grid-template-columns: 2fr;
   }
@@ -2329,7 +2356,7 @@ footer .copyright {
   height: 370px;
 }
 
-@media screen and (min-width: 760px) and (max-width: 1024px) {
+@media screen and (min-width: 360px) and (max-width: 1024px) {
   #filter_box {
     display: flex;
     flex-direction: row !important;
@@ -2337,6 +2364,11 @@ footer .copyright {
     padding: 0px 0px 0px 0px !important;
     margin-bottom: 0px !important;
     margin-top: 0px;
+  }
+
+  #fiter_box select {
+    padding: 5px 10px;
+    font-size: 14px;
   }
 
   #filter_box_section {

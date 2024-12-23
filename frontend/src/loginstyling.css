@@ -128,9 +128,10 @@ div[style*="color: red"] {
   text-align: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1025px) {
   #login-page {
-    flex-direction: column-reverse;
+    /* flex-direction: column-reverse; */
+    height: 100vh;
   }
 
   .login-container {
@@ -142,6 +143,7 @@ div[style*="color: red"] {
   }
 
   .signup-image {
-    height: 200px;
+    height: 100%;
+    width: 500px;
   }
 }
