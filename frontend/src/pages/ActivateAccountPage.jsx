@@ -23,7 +23,7 @@ const ActivateAccountPage = () => {
         setMessage(response.data.message);
 
         // Optionally, navigate to login page after a delay
-        setTimeout(() => navigate("/login"), 3000);
+        setTimeout(() => navigate("/ethereal/login"), 3000);
       } catch (error) {
         setMessage(
           error.response?.data?.message ||
@@ -48,7 +48,7 @@ const ActivateAccountPage = () => {
       }}
     >
       <h2>Account Activation</h2>
-      <p style={{ color: "red", margin: "20px" }}>{message}</p>
+      <p style={{ color: "green", margin: "20px" }}>{message}</p>
       <button
         onClick={handleActivateAccount}
         disabled={isLoading}

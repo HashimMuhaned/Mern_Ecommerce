@@ -15,6 +15,7 @@ const crypto = require("crypto");
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 const mailSender = process.env.SENDGRID_FROM_EMAIL;
+const { getStorage, ref, deleteObject } = require("firebase/storage");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -898,7 +899,7 @@ const editYourItem = async (req, res) => {
 
 const deleteYourItem = async (req, res) => {
   try {
-    const { productId } = req.params; // Extract productId from the request parameters
+    const { productId } = req.params;
 
     // Find the item by productId and delete it
     const deletedItem = await ItemModel.findByIdAndDelete(productId);
@@ -907,18 +908,32 @@ const deleteYourItem = async (req, res) => {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    await Favorite.updateMany(
-      { "items.productId": productId },
-      { $pull: { items: { productId: productId } } }
-    );
+    // Extract image URLs from individual fields
+    const imageUrls = [
+      deletedItem.image1,
+      deletedItem.image2,
+      deletedItem.image3,
+      deletedItem.image4,
+      deletedItem.image5,
+    ].filter((url) => url); // Filter out null/undefined values
 
-    await Cart.updateMany(
-      { "items.productId": productId },
-      { $pull: { items: { productId: productId } } }
-    );
+    // Initialize Firebase Storage
+    const storage = getStorage();
 
-    // Send a success response
-    res.status(200).json({ message: "Item deleted successfully" });
+    // Delete associated images
+    const deleteImagePromises = imageUrls.map(async (url) => {
+      const filePath = decodeURIComponent(
+        url.split(`${process.env.storageBucket}/o/`)[1].split("?")[0]
+      );
+      const fileRef = ref(storage, filePath);
+      await deleteObject(fileRef);
+    });
+
+    await Promise.all(deleteImagePromises);
+
+    res
+      .status(200)
+      .json({ message: "Item and associated images deleted successfully" });
   } catch (error) {
     console.error("Error deleting item:", error);
     res.status(500).json({ message: "Error deleting item" });

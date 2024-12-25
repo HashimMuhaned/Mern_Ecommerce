@@ -16,11 +16,14 @@ const FavoritePage = () => {
   useEffect(() => {
     const fetchFavoriteItems = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_API}/favorites/get`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.BACKEND_API}/favorites/get`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setFavoriteItems(response.data);
       } catch (error) {
         console.error("Error fetching favorite items:", error);
@@ -70,7 +73,7 @@ const FavoritePage = () => {
         </h2>
       )}
       {favoriteItems.length > 0 ? (
-        <section id="best_seller_section">
+        <section id="best_seller_section" style={{ paddingBottom: "30px" }}>
           <div id="itemsCard">
             {favoriteItems.map((item) => (
               <ItemCard key={item._id} item={item} />

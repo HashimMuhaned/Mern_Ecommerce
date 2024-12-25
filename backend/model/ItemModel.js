@@ -26,7 +26,7 @@ const itemSchema = new mongoose.Schema({
     default: false,
   },
   image1: {
-    type: String, // Store base64 encoded image
+    type: String,
   },
   image2: {
     type: String,
