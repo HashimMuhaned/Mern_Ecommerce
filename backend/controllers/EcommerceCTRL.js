@@ -15,7 +15,8 @@ const crypto = require("crypto");
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 const mailSender = process.env.SENDGRID_FROM_EMAIL;
-const { getStorage, ref, deleteObject } = require("firebase/storage");
+const admin = require("../firebaseAdmin.js"); // Importing the initialized Firebase Admin
+const bucket = admin.storage().bucket(); // Access the storage bucket
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -917,9 +918,6 @@ const deleteYourItem = async (req, res) => {
       deletedItem.image5,
     ].filter((url) => url); // Filter out null/undefined values
 
-    // Initialize Firebase Storage
-    const storage = getStorage();
-
     // Delete associated images
     const deleteImagePromises = imageUrls.map(async (url) => {
       // Extract the file path from the URL after "o/"
@@ -928,11 +926,11 @@ const deleteYourItem = async (req, res) => {
       // Ensure the folder "uploads/" is part of the path
       const completePath = `uploads/${filePath}`;
 
-      // Create a reference to the file in Firebase
-      const fileRef = ref(storage, completePath);
+      // Create a reference to the file in Firebase Storage using Admin SDK
+      const fileRef = bucket.file(completePath);
 
       // Delete the file
-      await deleteObject(fileRef);
+      await fileRef.delete();
     });
 
     // Wait for all deletions to complete
