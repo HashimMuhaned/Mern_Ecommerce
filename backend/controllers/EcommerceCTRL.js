@@ -919,17 +919,19 @@ const deleteYourItem = async (req, res) => {
 
     // Delete associated images
     const deleteImagePromises = imageUrls.map(async (url) => {
-      // Extract the file path from the URL after "o/"
-      const filePath = decodeURIComponent(url.split("o/")[1].split("?")[0]);
+      try {
+        // Extract the file path after "o/"
+        const filePath = decodeURIComponent(url.split("/o/")[1].split("?")[0]); // "uploads/<timestamp>-<filename>"
 
-      // Ensure the folder "uploads/" is part of the path
-      const completePath = `uploads/${filePath}`;
+        // Create a reference to the file in Firebase Storage using Admin SDK
+        const fileRef = bucket.file(filePath);
 
-      // Create a reference to the file in Firebase Storage using Admin SDK
-      const fileRef = bucket.file(completePath);
-
-      // Delete the file
-      await fileRef.delete();
+        // Delete the file
+        await fileRef.delete();
+        console.log(`Deleted file: ${filePath}`);
+      } catch (err) {
+        console.error(`Failed to delete file: ${url}`, err);
+      }
     });
 
     // Wait for all deletions to complete
