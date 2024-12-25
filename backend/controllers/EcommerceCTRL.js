@@ -15,8 +15,7 @@ const crypto = require("crypto");
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 const mailSender = process.env.SENDGRID_FROM_EMAIL;
-const admin = require("../firebaseAdmin.js"); // Importing the initialized Firebase Admin
-const bucket = admin.storage().bucket(); // Access the storage bucket
+const bucket = require("../firebaseAdmin.js"); // Importing the initialized Firebase Admin
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
