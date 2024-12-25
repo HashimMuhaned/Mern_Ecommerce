@@ -14,7 +14,7 @@ export default defineConfig({
       "/api": {
         target:
           process.env.BACKEND_API ||
-          "https://mern-ecommerce-backend-psi.vercel.app/api",
+          "https://mern-ecommerce-backend-six.vercel.app/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
@@ -23,7 +23,7 @@ export default defineConfig({
   define: {
     "process.env.BACKEND_API": JSON.stringify(
       process.env.BACKEND_API ||
-        "https://mern-ecommerce-backend-psi.vercel.app/api"
+        "https://mern-ecommerce-backend-six.vercel.app/api"
     ),
   },
 });
