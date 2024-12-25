@@ -922,13 +922,22 @@ const deleteYourItem = async (req, res) => {
 
     // Delete associated images
     const deleteImagePromises = imageUrls.map(async (url) => {
+      // Extract the file path after "your-bucket-name/o/"
       const filePath = decodeURIComponent(
         url.split("ethreal-1a9e9.firebasestorage.app/o/")[1].split("?")[0]
       );
-      const fileRef = ref(storage, filePath);
+
+      // Ensure the folder "uploads/" is part of the path
+      const completePath = `uploads/${filePath}`;
+
+      // Create a reference to the file in Firebase
+      const fileRef = ref(storage, completePath);
+
+      // Delete the file
       await deleteObject(fileRef);
     });
 
+    // Wait for all deletions to complete
     await Promise.all(deleteImagePromises);
 
     res
