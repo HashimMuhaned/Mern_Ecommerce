@@ -923,7 +923,7 @@ const deleteYourItem = async (req, res) => {
     // Delete associated images
     const deleteImagePromises = imageUrls.map(async (url) => {
       const filePath = decodeURIComponent(
-        url.split(`${process.env.storageBucket}/o/`)[1].split("?")[0]
+        url.split("ethreal-1a9e9.firebasestorage.app/o/")[1].split("?")[0]
       );
       const fileRef = ref(storage, filePath);
       await deleteObject(fileRef);
