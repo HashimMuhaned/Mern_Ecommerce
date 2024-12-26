@@ -2010,6 +2010,8 @@ footer .copyright {
 
 #MainImg {
   width: 500px;
+  height: 600px;
+  object-fit: cover;
 }
 
 #prodetails .small-img-group {
