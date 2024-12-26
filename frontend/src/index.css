@@ -613,7 +613,7 @@ a {
   }
 } */
 
-@media only screen and (min-width: 360px) and (max-width: 850px) {
+@media only screen and (min-width: 360px) and (max-width: 800px) {
   #itemsCard {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1687,7 +1687,7 @@ footer .copyright {
     justify-content: center;
     align-items: center;
     margin-top: 2rem;
-    margin-left: 23rem;
+    margin-left: 10rem;
     margin-right: 5rem;
   }
 
@@ -1732,7 +1732,9 @@ footer .copyright {
     grid-template-columns: repeat(3, 1fr);
     margin-left: 100px;
   }
+}
 
+@media screen and (min-width: 800px) and (max-width: 1025px) {
   .name-info-container {
     display: flex;
     flex-direction: column !important;
@@ -1747,19 +1749,23 @@ footer .copyright {
   }
 
   #profile-topNavbar-links {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   .account-setting-section {
     display: flex;
     justify-content: end;
     align-items: flex-start;
+  }
+
+  #backbtn {
+    display: none !important;
   }
 }
 
