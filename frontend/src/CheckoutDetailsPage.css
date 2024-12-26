@@ -188,6 +188,7 @@ small {
   .checkout-container {
     width: 360px;
     padding: 10px;
+    height: 1200px;
   }
 
   .checkout-form {

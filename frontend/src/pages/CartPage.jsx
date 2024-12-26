@@ -159,10 +159,14 @@ const CartPage = () => {
                       >
                         <div id="cartItemDetails">
                           <img
+                            style={{
+                              width: "200px",
+                              height: "200px",
+                              objectFit: "cover",
+                            }}
                             id="productImageCart"
                             src={item.productId.image1}
                             alt={item.productId.name}
-                            width="200"
                           />
                           <div id="cartItemOptions">
                             <NavLink
