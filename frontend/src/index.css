@@ -104,20 +104,20 @@ HTML {
 /*Phone*/
 @media screen and (min-width: 355px) and (max-width: 800px) {
   .itemCardInsideYourItemsPage {
-    height: 165px;
+    height: 165px !important;
   }
 
   .itemCardInsideAnalysePage {
-    height: 165px;
+    height: 165px !important;
   }
 
   #itemCardImage {
-    width: 100%;
-    height: 165px;
-    object-fit: cover;
-    border-radius: 20px;
+    width: 100% !important;
+    height: 165px !important;
+    object-fit: cover !important;
     border-radius: 20px;
   }
+
   #navbar {
     justify-content: start !important;
   }
