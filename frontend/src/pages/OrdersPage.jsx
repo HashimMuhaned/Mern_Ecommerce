@@ -19,11 +19,14 @@ const OrdersPage = () => {
 
   const fetchSellerOrders = async (sellerId) => {
     try {
-      const response = await axios.get(`${process.env.BACKEND_API}/orders?sellerId=${sellerId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${process.env.BACKEND_API}/orders?sellerId=${sellerId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setOrders(response.data.orders);
     } catch (error) {
       console.error("Error fetching seller's orders:", error);
@@ -37,6 +40,11 @@ const OrdersPage = () => {
         `${process.env.BACKEND_API}/orders/${orderId}/items/${productId}/updateStatus`,
         {
           status: newStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the Authorization header here
+          },
         }
       );
 

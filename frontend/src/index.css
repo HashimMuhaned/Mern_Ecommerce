@@ -613,7 +613,7 @@ a {
   }
 } */
 
-@media only screen and (min-width: 360px) and (max-width: 768px) {
+@media only screen and (min-width: 360px) and (max-width: 850px) {
   #itemsCard {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -644,7 +644,7 @@ a {
   display: none;
 }
 
-@media only screen and (min-width: 320px) and (max-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and (min-width: 320px) and (max-width: 550px) and (-webkit-min-device-pixel-ratio: 2) {
   #notFound_img {
     width: 400px;
     height: 300px;
@@ -708,8 +708,6 @@ a {
 
   #best_seller_section {
     padding: 10px 10px 0px 10px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
   }
 
   #itemsCard {
@@ -1689,7 +1687,7 @@ footer .copyright {
     justify-content: center;
     align-items: center;
     margin-top: 2rem;
-    margin-left: 17rem;
+    margin-left: 23rem;
     margin-right: 5rem;
   }
 
@@ -1733,6 +1731,35 @@ footer .copyright {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     margin-left: 100px;
+  }
+
+  .name-info-container {
+    display: flex;
+    flex-direction: column !important;
+    gap: 20px;
+    align-items: flex-start !important;
+    padding-top: 30px;
+  }
+
+  #itemsCard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  #profile-topNavbar-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .account-setting-section {
+    display: flex;
+    justify-content: end;
+    align-items: flex-start;
   }
 }
 
