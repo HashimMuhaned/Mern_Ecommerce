@@ -104,7 +104,7 @@ HTML {
 /*Phone*/
 @media screen and (min-width: 355px) and (max-width: 800px) {
   .itemCardInsideYourItemsPage {
-    height: 165px !important;
+    height: 250px !important;
   }
 
   .itemCardInsideAnalysePage {
