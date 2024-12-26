@@ -615,7 +615,8 @@ a {
 
 @media only screen and (min-width: 360px) and (max-width: 768px) {
   #itemsCard {
-    grid-template-columns: 2fr;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   #notFound_img {
@@ -707,6 +708,8 @@ a {
 
   #best_seller_section {
     padding: 10px 10px 0px 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   #itemsCard {
@@ -804,11 +807,10 @@ a {
   }
 
   #Edit_delete_ItemCard {
-    flex-direction: column;
     align-items: start;
-    justify-content: center;
+    justify-content: start;
     padding: 0px !important;
-    width: 130px;
+    width: 100px;
   }
 
   #editItemButton {
