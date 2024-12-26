@@ -807,10 +807,10 @@ a {
   }
 
   #Edit_delete_ItemCard {
-    align-items: start;
-    justify-content: start;
-    padding: 0px !important;
-    width: 100px;
+    bottom: 40px !important;
+    right: 5px !important;
+    font-size: 20px !important;
+    gap: 7px !important;
   }
 
   #editItemButton {
