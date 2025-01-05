@@ -1,9 +1,9 @@
 import React from "react";
-import heroImage from "../assets/HeroMainImg.jpg";
-import MenHeroSection from "../assets/MenHeroSection.avif";
-import MenHeroSection2 from "../assets/MenHeroSection2.avif";
+// import heroImage from "../assets/HeroMainImg.jpg";
+// import MenHeroSection from "../assets/MenHeroSection.avif";
+// import MenHeroSection2 from "../assets/MenHeroSection2.avif";
 import MenHeroSection3 from "../assets/MenHeroSection3.jpg";
-import theWoman from "../assets/sheisgotthelook.jpg";
+// import theWoman from "../assets/sheisgotthelook.jpg";
 import DiscoverOffersLink from "./DiscoverOffersLink";
 import { useNavigate } from "react-router-dom";
 
