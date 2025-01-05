@@ -561,12 +561,13 @@ a {
 #heroHook_img {
   position: absolute; /* Position the heroHook absolutely within the hero container */
   top: 35%; /* Center vertically */
-  left: 45px; /* Position 20px from the left */
+  left: 70px; /* Position 20px from the left */
   transform: translateY(-50%); /* Adjust positioning to vertically center */
   color: black; /* Text color */
   text-align: left; /* Left-align text */
   padding: 20px; /* Padding around text */
-  font-size: 90px;
+  font-size: 45px;
+  width: 55%;
 }
 
 #unlock {
@@ -1369,7 +1370,7 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  background-image: url("./assets/banner/b17.jpg");
+  background-image: url("./assets/banner/b16.jpg");
   min-width: 580px;
   height: 50vh;
   background-size: cover;
@@ -1424,12 +1425,16 @@ a {
   padding: 50px 80px 0px 80px;
 }
 
+#banner3:hover {
+  cursor: pointer;
+}
+
 #banner3 .banner-box {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  background-image: url("./assets/banner/b7.jpg");
+  background-image: url("./assets/banner/special_offers.jpg");
   min-width: 30%;
   height: 30vh;
   background-size: cover;
@@ -1439,11 +1444,11 @@ a {
 }
 
 #banner3 .banner-box2 {
-  background-image: url("./assets/banner/b4.jpg");
+  background-image: url("./assets/banner/sandals_for_men.webp");
 }
 
 #banner3 .banner-box3 {
-  background-image: url("./assets/banner/b18.jpg");
+  background-image: url("./assets/banner/15237.jpg");
 }
 
 #banner3 h2 {

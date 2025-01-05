@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import Men from "../assets/Categories/Men.jpg";
 import Women from "../assets/Categories/Women.jpg";
+import hijabWomen from "../assets/Categories/hijabWomen.webp";
 import Kids from "../assets/Categories/Kids.jpg";
 import Home from "../assets/Categories/Home.jpg";
 import Accessories from "../assets/Categories/Accessories.jpg";
@@ -23,7 +24,7 @@ const CategoriesPage = () => {
         className="category"
         to="/ethereal/categories/women"
       >
-        <img src={Women} alt="men Picture" />
+        <img src={hijabWomen} alt="men Picture" />
         <p>Women</p>
       </NavLink>
       <NavLink

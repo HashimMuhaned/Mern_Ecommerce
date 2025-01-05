@@ -6,8 +6,6 @@ const SeasonalCollections = () => {
   return (
     <section id="banner3" onClick={() => navigate("/ethereal/all")}>
       <div className="banner-box">
-        <h2>Seasonal Sale</h2>
-        <h3>Winter Collection -50% Off</h3>
       </div>
       <div className="banner-box banner-box2">
         <h2>New Footware Collection</h2>
