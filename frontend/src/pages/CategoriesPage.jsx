@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import Men from "../assets/Categories/Men.jpg";
-import Women from "../assets/Categories/Women.jpg";
+// import Women from "../assets/Categories/Women.jpg";
 import hijabWomen from "../assets/Categories/hijabWomen.webp";
 import Kids from "../assets/Categories/Kids.jpg";
 import Home from "../assets/Categories/Home.jpg";
