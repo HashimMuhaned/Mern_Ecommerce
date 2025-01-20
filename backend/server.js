@@ -34,6 +34,7 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api", EcommerceRoutes);
 
