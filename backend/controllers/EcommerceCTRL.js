@@ -2135,8 +2135,7 @@ const suggestProducts = async (req, res) => {
     console.log(suggested_Category);
 
     res.status(200).json({
-      message: "Products suggested successfully",
-      suggested_Category,
+      message: `Suggesting products for category: ${suggested_Category}`,
     });
   } catch (error) {
     // Handle errors and respond with appropriate status
