@@ -55,6 +55,7 @@ const {
   getItemsTotalSalesByPeriod,
   signOut,
   activateAccount,
+  suggestProducts,
 } = require("../controllers/EcommerceCTRL");
 
 // Define route to handle file uploads
@@ -164,4 +165,7 @@ router.get("/suggestions", searchSuggestions);
 router.delete("/clear", checkUserToken, clearCart);
 router.patch("/update/salesCount", checkUserToken, updateSalesCount);
 router.get("/auth/signout", signOut);
+
+router.post("/suggest-products", suggestProducts);
+
 module.exports = router;

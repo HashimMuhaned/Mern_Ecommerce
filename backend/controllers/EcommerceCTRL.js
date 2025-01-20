@@ -16,6 +16,7 @@ const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 const mailSender = process.env.SENDGRID_FROM_EMAIL;
 const bucket = require("../firebaseAdmin.js"); // Importing the initialized Firebase Admin
+const { console } = require("inspector");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -2127,6 +2128,12 @@ const signOut = async (req, res) => {
   res.status(200).json({ message: "Signed out successfully" });
 };
 
+const suggestProducts = async (req, res) => {
+  const { suggested_Category } = req.body;
+
+  console.log(suggested_Category);
+};
+
 module.exports = {
   createItem,
   getItems,
@@ -2181,4 +2188,5 @@ module.exports = {
   getItemsTotalSalesByPeriod,
   signOut,
   activateAccount,
+  suggestProducts,
 };
