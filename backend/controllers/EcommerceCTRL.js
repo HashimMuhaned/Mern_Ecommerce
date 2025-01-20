@@ -2129,9 +2129,20 @@ const signOut = async (req, res) => {
 };
 
 const suggestProducts = async (req, res) => {
-  const { suggested_Category } = req.body;
+  try {
+    const { suggested_Category } = req.body;
 
-  console.log(suggested_Category);
+    console.log(suggested_Category);
+
+    res.status(200).json({
+      message: "Products suggested successfully",
+      suggested_Category,
+    });
+  } catch (error) {
+    // Handle errors and respond with appropriate status
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 module.exports = {
