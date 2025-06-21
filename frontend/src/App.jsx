@@ -28,7 +28,6 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ConfirmEmailToResetPassword from "./pages/ConfirmEmailToResetPassword";
 import ActivateAccountPage from "./pages/ActivateAccountPage";
 import NotFoundPage from "./pages/NotFoundPage";
-// import ChatBotLayout from "./layouts/ChatBotLayout";
 
 
 function App() {
