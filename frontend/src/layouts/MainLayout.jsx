@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import { Fragment } from "react";
 import BackButton from "../components/BackButton";
 import MobileBottomNavBar from "../components/MobileBottomNavBar";
+import ChatMainHome from "../components/ai_chatbot_components/ChatMainHome";
 import E_footer from "../components/E_footer";
 
 const MainLayout = () => {
@@ -25,6 +26,7 @@ const MainLayout = () => {
   return (
     <Fragment>
       <NavBar />
+      <ChatMainHome />
       {/* <MiniNavBar /> */}
       {showBackButton && <BackButton />}
       <Outlet />
