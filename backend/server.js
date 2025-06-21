@@ -13,13 +13,21 @@ const cookieParser = require("cookie-parser");
 // const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 
+const allowedOrigins = [
+  "https://mern-ecommerce-frontend-eta-ten.vercel.app",
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: [
-      "https://mern-ecommerce-frontend-eta-ten.vercel.app/",
-      "http://localhost:5173",
-    ],
-    credentials: true, // If you're using cookies or other credentials
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
 
