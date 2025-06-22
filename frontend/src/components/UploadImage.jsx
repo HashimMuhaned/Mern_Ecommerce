@@ -145,7 +145,7 @@ const AddItemForm = () => {
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("publicKey", process.env.VITE_IMAGEKIT_PUBLIC_API_KEY);
+      formData.append("publicKey", import.meta.env.VITE_IMAGEKIT_PUBLIC_API_KEY);
       formData.append("fileName", `${Date.now()}-${file.name}`);
       formData.append("folder", "/product-images");
 
@@ -157,10 +157,8 @@ const AddItemForm = () => {
         }
       );
 
-      const raw = await response.text(); // Capture raw error message
-      console.log("Raw response from ImageKit:", raw);
-
       const data = await response.json();
+      console.log("Raw response from ImageKit:", data);
 
       if (data && data.url) {
         setFormData((prevData) => ({
