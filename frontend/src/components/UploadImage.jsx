@@ -74,8 +74,6 @@ const AddItemForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-
-
   const handleFileUpload = async (e, imageField) => {
     const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
     const file = e.target.files[0];
@@ -110,14 +108,16 @@ const AddItemForm = () => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append(
-        "publicKey",
-        import.meta.env.VITE_IMAGEKIT_PUBLIC_API_KEY
-      );
-      formData.append("fileName", `${Date.now()}-${file.name}`);
-      formData.append("folder", "/product-images"); // Optional
+        "upload_preset",
+        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+      ); // unsigned preset
+      formData.append("folder", "product-images"); // your target folder
+      // formData.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME); // not mandatory, just for clarity
 
       const response = await fetch(
-        "https://upload.imagekit.io/api/v1/files/upload",
+        `https://api.cloudinary.com/v1_1/${
+          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        }/image/upload`,
         {
           method: "POST",
           body: formData,
@@ -125,16 +125,16 @@ const AddItemForm = () => {
       );
 
       const data = await response.json();
-      console.log("ImageKit Response:", data);
+      console.log("Cloudinary Response:", data);
 
-      if (data && data.url) {
+      if (data && data.secure_url) {
         setFormData((prevData) => ({
           ...prevData,
-          [imageField]: data.url,
+          [imageField]: data.secure_url,
         }));
         toast.success("Image uploaded successfully!");
       } else {
-        throw new Error("ImageKit upload failed");
+        throw new Error("Cloudinary upload failed");
       }
     } catch (error) {
       console.error("Error uploading file:", error);
