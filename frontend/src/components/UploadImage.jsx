@@ -74,6 +74,52 @@ const AddItemForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // this image upload using firebase, but it has been changed to ImageKit check below.
+  // const handleFileUpload = async (e, imageField) => {
+  //   const file = e.target.files[0];
+
+  //   if (!file) return;
+
+  //   const allowedFileTypes = [
+  //     "image/jpeg",
+  //     "image/png",
+  //     "image/gif",
+  //     "image/jpg",
+  //   ];
+  //   if (!allowedFileTypes.includes(file.type)) {
+  //     toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
+  //     return;
+  //   }
+
+  //   try {
+  //     // Set loading for the specific image
+  //     setLoadingImages((prevState) => ({
+  //       ...prevState,
+  //       [imageField]: true,
+  //     }));
+
+  //     const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
+  //     await uploadBytes(storageRef, file);
+  //     const downloadURL = await getDownloadURL(storageRef);
+
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       [imageField]: downloadURL, // Store URL instead of the file object
+  //     }));
+
+  //     toast.success("Image uploaded successfully!");
+  //   } catch (error) {
+  //     console.error("Error uploading file:", error);
+  //     toast.error("Failed to upload image.");
+  //   } finally {
+  //     // Reset loading for the specific image
+  //     setLoadingImages((prevState) => ({
+  //       ...prevState,
+  //       [imageField]: false,
+  //     }));
+  //   }
+  // };
+
   const handleFileUpload = async (e, imageField) => {
     const file = e.target.files[0];
 
@@ -97,16 +143,31 @@ const AddItemForm = () => {
         [imageField]: true,
       }));
 
-      const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("publicKey", process.env.VITE_IMAGEKIT_PUBLIC_API_KEY); 
+      formData.append("fileName", `${Date.now()}-${file.name}`);
+      formData.append("folder", "/product-images"); 
 
-      setFormData((prevData) => ({
-        ...prevData,
-        [imageField]: downloadURL, // Store URL instead of the file object
-      }));
+      const response = await fetch(
+        "https://upload.imagekit.io/api/v1/files/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
-      toast.success("Image uploaded successfully!");
+      const data = await response.json();
+
+      if (data && data.url) {
+        setFormData((prevData) => ({
+          ...prevData,
+          [imageField]: data.url, // Store public URL
+        }));
+        toast.success("Image uploaded successfully!");
+      } else {
+        throw new Error("ImageKit upload failed");
+      }
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("Failed to upload image.");
