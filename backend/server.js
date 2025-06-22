@@ -14,7 +14,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 const allowedOrigins = [
-  "https://mern-ecommerce-frontend-eta-ten.vercel.app",
+  "https://mern-ecommerce-frontend-kvehtd1wm-hashims-projects-1d68b3df.vercel.app",
   "http://localhost:5173",
 ];
 
