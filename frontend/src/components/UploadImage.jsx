@@ -74,55 +74,11 @@ const AddItemForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  // this image upload using firebase, but it has been changed to ImageKit check below.
-  // const handleFileUpload = async (e, imageField) => {
-  //   const file = e.target.files[0];
 
-  //   if (!file) return;
-
-  //   const allowedFileTypes = [
-  //     "image/jpeg",
-  //     "image/png",
-  //     "image/gif",
-  //     "image/jpg",
-  //   ];
-  //   if (!allowedFileTypes.includes(file.type)) {
-  //     toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
-  //     return;
-  //   }
-
-  //   try {
-  //     // Set loading for the specific image
-  //     setLoadingImages((prevState) => ({
-  //       ...prevState,
-  //       [imageField]: true,
-  //     }));
-
-  //     const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
-  //     await uploadBytes(storageRef, file);
-  //     const downloadURL = await getDownloadURL(storageRef);
-
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [imageField]: downloadURL, // Store URL instead of the file object
-  //     }));
-
-  //     toast.success("Image uploaded successfully!");
-  //   } catch (error) {
-  //     console.error("Error uploading file:", error);
-  //     toast.error("Failed to upload image.");
-  //   } finally {
-  //     // Reset loading for the specific image
-  //     setLoadingImages((prevState) => ({
-  //       ...prevState,
-  //       [imageField]: false,
-  //     }));
-  //   }
-  // };
 
   const handleFileUpload = async (e, imageField) => {
+    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
     const file = e.target.files[0];
-
     if (!file) return;
 
     const allowedFileTypes = [
@@ -136,8 +92,16 @@ const AddItemForm = () => {
       return;
     }
 
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(
+        `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
+          2
+        )}MB, max allowed is 20MB.`
+      );
+      return;
+    }
+
     try {
-      // Set loading for the specific image
       setLoadingImages((prevState) => ({
         ...prevState,
         [imageField]: true,
@@ -145,9 +109,12 @@ const AddItemForm = () => {
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("publicKey", import.meta.env.VITE_IMAGEKIT_PUBLIC_API_KEY);
+      formData.append(
+        "publicKey",
+        import.meta.env.VITE_IMAGEKIT_PUBLIC_API_KEY
+      );
       formData.append("fileName", `${Date.now()}-${file.name}`);
-      formData.append("folder", "/product-images");
+      formData.append("folder", "/product-images"); // Optional
 
       const response = await fetch(
         "https://upload.imagekit.io/api/v1/files/upload",
@@ -158,12 +125,12 @@ const AddItemForm = () => {
       );
 
       const data = await response.json();
-      console.log("Raw response from ImageKit:", data);
+      console.log("ImageKit Response:", data);
 
       if (data && data.url) {
         setFormData((prevData) => ({
           ...prevData,
-          [imageField]: data.url, // Store public URL
+          [imageField]: data.url,
         }));
         toast.success("Image uploaded successfully!");
       } else {
@@ -173,7 +140,6 @@ const AddItemForm = () => {
       console.error("Error uploading file:", error);
       toast.error("Failed to upload image.");
     } finally {
-      // Reset loading for the specific image
       setLoadingImages((prevState) => ({
         ...prevState,
         [imageField]: false,
