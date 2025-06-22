@@ -157,7 +157,7 @@ const AddItemForm = () => {
         }
       );
 
-      const raw = await res.text(); // Capture raw error message
+      const raw = await response.text(); // Capture raw error message
       console.log("Raw response from ImageKit:", raw);
 
       const data = await response.json();
