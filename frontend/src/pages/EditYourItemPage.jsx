@@ -19,6 +19,7 @@ import app from "../firebase-config";
 const EditYourItemPage = () => {
   const navigate = useNavigate();
   const storage = getStorage(app);
+  // const [loadingImages, setLoadingImages] = useState()
   const { setYourItems } = useContext(YourItemsContext);
   const { setFavoriteItems } = useContext(FavoriteContext);
   const { setCartItems } = useContext(CartContext);
@@ -201,7 +202,7 @@ const EditYourItemPage = () => {
     }
 
     try {
-      setLoadingImages((prev) => ({ ...prev, [imageField]: true }));
+      // setLoadingImages((prev) => ({ ...prev, [imageField]: true }));
 
       // --- Upload to Cloudinary ---
       const formData = new FormData();
