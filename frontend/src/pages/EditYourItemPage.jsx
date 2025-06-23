@@ -158,22 +158,22 @@ const EditYourItemPage = () => {
   //   }
   // };
 
-  // const handleCheckboxChange = (e) => {
-  //   setFormData({ ...formData, isBestseller: e.target.checked });
-  // };
+  const handleCheckboxChange = (e) => {
+    setFormData({ ...formData, isBestseller: e.target.checked });
+  };
 
-  // const handleSizeChange = (size) => {
-  //   const selectedSizes = [...formData.size];
-  //   if (selectedSizes.includes(size)) {
-  //     setFormData({
-  //       ...formData,
-  //       size: selectedSizes.filter((s) => s !== size),
-  //     });
-  //   } else {
-  //     selectedSizes.push(size);
-  //     setFormData({ ...formData, size: selectedSizes });
-  //   }
-  // };
+  const handleSizeChange = (size) => {
+    const selectedSizes = [...formData.size];
+    if (selectedSizes.includes(size)) {
+      setFormData({
+        ...formData,
+        size: selectedSizes.filter((s) => s !== size),
+      });
+    } else {
+      selectedSizes.push(size);
+      setFormData({ ...formData, size: selectedSizes });
+    }
+  };
 
   const handleFileUpload = async (e, imageField) => {
     const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB max
