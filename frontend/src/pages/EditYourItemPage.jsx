@@ -111,9 +111,73 @@ const EditYourItemPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileUpload = async (e, imageField) => {
-    const file = e.target.files[0];
+  // const handleFileUpload = async (e, imageField) => {
+  //   const file = e.target.files[0];
 
+  //   if (!file) return;
+
+  //   const allowedFileTypes = [
+  //     "image/jpeg",
+  //     "image/png",
+  //     "image/gif",
+  //     "image/jpg",
+  //   ];
+  //   if (!allowedFileTypes.includes(file.type)) {
+  //     toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
+  //     return;
+  //   }
+
+  //   try {
+  //     // Delete the old image if it exists
+  //     if (oldImages[imageField]) {
+  //       const oldImageRef = ref(storage, oldImages[imageField]);
+  //       await deleteObject(oldImageRef);
+  //       console.log(`Deleted old image: ${oldImages[imageField]}`);
+  //     }
+
+  //     // Upload the new file
+  //     const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
+  //     await uploadBytes(storageRef, file);
+  //     const downloadURL = await getDownloadURL(storageRef);
+
+  //     // Update the formData and oldImages state
+  //     setFormData((prevData) => ({
+  //       ...prevData,
+  //       [imageField]: downloadURL, // Store the new image URL
+  //     }));
+
+  //     setOldImages((prevOldImages) => ({
+  //       ...prevOldImages,
+  //       [imageField]: downloadURL, // Update the oldImages with the new URL
+  //     }));
+
+  //     toast.success("Image uploaded successfully!");
+  //   } catch (error) {
+  //     console.error("Error uploading or deleting image:", error);
+  //     toast.error("Failed to upload image.");
+  //   }
+  // };
+
+  // const handleCheckboxChange = (e) => {
+  //   setFormData({ ...formData, isBestseller: e.target.checked });
+  // };
+
+  // const handleSizeChange = (size) => {
+  //   const selectedSizes = [...formData.size];
+  //   if (selectedSizes.includes(size)) {
+  //     setFormData({
+  //       ...formData,
+  //       size: selectedSizes.filter((s) => s !== size),
+  //     });
+  //   } else {
+  //     selectedSizes.push(size);
+  //     setFormData({ ...formData, size: selectedSizes });
+  //   }
+  // };
+
+  const handleFileUpload = async (e, imageField) => {
+    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB max
+    const file = e.target.files[0];
     if (!file) return;
 
     const allowedFileTypes = [
@@ -127,51 +191,71 @@ const EditYourItemPage = () => {
       return;
     }
 
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(
+        `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
+          2
+        )}MB, max allowed is 20MB.`
+      );
+      return;
+    }
+
     try {
-      // Delete the old image if it exists
-      if (oldImages[imageField]) {
-        const oldImageRef = ref(storage, oldImages[imageField]);
-        await deleteObject(oldImageRef);
-        console.log(`Deleted old image: ${oldImages[imageField]}`);
+      setLoadingImages((prev) => ({ ...prev, [imageField]: true }));
+
+      // --- Upload to Cloudinary ---
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "upload_preset",
+        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+      );
+      formData.append("folder", "product-images");
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${
+          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        }/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      console.log("Cloudinary Response:", data);
+
+      if (!data.secure_url) throw new Error("Cloudinary upload failed");
+
+      // Optional: Delete old image (requires public_id, which is not a URL)
+      if (oldImages[imageField]?.public_id) {
+        console.warn(
+          "Note: Cloudinary image deletion must be done securely from backend using the public_id:",
+          oldImages[imageField].public_id
+        );
+        // Call your backend here if you implement deletion logic
       }
 
-      // Upload the new file
-      const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(storageRef);
-
-      // Update the formData and oldImages state
+      // Save image URL and public_id
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: downloadURL, // Store the new image URL
+        [imageField]: data.secure_url, // image URL
       }));
 
-      setOldImages((prevOldImages) => ({
-        ...prevOldImages,
-        [imageField]: downloadURL, // Update the oldImages with the new URL
+      setOldImages((prev) => ({
+        ...prev,
+        [imageField]: {
+          url: data.secure_url,
+          public_id: data.public_id, // needed for deletion
+        },
       }));
 
       toast.success("Image uploaded successfully!");
     } catch (error) {
-      console.error("Error uploading or deleting image:", error);
+      console.error("Error uploading image to Cloudinary:", error);
       toast.error("Failed to upload image.");
-    }
-  };
-
-  const handleCheckboxChange = (e) => {
-    setFormData({ ...formData, isBestseller: e.target.checked });
-  };
-
-  const handleSizeChange = (size) => {
-    const selectedSizes = [...formData.size];
-    if (selectedSizes.includes(size)) {
-      setFormData({
-        ...formData,
-        size: selectedSizes.filter((s) => s !== size),
-      });
-    } else {
-      selectedSizes.push(size);
-      setFormData({ ...formData, size: selectedSizes });
+    } finally {
+      setLoadingImages((prev) => ({ ...prev, [imageField]: false }));
     }
   };
 
