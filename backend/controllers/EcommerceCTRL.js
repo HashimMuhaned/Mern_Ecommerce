@@ -856,8 +856,10 @@ const getYourItemToEdit = async (req, res) => {
 };
 
 const deleteOldCloudinaryImage = async (oldImage, newImage) => {
-  const oldPublicId = oldImage?.public_id;
-  const newPublicId = newImage?.public_id;
+  const oldPublicId =
+    typeof oldImage === "object" ? oldImage?.public_id : undefined;
+  const newPublicId =
+    typeof newImage === "object" ? newImage?.public_id : undefined;
 
   if (oldPublicId && oldPublicId !== newPublicId) {
     try {
@@ -892,31 +894,31 @@ const editYourItem = async (req, res) => {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    // Store old images for comparison
+    // Store old images for deletion comparison
     const oldImage1 = item.image1;
     const oldImage2 = item.image2;
     const oldImage3 = item.image3;
     const oldImage4 = item.image4;
     const oldImage5 = item.image5;
 
-    // Update text/boolean/array fields
+    // Update regular fields
     item.name = name || item.name;
     item.description = description || item.description;
     item.price = price || item.price;
     item.category = category || item.category;
     item.subCategory = subCategory || item.subCategory;
-    item.size = size?.length ? size : item.size;
+    item.size = Array.isArray(size) && size.length > 0 ? size : item.size;
     item.isBestseller =
       typeof isBestseller === "boolean" ? isBestseller : item.isBestseller;
 
-    // Update image fields if changed
-    item.image1 = image1 || oldImage1;
-    item.image2 = image2 || oldImage2;
-    item.image3 = image3 || oldImage3;
-    item.image4 = image4 || oldImage4;
-    item.image5 = image5 || oldImage5;
+    // Update image URLs
+    item.image1 = image1?.url || item.image1;
+    item.image2 = image2?.url || item.image2;
+    item.image3 = image3?.url || item.image3;
+    item.image4 = image4?.url || item.image4;
+    item.image5 = image5?.url || item.image5;
 
-    // Delete previous Cloudinary images if replaced
+    // Delete old Cloudinary images if public_id changed
     await deleteOldCloudinaryImage(oldImage1, image1);
     await deleteOldCloudinaryImage(oldImage2, image2);
     await deleteOldCloudinaryImage(oldImage3, image3);

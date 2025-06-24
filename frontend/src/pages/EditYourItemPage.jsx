@@ -82,11 +82,11 @@ const EditYourItemPage = () => {
           subCategory: itemData.subCategory || "Topwear",
           size: itemData.size || [],
           isBestseller: itemData.isBestseller || false,
-          image1: itemData.image1 || "",
-          image2: itemData.image2 || "",
-          image3: itemData.image3 || "",
-          image4: itemData.image4 || "",
-          image5: itemData.image5 || "",
+          image1: { url: "", public_id: "" },
+          image2: { url: "", public_id: "" },
+          image3: { url: "", public_id: "" },
+          image4: { url: "", public_id: "" },
+          image5: { url: "", public_id: "" },
         };
 
         setFormData(fetchedData); // Set form data for editing
@@ -176,6 +176,16 @@ const EditYourItemPage = () => {
     }
   };
 
+  useEffect(() => {
+    setOldImages({
+      image1: formData.image1,
+      image2: formData.image2,
+      image3: formData.image3,
+      image4: formData.image4,
+      image5: formData.image5,
+    });
+  }, [formData]);
+
   const handleFileUpload = async (e, imageField) => {
     const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB max
     const file = e.target.files[0];
@@ -230,7 +240,10 @@ const EditYourItemPage = () => {
       // Update formData with image URL
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: data.secure_url,
+        [imageField]: {
+          url: data.secure_url,
+          public_id: data.public_id,
+        },
       }));
 
       // Track uploaded image for potential deletion
@@ -241,7 +254,7 @@ const EditYourItemPage = () => {
           public_id: data.public_id, // Send this to backend if needed
         },
       }));
-
+      console.log(formData.image1)
       toast.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Error uploading image to Cloudinary:", error);
