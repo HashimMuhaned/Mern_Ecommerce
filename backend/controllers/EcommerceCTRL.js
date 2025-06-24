@@ -855,17 +855,16 @@ const getYourItemToEdit = async (req, res) => {
   }
 };
 
-const deleteOldCloudinaryImage = async (oldUrl, newUrl) => {
-  if (oldUrl && oldUrl !== newUrl) {
-    try {
-      const parts = oldUrl.split("/");
-      const fileWithExtension = parts[parts.length - 1]; // e.g. abc123.jpg
-      const publicId = `product-images/${fileWithExtension.split(".")[0]}`; // e.g. product-images/abc123
+const deleteOldCloudinaryImage = async (oldImage, newImage) => {
+  const oldPublicId = oldImage?.public_id;
+  const newPublicId = newImage?.public_id;
 
-      await cloudinary.uploader.destroy(publicId);
-      console.log("Deleted from Cloudinary:", publicId);
+  if (oldPublicId && oldPublicId !== newPublicId) {
+    try {
+      await cloudinary.uploader.destroy(oldPublicId);
+      console.log("✅ Deleted from Cloudinary:", oldPublicId);
     } catch (err) {
-      console.warn("Error deleting from Cloudinary:", err.message);
+      console.warn("⚠️ Error deleting from Cloudinary:", err.message);
     }
   }
 };
@@ -893,14 +892,14 @@ const editYourItem = async (req, res) => {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    // Store old image URLs before updating
+    // Store old images for comparison
     const oldImage1 = item.image1;
     const oldImage2 = item.image2;
     const oldImage3 = item.image3;
     const oldImage4 = item.image4;
     const oldImage5 = item.image5;
 
-    // Update item fields
+    // Update text/boolean/array fields
     item.name = name || item.name;
     item.description = description || item.description;
     item.price = price || item.price;
@@ -910,25 +909,25 @@ const editYourItem = async (req, res) => {
     item.isBestseller =
       typeof isBestseller === "boolean" ? isBestseller : item.isBestseller;
 
-    item.image1 = image1 || item.image1;
-    item.image2 = image2 || item.image2;
-    item.image3 = image3 || item.image3;
-    item.image4 = image4 || item.image4;
-    item.image5 = image5 || item.image5;
+    // Update image fields if changed
+    item.image1 = image1 || oldImage1;
+    item.image2 = image2 || oldImage2;
+    item.image3 = image3 || oldImage3;
+    item.image4 = image4 || oldImage4;
+    item.image5 = image5 || oldImage5;
 
-    // Now compare and delete old images if changed
-    await deleteOldCloudinaryImage(oldImage1, item.image1);
-    await deleteOldCloudinaryImage(oldImage2, item.image2);
-    await deleteOldCloudinaryImage(oldImage3, item.image3);
-    await deleteOldCloudinaryImage(oldImage4, item.image4);
-    await deleteOldCloudinaryImage(oldImage5, item.image5);
+    // Delete previous Cloudinary images if replaced
+    await deleteOldCloudinaryImage(oldImage1, image1);
+    await deleteOldCloudinaryImage(oldImage2, image2);
+    await deleteOldCloudinaryImage(oldImage3, image3);
+    await deleteOldCloudinaryImage(oldImage4, image4);
+    await deleteOldCloudinaryImage(oldImage5, image5);
 
-    // Save updated item
     await item.save();
 
     res.status(200).json({ message: "Item updated successfully", item });
   } catch (error) {
-    console.error("Error updating item:", error);
+    console.error("❌ Error updating item:", error);
     res.status(500).json({ message: "Error updating item" });
   }
 };
