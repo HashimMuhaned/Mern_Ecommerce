@@ -196,15 +196,13 @@ const EditYourItemPage = () => {
       toast.error(
         `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
           2
-        )}MB, max allowed is 20MB.`
+        )}MB. Max allowed is 20MB.`
       );
       return;
     }
 
     try {
-      // setLoadingImages((prev) => ({ ...prev, [imageField]: true }));
-
-      // --- Upload to Cloudinary ---
+      // Upload to Cloudinary
       const formData = new FormData();
       formData.append("file", file);
       formData.append(
@@ -213,10 +211,9 @@ const EditYourItemPage = () => {
       );
       formData.append("folder", "product-images");
 
+      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        }/upload`,
+        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
         {
           method: "POST",
           body: formData,
@@ -226,28 +223,22 @@ const EditYourItemPage = () => {
       const data = await response.json();
       console.log("Cloudinary Response:", data);
 
-      if (!data.secure_url) throw new Error("Cloudinary upload failed");
-
-      // Optional: Delete old image (requires public_id, which is not a URL)
-      if (oldImages[imageField]?.public_id) {
-        console.warn(
-          "Note: Cloudinary image deletion must be done securely from backend using the public_id:",
-          oldImages[imageField].public_id
-        );
-        // Call your backend here if you implement deletion logic
+      if (!data.secure_url || !data.public_id) {
+        throw new Error("Cloudinary upload failed");
       }
 
-      // Save image URL and public_id
+      // Update formData with image URL
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: data.secure_url, // image URL
+        [imageField]: data.secure_url,
       }));
 
+      // Track uploaded image for potential deletion
       setOldImages((prev) => ({
         ...prev,
         [imageField]: {
           url: data.secure_url,
-          public_id: data.public_id, // needed for deletion
+          public_id: data.public_id, // Send this to backend if needed
         },
       }));
 
@@ -255,8 +246,6 @@ const EditYourItemPage = () => {
     } catch (error) {
       console.error("Error uploading image to Cloudinary:", error);
       toast.error("Failed to upload image.");
-    } finally {
-      setOldImages((prev) => ({ ...prev, [imageField]: false }));
     }
   };
 

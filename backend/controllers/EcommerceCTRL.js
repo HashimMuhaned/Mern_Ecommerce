@@ -20,13 +20,13 @@ const { console } = require("inspector");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
-// import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // const checkUserToken = (req, res, next) => {
 //   const token = req.cookies.cookie; // Accessing the JWT from the cookie
@@ -855,9 +855,24 @@ const getYourItemToEdit = async (req, res) => {
   }
 };
 
+const deleteOldCloudinaryImage = async (oldUrl, newUrl) => {
+  if (oldUrl && oldUrl !== newUrl) {
+    try {
+      const parts = oldUrl.split("/");
+      const fileWithExtension = parts[parts.length - 1];
+      const publicId = `product-images/${fileWithExtension.split(".")[0]}`;
+
+      await cloudinary.uploader.destroy(publicId);
+      console.log("Deleted from Cloudinary:", publicId);
+    } catch (err) {
+      console.warn("Error deleting from Cloudinary:", err.message);
+    }
+  }
+};
+
 const editYourItem = async (req, res) => {
   try {
-    const { id } = req.params; // Get the item ID from the URL params
+    const { id } = req.params;
     const {
       name,
       description,
@@ -871,34 +886,38 @@ const editYourItem = async (req, res) => {
       image3,
       image4,
       image5,
-    } = req.body; // Destructure the form data from the request body
+    } = req.body;
 
-    // Find the item by its ID in the database
     const item = await ItemModel.findById(id);
     if (!item) {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    // Update the item fields with the new data
+    // Delete old Cloudinary images if replaced
+    await deleteOldCloudinaryImage(item.image1, image1);
+    await deleteOldCloudinaryImage(item.image2, image2);
+    await deleteOldCloudinaryImage(item.image3, image3);
+    await deleteOldCloudinaryImage(item.image4, image4);
+    await deleteOldCloudinaryImage(item.image5, image5);
+
+    // Update fields (fallback to old if not provided)
     item.name = name || item.name;
     item.description = description || item.description;
     item.price = price || item.price;
     item.category = category || item.category;
     item.subCategory = subCategory || item.subCategory;
-    item.size = size || item.size;
-    item.isBestseller = isBestseller || false;
+    item.size = size?.length ? size : item.size;
+    item.isBestseller =
+      typeof isBestseller === "boolean" ? isBestseller : item.isBestseller;
 
-    // Only update images if a new one was provided, otherwise keep the old one
     item.image1 = image1 || item.image1;
     item.image2 = image2 || item.image2;
     item.image3 = image3 || item.image3;
     item.image4 = image4 || item.image4;
     item.image5 = image5 || item.image5;
 
-    // Save the updated item back to the database
     await item.save();
 
-    // Return the updated item in the response
     res.status(200).json({ message: "Item updated successfully", item });
   } catch (error) {
     console.error("Error updating item:", error);
