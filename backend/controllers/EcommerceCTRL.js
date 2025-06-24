@@ -20,7 +20,7 @@ const { console } = require("inspector");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
-import { v2 as cloudinary } from "cloudinary";
+const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -859,8 +859,8 @@ const deleteOldCloudinaryImage = async (oldUrl, newUrl) => {
   if (oldUrl && oldUrl !== newUrl) {
     try {
       const parts = oldUrl.split("/");
-      const fileWithExtension = parts[parts.length - 1];
-      const publicId = `product-images/${fileWithExtension.split(".")[0]}`;
+      const fileWithExtension = parts[parts.length - 1]; // e.g. abc123.jpg
+      const publicId = `product-images/${fileWithExtension.split(".")[0]}`; // e.g. product-images/abc123
 
       await cloudinary.uploader.destroy(publicId);
       console.log("Deleted from Cloudinary:", publicId);
@@ -893,14 +893,14 @@ const editYourItem = async (req, res) => {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    // Delete old Cloudinary images if replaced
-    await deleteOldCloudinaryImage(item.image1, image1);
-    await deleteOldCloudinaryImage(item.image2, image2);
-    await deleteOldCloudinaryImage(item.image3, image3);
-    await deleteOldCloudinaryImage(item.image4, image4);
-    await deleteOldCloudinaryImage(item.image5, image5);
+    // Store old image URLs before updating
+    const oldImage1 = item.image1;
+    const oldImage2 = item.image2;
+    const oldImage3 = item.image3;
+    const oldImage4 = item.image4;
+    const oldImage5 = item.image5;
 
-    // Update fields (fallback to old if not provided)
+    // Update item fields
     item.name = name || item.name;
     item.description = description || item.description;
     item.price = price || item.price;
@@ -916,6 +916,14 @@ const editYourItem = async (req, res) => {
     item.image4 = image4 || item.image4;
     item.image5 = image5 || item.image5;
 
+    // Now compare and delete old images if changed
+    await deleteOldCloudinaryImage(oldImage1, item.image1);
+    await deleteOldCloudinaryImage(oldImage2, item.image2);
+    await deleteOldCloudinaryImage(oldImage3, item.image3);
+    await deleteOldCloudinaryImage(oldImage4, item.image4);
+    await deleteOldCloudinaryImage(oldImage5, item.image5);
+
+    // Save updated item
     await item.save();
 
     res.status(200).json({ message: "Item updated successfully", item });
