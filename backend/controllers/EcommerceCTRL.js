@@ -878,12 +878,12 @@ const editYourItem = async (req, res) => {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    const deleteOldImage = async (oldUrl, newUrl) => {
-      if (oldUrl && oldUrl !== newUrl) {
-        const publicId = oldUrl.split("/").pop().split(".")[0]; // works for default Cloudinary URLs
-        await cloudinary.uploader.destroy(`product-images/${publicId}`);
-      }
-    };
+    // const deleteOldImage = async (oldUrl, newUrl) => {
+    //   if (oldUrl && oldUrl !== newUrl) {
+    //     const publicId = oldUrl.split("/").pop().split(".")[0]; // works for default Cloudinary URLs
+    //     await cloudinary.uploader.destroy(`product-images/${publicId}`);
+    //   }
+    // };
 
     // Delete and replace each image only if changed
     await deleteOldImage(item.image1, image1);
@@ -915,6 +915,7 @@ const editYourItem = async (req, res) => {
     res.status(500).json({ message: "Error updating item" });
   }
 };
+
 const deleteYourItem = async (req, res) => {
   try {
     const { productId } = req.params;
