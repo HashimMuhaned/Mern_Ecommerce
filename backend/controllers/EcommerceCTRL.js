@@ -20,6 +20,14 @@ const { console } = require("inspector");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.VITE_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 // const checkUserToken = (req, res, next) => {
 //   const token = req.cookies.cookie; // Accessing the JWT from the cookie
 
@@ -849,7 +857,7 @@ const getYourItemToEdit = async (req, res) => {
 
 const editYourItem = async (req, res) => {
   try {
-    const { id } = req.params; // Get the item ID from the URL params
+    const { id } = req.params;
     const {
       name,
       description,
@@ -863,15 +871,28 @@ const editYourItem = async (req, res) => {
       image3,
       image4,
       image5,
-    } = req.body; // Destructure the form data from the request body
+    } = req.body;
 
-    // Find the item by its ID in the database
     const item = await ItemModel.findById(id);
     if (!item) {
       return res.status(404).json({ message: "Item not found" });
     }
 
-    // Update the item fields with the new data
+    const deleteOldImage = async (oldUrl, newUrl) => {
+      if (oldUrl && oldUrl !== newUrl) {
+        const publicId = oldUrl.split("/").pop().split(".")[0]; // works for default Cloudinary URLs
+        await cloudinary.uploader.destroy(`product-images/${publicId}`);
+      }
+    };
+
+    // Delete and replace each image only if changed
+    await deleteOldImage(item.image1, image1);
+    await deleteOldImage(item.image2, image2);
+    await deleteOldImage(item.image3, image3);
+    await deleteOldImage(item.image4, image4);
+    await deleteOldImage(item.image5, image5);
+
+    // Update item fields
     item.name = name || item.name;
     item.description = description || item.description;
     item.price = price || item.price;
@@ -880,24 +901,20 @@ const editYourItem = async (req, res) => {
     item.size = size || item.size;
     item.isBestseller = isBestseller || false;
 
-    // Only update images if a new one was provided, otherwise keep the old one
     item.image1 = image1 || item.image1;
     item.image2 = image2 || item.image2;
     item.image3 = image3 || item.image3;
     item.image4 = image4 || item.image4;
     item.image5 = image5 || item.image5;
 
-    // Save the updated item back to the database
     await item.save();
 
-    // Return the updated item in the response
     res.status(200).json({ message: "Item updated successfully", item });
   } catch (error) {
     console.error("Error updating item:", error);
     res.status(500).json({ message: "Error updating item" });
   }
 };
-
 const deleteYourItem = async (req, res) => {
   try {
     const { productId } = req.params;

@@ -256,7 +256,7 @@ const EditYourItemPage = () => {
       console.error("Error uploading image to Cloudinary:", error);
       toast.error("Failed to upload image.");
     } finally {
-      setLoadingImages((prev) => ({ ...prev, [imageField]: false }));
+      setOldImages((prev) => ({ ...prev, [imageField]: false }));
     }
   };
 
