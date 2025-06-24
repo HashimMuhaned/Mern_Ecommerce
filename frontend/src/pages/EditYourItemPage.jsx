@@ -36,11 +36,11 @@ const EditYourItemPage = () => {
     subCategory: "Top Wear",
     size: [],
     isBestseller: false,
-    image1: "",
-    image2: "",
-    image3: "",
-    image4: "",
-    image5: "",
+    image1: { url: "", public_id: "" },
+    image2: { url: "", public_id: "" },
+    image3: { url: "", public_id: "" },
+    image4: { url: "", public_id: "" },
+    image5: { url: "", public_id: "" },
   };
 
   const [formData, setFormData] = useState(
@@ -48,13 +48,12 @@ const EditYourItemPage = () => {
   );
 
   useEffect(() => {
-    // Set the old image URLs when loading the item for editing
     setOldImages({
-      image1: formData.image1 || "",
-      image2: formData.image2 || "",
-      image3: formData.image3 || "",
-      image4: formData.image4 || "",
-      image5: formData.image5 || "",
+      image1: formData.image1,
+      image2: formData.image2,
+      image3: formData.image3,
+      image4: formData.image4,
+      image5: formData.image5,
     });
   }, [formData]);
 
@@ -176,16 +175,6 @@ const EditYourItemPage = () => {
     }
   };
 
-  useEffect(() => {
-    setOldImages({
-      image1: formData.image1,
-      image2: formData.image2,
-      image3: formData.image3,
-      image4: formData.image4,
-      image5: formData.image5,
-    });
-  }, [formData]);
-
   const handleFileUpload = async (e, imageField) => {
     const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB max
     const file = e.target.files[0];
@@ -246,15 +235,7 @@ const EditYourItemPage = () => {
         },
       }));
 
-      // Track uploaded image for potential deletion
-      setOldImages((prev) => ({
-        ...prev,
-        [imageField]: {
-          url: data.secure_url,
-          public_id: data.public_id, // Send this to backend if needed
-        },
-      }));
-      console.log(formData.image1)
+      console.log(formData.image1);
       toast.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Error uploading image to Cloudinary:", error);
@@ -341,9 +322,9 @@ const EditYourItemPage = () => {
           {[1, 2, 3, 4, 5].map((num) => (
             <div key={num} className="image-upload-box">
               <label htmlFor={`file-upload-${num}`}>
-                {formData[`image${num}`] ? (
+                {formData[`image${num}`]?.url ? (
                   <img
-                    src={formData[`image${num}`]}
+                    src={formData[`image${num}`].url}
                     alt={`Preview ${num}`}
                     className="image-preview"
                   />
