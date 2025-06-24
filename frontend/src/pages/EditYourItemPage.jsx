@@ -230,10 +230,7 @@ const EditYourItemPage = () => {
       // Update formData with image URL
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: {
-          url: data.secure_url,
-          public_id: data.public_id,
-        },
+        [imageField]: data.secure_url,
       }));
 
       // Track uploaded image for potential deletion
