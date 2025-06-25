@@ -17,15 +17,6 @@ const AddItemForm = () => {
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
-  console.log("isLoggedin:", isLoggedin);
-  console.log(
-    "VITE_CLOUDINARY_UPLOAD_PRESET:",
-    import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-  );
-  console.log(
-    "VITE_CLOUDINARY_CLOUD_NAME",
-    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-  );
   const token = localStorage.getItem("authToken");
   const [loading, setLoading] = useState(false);
   const [loadingImages, setLoadingImages] = useState({
@@ -162,79 +153,6 @@ const AddItemForm = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  // const handleFileUpload = async (e, imageField) => {
-  //   const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-
-  //   const allowedFileTypes = [
-  //     "image/jpeg",
-  //     "image/png",
-  //     "image/gif",
-  //     "image/jpg",
-  //   ];
-  //   if (!allowedFileTypes.includes(file.type)) {
-  //     toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
-  //     return;
-  //   }
-
-  //   if (file.size > MAX_FILE_SIZE) {
-  //     toast.error(
-  //       `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
-  //         2
-  //       )}MB, max allowed is 20MB.`
-  //     );
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoadingImages((prevState) => ({
-  //       ...prevState,
-  //       [imageField]: true,
-  //     }));
-
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-  //     formData.append(
-  //       "upload_preset",
-  //       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-  //     ); // unsigned preset
-  //     formData.append("folder", "product-images"); // your target folder
-  //     // formData.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME); // not mandatory, just for clarity
-
-  //     const response = await fetch(
-  //       `https://api.cloudinary.com/v1_1/${
-  //         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-  //       }/image/upload`,
-  //       {
-  //         method: "POST",
-  //         body: formData,
-  //       }
-  //     );
-
-  //     const data = await response.json();
-  //     console.log("Cloudinary Response:", data);
-
-  //     if (data && data.secure_url) {
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         [imageField]: data.secure_url,
-  //       }));
-  //       toast.success("Image uploaded successfully!");
-  //     } else {
-  //       throw new Error("Cloudinary upload failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error uploading file:", error);
-  //     toast.error("Failed to upload image.");
-  //   } finally {
-  //     setLoadingImages((prevState) => ({
-  //       ...prevState,
-  //       [imageField]: false,
-  //     }));
-  //   }
-  // };
 
   const handleCheckboxChange = (e) => {
     setFormData({ ...formData, isBestseller: e.target.checked });
