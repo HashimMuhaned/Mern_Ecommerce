@@ -27,6 +27,77 @@ const AddItemForm = () => {
     image5: false,
   });
 
+  const [selectedImages, setSelectedImages] = useState({
+    image1: null,
+    image2: null,
+    image3: null,
+    image4: null,
+    image5: null,
+  });
+
+  const handleImageSelect = (e, imageField) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedFileTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/jpg",
+    ];
+    const MAX_FILE_SIZE = 20 * 1024 * 1024;
+
+    if (!allowedFileTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(
+        `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
+          2
+        )}MB, max allowed is 20MB.`
+      );
+      return;
+    }
+
+    setSelectedImages((prev) => ({
+      ...prev,
+      [imageField]: file,
+    }));
+
+    // Optional: show preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prevData) => ({
+        ...prevData,
+        [imageField]: reader.result, // preview only
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const uploadImageToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+    formData.append("folder", "product-images");
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${
+        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+      }/image/upload`,
+      { method: "POST", body: formData }
+    );
+
+    const data = await response.json();
+    if (!data.secure_url) throw new Error("Cloudinary upload failed");
+    return data.secure_url;
+  };
+
   if (!isLoggedin) {
     return (
       <p id="login_to_view">
@@ -74,78 +145,78 @@ const AddItemForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileUpload = async (e, imageField) => {
-    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
-    const file = e.target.files[0];
-    if (!file) return;
+  // const handleFileUpload = async (e, imageField) => {
+  //   const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+  //   const file = e.target.files[0];
+  //   if (!file) return;
 
-    const allowedFileTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/gif",
-      "image/jpg",
-    ];
-    if (!allowedFileTypes.includes(file.type)) {
-      toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
-      return;
-    }
+  //   const allowedFileTypes = [
+  //     "image/jpeg",
+  //     "image/png",
+  //     "image/gif",
+  //     "image/jpg",
+  //   ];
+  //   if (!allowedFileTypes.includes(file.type)) {
+  //     toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
+  //     return;
+  //   }
 
-    if (file.size > MAX_FILE_SIZE) {
-      toast.error(
-        `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
-          2
-        )}MB, max allowed is 20MB.`
-      );
-      return;
-    }
+  //   if (file.size > MAX_FILE_SIZE) {
+  //     toast.error(
+  //       `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
+  //         2
+  //       )}MB, max allowed is 20MB.`
+  //     );
+  //     return;
+  //   }
 
-    try {
-      setLoadingImages((prevState) => ({
-        ...prevState,
-        [imageField]: true,
-      }));
+  //   try {
+  //     setLoadingImages((prevState) => ({
+  //       ...prevState,
+  //       [imageField]: true,
+  //     }));
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append(
-        "upload_preset",
-        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-      ); // unsigned preset
-      formData.append("folder", "product-images"); // your target folder
-      // formData.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME); // not mandatory, just for clarity
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+  //     formData.append(
+  //       "upload_preset",
+  //       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+  //     ); // unsigned preset
+  //     formData.append("folder", "product-images"); // your target folder
+  //     // formData.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME); // not mandatory, just for clarity
 
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        }/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+  //     const response = await fetch(
+  //       `https://api.cloudinary.com/v1_1/${
+  //         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+  //       }/image/upload`,
+  //       {
+  //         method: "POST",
+  //         body: formData,
+  //       }
+  //     );
 
-      const data = await response.json();
-      console.log("Cloudinary Response:", data);
+  //     const data = await response.json();
+  //     console.log("Cloudinary Response:", data);
 
-      if (data && data.secure_url) {
-        setFormData((prevData) => ({
-          ...prevData,
-          [imageField]: data.secure_url,
-        }));
-        toast.success("Image uploaded successfully!");
-      } else {
-        throw new Error("Cloudinary upload failed");
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      toast.error("Failed to upload image.");
-    } finally {
-      setLoadingImages((prevState) => ({
-        ...prevState,
-        [imageField]: false,
-      }));
-    }
-  };
+  //     if (data && data.secure_url) {
+  //       setFormData((prevData) => ({
+  //         ...prevData,
+  //         [imageField]: data.secure_url,
+  //       }));
+  //       toast.success("Image uploaded successfully!");
+  //     } else {
+  //       throw new Error("Cloudinary upload failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error uploading file:", error);
+  //     toast.error("Failed to upload image.");
+  //   } finally {
+  //     setLoadingImages((prevState) => ({
+  //       ...prevState,
+  //       [imageField]: false,
+  //     }));
+  //   }
+  // };
 
   const handleCheckboxChange = (e) => {
     setFormData({ ...formData, isBestseller: e.target.checked });
@@ -190,13 +261,32 @@ const AddItemForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
 
     try {
+      // Start with a full copy of the existing formData
+      const updatedFormData = { ...formData };
+
+      // Upload selected image files and replace their values in formData
+      for (const key of Object.keys(selectedImages)) {
+        const file = selectedImages[key];
+        if (file) {
+          try {
+            const url = await uploadImageToCloudinary(file);
+            updatedFormData[key] = url; // update the image field
+          } catch (err) {
+            toast.error(`Failed to upload ${key}`);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
+      // Now submit the full formData with updated image URLs
       const response = await axios.post(
         `${process.env.BACKEND_API}/upload-item`,
-        formData,
+        updatedFormData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -207,9 +297,9 @@ const AddItemForm = () => {
 
       if (response.status === 201) {
         toast.success("Item created successfully!");
-        clearFormInputs(); // Reset form
-        fetchYourItems(); // Reload your items
-        fetchHomePageItems(); // Reload home page items
+        clearFormInputs();
+        fetchYourItems();
+        fetchHomePageItems();
       }
     } catch (error) {
       console.error("Error:", error);
@@ -272,7 +362,7 @@ const AddItemForm = () => {
                 type="file"
                 id={`file-upload-${num}`}
                 style={{ display: "none" }}
-                onChange={(e) => handleFileUpload(e, `image${num}`)}
+                onChange={(e) => handleImageSelect(e, `image${num}`)}
               />
             </div>
           ))}

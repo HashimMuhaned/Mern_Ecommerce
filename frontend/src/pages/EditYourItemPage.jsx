@@ -235,13 +235,16 @@ const EditYourItemPage = () => {
         },
       }));
 
-      console.log(formData.image1);
       toast.success("Image uploaded successfully!");
     } catch (error) {
       console.error("Error uploading image to Cloudinary:", error);
       toast.error("Failed to upload image.");
     }
   };
+
+  useEffect(() => {
+    console.log("Updated formData:", formData);
+  }, [formData]);
 
   // Submit form data
   const handleSubmit = (e) => {
