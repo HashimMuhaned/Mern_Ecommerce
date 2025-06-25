@@ -17,6 +17,15 @@ const AddItemForm = () => {
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
   const { isLoggedin } = useContext(CheckUserContext);
+  console.log("isLoggedin:", isLoggedin);
+  console.log(
+    "VITE_CLOUDINARY_UPLOAD_PRESET:",
+    import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+  );
+  console.log(
+    "VITE_CLOUDINARY_CLOUD_NAME",
+    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+  );
   const token = localStorage.getItem("authToken");
   const [loading, setLoading] = useState(false);
   const [loadingImages, setLoadingImages] = useState({
@@ -34,6 +43,16 @@ const AddItemForm = () => {
     image4: null,
     image5: null,
   });
+
+  const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+  const cloudinary_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  if (!uploadPreset) {
+    console.warn("Missing Cloudinary upload preset!");
+  }
+
+  if (!cloudinary_name) {
+    console.warn("Missing Cloudinary upload preset!");
+  }
 
   const handleImageSelect = (e, imageField) => {
     const file = e.target.files[0];
@@ -80,16 +99,11 @@ const AddItemForm = () => {
   const uploadImageToCloudinary = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-    );
+    formData.append("upload_preset", uploadPreset);
     formData.append("folder", "product-images");
 
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${
-        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-      }/image/upload`,
+      `https://api.cloudinary.com/v1_1/${cloudinary_name}/image/upload`,
       { method: "POST", body: formData }
     );
 
@@ -98,7 +112,7 @@ const AddItemForm = () => {
     return data.secure_url;
   };
 
-  if (!isLoggedin) {
+  if (isLoggedin === false) {
     return (
       <p id="login_to_view">
         Please{" "}
@@ -106,12 +120,16 @@ const AddItemForm = () => {
           to={"/ethereal/login"}
           style={{ color: "blue", textDecoration: "underline" }}
         >
-          {" "}
           Login.
         </NavLink>
       </p>
     );
   }
+
+  if (isLoggedin === undefined) {
+    return null; // or a loading spinner
+  }
+
   // Retrieve form data from local storage or set default values
   const initialFormData = JSON.parse(localStorage.getItem("formData")) || {
     name: "",
