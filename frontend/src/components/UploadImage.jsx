@@ -324,6 +324,15 @@ const AddItemForm = () => {
       image4: "",
       image5: "",
     });
+
+    setSelectedImages({
+      image1: null,
+      image2: null,
+      image3: null,
+      image4: null,
+      image5: null,
+    });
+
     localStorage.removeItem("formData");
   };
 
