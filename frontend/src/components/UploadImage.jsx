@@ -6,13 +6,13 @@ import { YourItemsContext } from "../context/YourItemsContext";
 import { DataContext } from "../context/DataContext";
 import { NavLink } from "react-router-dom";
 import { CheckUserContext } from "../context/CheckUserToken";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import app from "../firebase-config";
+// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// import app from "../firebase-config";
 import SpinnersForUploadFiles from "./SpinnersForUploadFiles";
 // import SpinnersForBtn from "./SpinnersForBtn";
 
 const AddItemForm = () => {
-  const storage = getStorage(app);
+  // const storage = getStorage(app);
 
   const { setYourItems } = useContext(YourItemsContext);
   const { setData } = useContext(DataContext);
@@ -113,20 +113,39 @@ const AddItemForm = () => {
     );
   }
   // Retrieve form data from local storage or set default values
-  const initialFormData = JSON.parse(localStorage.getItem("formData")) || {
-    name: "",
-    description: "",
-    price: "",
-    category: "men",
-    subCategory: "Top Wear",
-    size: [],
-    isBestseller: false,
-    image1: "",
-    image2: "",
-    image3: "",
-    image4: "",
-    image5: "",
-  };
+  let initialFormData;
+  try {
+    initialFormData = JSON.parse(localStorage.getItem("formData")) || {
+      name: "",
+      description: "",
+      price: "",
+      category: "men",
+      subCategory: "Top Wear",
+      size: [],
+      isBestseller: false,
+      image1: "",
+      image2: "",
+      image3: "",
+      image4: "",
+      image5: "",
+    };
+  } catch (err) {
+    console.warn("Failed to parse formData from localStorage:", err);
+    initialFormData = {
+      name: "",
+      description: "",
+      price: "",
+      category: "men",
+      subCategory: "Top Wear",
+      size: [],
+      isBestseller: false,
+      image1: "",
+      image2: "",
+      image3: "",
+      image4: "",
+      image5: "",
+    };
+  }
 
   const [formData, setFormData] = useState(initialFormData);
 
