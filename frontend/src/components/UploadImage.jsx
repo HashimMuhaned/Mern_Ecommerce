@@ -113,39 +113,20 @@ const AddItemForm = () => {
     );
   }
   // Retrieve form data from local storage or set default values
-  let initialFormData;
-  try {
-    initialFormData = JSON.parse(localStorage.getItem("formData")) || {
-      name: "",
-      description: "",
-      price: "",
-      category: "men",
-      subCategory: "Top Wear",
-      size: [],
-      isBestseller: false,
-      image1: "",
-      image2: "",
-      image3: "",
-      image4: "",
-      image5: "",
-    };
-  } catch (err) {
-    console.warn("Failed to parse formData from localStorage:", err);
-    initialFormData = {
-      name: "",
-      description: "",
-      price: "",
-      category: "men",
-      subCategory: "Top Wear",
-      size: [],
-      isBestseller: false,
-      image1: "",
-      image2: "",
-      image3: "",
-      image4: "",
-      image5: "",
-    };
-  }
+  const initialFormData = JSON.parse(localStorage.getItem("formData")) || {
+    name: "",
+    description: "",
+    price: "",
+    category: "men",
+    subCategory: "Top Wear",
+    size: [],
+    isBestseller: false,
+    image1: "",
+    image2: "",
+    image3: "",
+    image4: "",
+    image5: "",
+  };
 
   const [formData, setFormData] = useState(initialFormData);
 
