@@ -7,19 +7,10 @@ import { FavoriteContext } from "../context/FavoriteContext";
 import { YourItemsContext } from "../context/YourItemsContext";
 import { CartContext } from "../context/CartContext";
 import { DataContext } from "../context/DataContext";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import app from "../firebase-config";
 
 const EditYourItemPage = () => {
   const navigate = useNavigate();
-  const storage = getStorage(app);
-  // const [loadingImages, setLoadingImages] = useState()
+  const [loadingImages, setLoadingImages] = useState();
   const { setYourItems } = useContext(YourItemsContext);
   const { setFavoriteItems } = useContext(FavoriteContext);
   const { setCartItems } = useContext(CartContext);
@@ -111,53 +102,6 @@ const EditYourItemPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  // const handleFileUpload = async (e, imageField) => {
-  //   const file = e.target.files[0];
-
-  //   if (!file) return;
-
-  //   const allowedFileTypes = [
-  //     "image/jpeg",
-  //     "image/png",
-  //     "image/gif",
-  //     "image/jpg",
-  //   ];
-  //   if (!allowedFileTypes.includes(file.type)) {
-  //     toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
-  //     return;
-  //   }
-
-  //   try {
-  //     // Delete the old image if it exists
-  //     if (oldImages[imageField]) {
-  //       const oldImageRef = ref(storage, oldImages[imageField]);
-  //       await deleteObject(oldImageRef);
-  //       console.log(`Deleted old image: ${oldImages[imageField]}`);
-  //     }
-
-  //     // Upload the new file
-  //     const storageRef = ref(storage, `uploads/${Date.now()}-${file.name}`);
-  //     await uploadBytes(storageRef, file);
-  //     const downloadURL = await getDownloadURL(storageRef);
-
-  //     // Update the formData and oldImages state
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [imageField]: downloadURL, // Store the new image URL
-  //     }));
-
-  //     setOldImages((prevOldImages) => ({
-  //       ...prevOldImages,
-  //       [imageField]: downloadURL, // Update the oldImages with the new URL
-  //     }));
-
-  //     toast.success("Image uploaded successfully!");
-  //   } catch (error) {
-  //     console.error("Error uploading or deleting image:", error);
-  //     toast.error("Failed to upload image.");
-  //   }
-  // };
-
   const handleCheckboxChange = (e) => {
     setFormData({ ...formData, isBestseller: e.target.checked });
   };
@@ -175,8 +119,15 @@ const EditYourItemPage = () => {
     }
   };
 
-  const handleFileUpload = async (e, imageField) => {
-    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB max
+  const [selectedImages, setSelectedImages] = useState({
+    image1: null,
+    image2: null,
+    image3: null,
+    image4: null,
+    image5: null,
+  });
+
+  const handleImageSelect = (e, imageField) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -186,6 +137,8 @@ const EditYourItemPage = () => {
       "image/gif",
       "image/jpg",
     ];
+    const MAX_FILE_SIZE = 20 * 1024 * 1024;
+
     if (!allowedFileTypes.includes(file.type)) {
       toast.error("Invalid file type. Only JPEG, PNG, JPG, or GIF allowed.");
       return;
@@ -195,51 +148,53 @@ const EditYourItemPage = () => {
       toast.error(
         `File too large. Your file is ${(file.size / (1024 * 1024)).toFixed(
           2
-        )}MB. Max allowed is 20MB.`
+        )}MB`
       );
       return;
     }
 
-    try {
-      // Upload to Cloudinary
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append(
-        "upload_preset",
-        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-      );
-      formData.append("folder", "product-images");
-
-      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-      console.log("Cloudinary Response:", data);
-
-      if (!data.secure_url || !data.public_id) {
-        throw new Error("Cloudinary upload failed");
-      }
-
-      // Update formData with image URL
-      setFormData((prevData) => ({
-        ...prevData,
+    // Preview for UI (base64)
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prev) => ({
+        ...prev,
         [imageField]: {
-          url: data.secure_url,
-          public_id: data.public_id,
+          ...prev[imageField],
+          url: reader.result, // base64 preview only
+          public_id: prev[imageField].public_id, // keep the old one for now
         },
       }));
+    };
+    reader.readAsDataURL(file);
 
-      toast.success("Image uploaded successfully!");
-    } catch (error) {
-      console.error("Error uploading image to Cloudinary:", error);
-      toast.error("Failed to upload image.");
-    }
+    // Store selected file for upload later
+    setSelectedImages((prev) => ({
+      ...prev,
+      [imageField]: file,
+    }));
+  };
+
+  const uploadImageToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+    formData.append("folder", "product-images");
+
+    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    if (!data.secure_url || !data.public_id) throw new Error("Upload failed");
+    return data;
   };
 
   useEffect(() => {
@@ -247,14 +202,32 @@ const EditYourItemPage = () => {
   }, [formData]);
 
   // Submit form data
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios
-      .put(`${process.env.BACKEND_API}/editYourItem/${id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const updatedFormData = { ...formData };
+
+    for (const key of Object.keys(selectedImages)) {
+      const file = selectedImages[key];
+      if (file) {
+        const cloudinaryResult = await uploadImageToCloudinary(file);
+
+        // Delete old Cloudinary image (compare public_id)
+        const oldPublicId = formData[key].public_id;
+        if (oldPublicId && oldPublicId !== cloudinaryResult.public_id) {
+          await cloudinary.uploader.destroy(oldPublicId);
+        }
+
+        updatedFormData[key] = {
+          url: cloudinaryResult.secure_url,
+          public_id: cloudinaryResult.public_id,
+        };
+      }
+    }
+
+    await axios
+      .put(`${process.env.BACKEND_API}/editYourItem/${id}`, updatedFormData, {
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then(async (res) => {
         console.log("Item updated successfully:", res.data);
