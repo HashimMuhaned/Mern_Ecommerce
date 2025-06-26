@@ -842,13 +842,41 @@ const yourItems = async (req, res) => {
   }
 };
 
+
+
+// Helper to extract public_id from Cloudinary URL
+const extractPublicId = (url = "") => {
+  const matches = url.match(/\/upload\/v\d+\/([^\.]+)/);
+  return matches ? matches[1] : "";
+};
+
 const getYourItemToEdit = async (req, res) => {
   try {
     const { id } = req.params;
-    const item = await ItemModel.findById(id); // Directly find by ID
+    const item = await ItemModel.findById(id);
     if (!item) return res.status(404).json({ message: "Item Not Found" });
 
-    res.status(200).json(item); // Send back item data
+    const formatImage = (url) => ({
+      url: url || "",
+      public_id: url ? extractPublicId(url) : "",
+    });
+
+    const formattedItem = {
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      category: item.category,
+      subCategory: item.subCategory,
+      isBestseller: item.isBestseller,
+      size: item.size,
+      image1: formatImage(item.image1),
+      image2: formatImage(item.image2),
+      image3: formatImage(item.image3),
+      image4: formatImage(item.image4),
+      image5: formatImage(item.image5),
+    };
+
+    res.status(200).json(formattedItem);
   } catch (error) {
     console.log("there was an error", error);
     res.status(500).json({ message: "Error fetching item data" });

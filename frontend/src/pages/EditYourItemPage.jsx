@@ -72,11 +72,26 @@ const EditYourItemPage = () => {
           subCategory: itemData.subCategory || "Topwear",
           size: itemData.size || [],
           isBestseller: itemData.isBestseller || false,
-          image1: { url: "", public_id: "" },
-          image2: { url: "", public_id: "" },
-          image3: { url: "", public_id: "" },
-          image4: { url: "", public_id: "" },
-          image5: { url: "", public_id: "" },
+          image1: {
+            url: itemData.image1 || "",
+            public_id: itemData.image1_public_id || "",
+          },
+          image2: {
+            url: itemData.image2 || "",
+            public_id: itemData.image2_public_id || "",
+          },
+          image3: {
+            url: itemData.image3 || "",
+            public_id: itemData.image3_public_id || "",
+          },
+          image4: {
+            url: itemData.image4 || "",
+            public_id: itemData.image4_public_id || "",
+          },
+          image5: {
+            url: itemData.image5 || "",
+            public_id: itemData.image5_public_id || "",
+          },
         };
 
         setFormData(fetchedData); // Set form data for editing
@@ -314,7 +329,7 @@ const EditYourItemPage = () => {
                 type="file"
                 id={`file-upload-${num}`}
                 style={{ display: "none" }}
-                onChange={(e) => handleFileUpload(e, `image${num}`)}
+                onChange={(e) => handleImageSelect(e, `image${num}`)}
               />
             </div>
           ))}
