@@ -844,22 +844,21 @@ const yourItems = async (req, res) => {
 
 
 
-// Helper to extract public_id from Cloudinary URL
 const extractPublicId = (url = "") => {
   const matches = url.match(/\/upload\/v\d+\/([^\.]+)/);
   return matches ? matches[1] : "";
 };
+
+const formatImage = (url) => ({
+  url: url || "",
+  public_id: url ? extractPublicId(url) : "",
+});
 
 const getYourItemToEdit = async (req, res) => {
   try {
     const { id } = req.params;
     const item = await ItemModel.findById(id);
     if (!item) return res.status(404).json({ message: "Item Not Found" });
-
-    const formatImage = (url) => ({
-      url: url || "",
-      public_id: url ? extractPublicId(url) : "",
-    });
 
     const formattedItem = {
       name: item.name,
@@ -878,7 +877,7 @@ const getYourItemToEdit = async (req, res) => {
 
     res.status(200).json(formattedItem);
   } catch (error) {
-    console.log("there was an error", error);
+    console.error("Error fetching item data", error);
     res.status(500).json({ message: "Error fetching item data" });
   }
 };

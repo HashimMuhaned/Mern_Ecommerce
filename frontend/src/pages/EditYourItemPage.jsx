@@ -315,7 +315,7 @@ const EditYourItemPage = () => {
               <label htmlFor={`file-upload-${num}`}>
                 {formData[`image${num}`]?.url ? (
                   <img
-                    src={formData[`image${num}`].url.url}
+                    src={formData[`image${num}`].url}
                     alt={`Preview ${num}`}
                     className="image-preview"
                   />
