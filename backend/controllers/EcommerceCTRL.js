@@ -849,10 +849,13 @@ const extractPublicId = (url = "") => {
   return matches ? matches[1] : "";
 };
 
-const formatImage = (url) => ({
-  url: url || "",
-  public_id: url ? extractPublicId(url) : "",
-});
+const formatImage = (image = {}) => {
+  const imageUrl = typeof image === "string" ? image : image.url || "";
+  return {
+    url: imageUrl,
+    public_id: image.public_id || extractPublicId(imageUrl),
+  };
+};
 
 const getYourItemToEdit = async (req, res) => {
   try {

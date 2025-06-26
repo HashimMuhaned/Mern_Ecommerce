@@ -18,6 +18,17 @@ const EditYourItemPage = () => {
   const [oldImages, setOldImages] = useState({});
   const { id } = useParams();
   const token = localStorage.getItem("authToken");
+
+    useEffect(() => {
+    setOldImages({
+      image1: formData.image1,
+      image2: formData.image2,
+      image3: formData.image3,
+      image4: formData.image4,
+      image5: formData.image5,
+    });
+  }, [formData]);
+
   // Initial form data structure
   const initialFormData = {
     name: "",
@@ -38,15 +49,7 @@ const EditYourItemPage = () => {
     JSON.parse(localStorage.getItem("formDataEdit")) || initialFormData
   );
 
-  useEffect(() => {
-    setOldImages({
-      image1: formData.image1,
-      image2: formData.image2,
-      image3: formData.image3,
-      image4: formData.image4,
-      image5: formData.image5,
-    });
-  }, [formData]);
+
 
   const [originalFormData, setOriginalFormData] = useState(null); // To store the original fetched data
 
