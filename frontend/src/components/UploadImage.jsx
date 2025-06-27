@@ -218,31 +218,44 @@ const AddItemForm = () => {
     setLoading(true);
 
     try {
-      // Start with a full copy of the existing formData
       const updatedFormData = { ...formData };
 
-      // Upload selected image files and replace their values in formData
       for (const key of Object.keys(formData)) {
         if (key.startsWith("image")) {
           const image = formData[key];
 
-          // Check if image exists and URL is base64 (not Cloudinary)
+          // If image has a base64 URL, upload it directly
           if (image?.url?.startsWith("data:")) {
-            const file = selectedImages[key];
-
-            if (!file) {
-              toast.error(`Please reselect ${key} image.`);
-              setLoading(false);
-              return;
-            }
-
             try {
-              const result = await uploadImageToCloudinary(file);
+              const cloudinaryForm = new FormData();
+              cloudinaryForm.append("file", image.url); // base64 string
+              cloudinaryForm.append(
+                "upload_preset",
+                import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+              );
+              cloudinaryForm.append("folder", "product-images");
+
+              const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+              const res = await fetch(
+                `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+                {
+                  method: "POST",
+                  body: cloudinaryForm,
+                }
+              );
+
+              const data = await res.json();
+
+              if (!data.secure_url || !data.public_id) {
+                throw new Error("Cloudinary upload failed");
+              }
+
               updatedFormData[key] = {
-                url: result.url,
-                public_id: result.public_id,
+                url: data.secure_url,
+                public_id: data.public_id,
               };
             } catch (err) {
+              console.error(`Upload failed for ${key}:`, err);
               toast.error(`Failed to upload ${key}`);
               setLoading(false);
               return;
@@ -251,14 +264,15 @@ const AddItemForm = () => {
         }
       }
 
+      // Ensure at least image1 has been uploaded
       if (!updatedFormData.image1?.url) {
         toast.error("Main image is required.");
         setLoading(false);
         return;
       }
 
-      console.log("Sending form data:", updatedFormData);
-      // Now submit the full formData with updated image URLs
+      console.log("📤 Sending form data:", updatedFormData);
+
       const response = await axios.post(
         `${process.env.BACKEND_API}/upload-item`,
         updatedFormData,
@@ -277,7 +291,7 @@ const AddItemForm = () => {
         fetchHomePageItems();
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("🔥 Error submitting form:", error);
       toast.error("Failed to create item.");
     } finally {
       setLoading(false);
