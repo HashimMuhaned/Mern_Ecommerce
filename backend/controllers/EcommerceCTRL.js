@@ -16,7 +16,7 @@ const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 const sgMail = require("@sendgrid/mail");
 const mailSender = process.env.SENDGRID_FROM_EMAIL;
 const bucket = require("../firebaseAdmin.js"); // Importing the initialized Firebase Admin
-const { console } = require("inspector");
+const fs = require("fs");
 
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -94,15 +94,19 @@ const createItem = async (req, res) => {
       !price ||
       !category ||
       !subCategory ||
+      !Array.isArray(size) ||
       !size.length ||
-      !image1
+      !image1 ||
+      !image1.url
     ) {
-      return res
-        .status(400)
-        .json({ message: "Please fill all required fields" });
+      return res.status(400).json({
+        message: "Please fill all required fields including main image",
+      });
     }
 
     const userId = req.userId;
+
+    fs.writeFileSync("log.json", JSON.stringify(req.body, null, 2));
 
     const newItem = new ItemModel({
       name,
@@ -120,6 +124,9 @@ const createItem = async (req, res) => {
       user: userId,
     });
 
+    console.log("Creating item with userId:", userId);
+    console.log("Saving:", newItem);
+
     const savedItem = await newItem.save();
 
     res.status(201).json({
@@ -127,7 +134,10 @@ const createItem = async (req, res) => {
       item: savedItem,
     });
   } catch (error) {
-    console.error("Error creating item:", error);
+    console.error("❌ Error creating item:", error);
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ message: error.message });
+    }
     res
       .status(500)
       .json({ message: "An error occurred while creating the item" });
@@ -140,7 +150,7 @@ const getItems = async (req, res) => {
     const items = await ItemModel.find({});
 
     if (items.length === 0) {
-      return res.status(404).json({ message: "No items found" });
+      return res.status(200).json({ message: "No items found" });
     }
 
     res.status(200).json(items);
@@ -222,7 +232,7 @@ const createUser = async (req, res) => {
     };
 
     try {
-      await sgMail.send(msg);
+      // await sgMail.send(msg);
       console.log("Activation email sent successfully");
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
@@ -842,26 +852,21 @@ const yourItems = async (req, res) => {
   }
 };
 
-
-
 const extractPublicId = (url = "") => {
   const matches = url.match(/\/upload\/v\d+\/([^\.]+)/);
   return matches ? matches[1] : "";
 };
 
-const formatImage = (image = {}) => {
-  const imageUrl = typeof image === "string" ? image : image.url || "";
-  return {
-    url: imageUrl,
-    public_id: image.public_id || extractPublicId(imageUrl),
-  };
-};
+const formatImage = (url) => ({
+  url: url || "",
+  public_id: url ? extractPublicId(url) : "",
+});
 
 const getYourItemToEdit = async (req, res) => {
   try {
     const { id } = req.params;
     const item = await ItemModel.findById(id);
-    if (!item) return res.status(404).json({ message: "Item Not Found" });
+    if (!item) return res.status(200).json({ message: "Item Not Found" });
 
     const formattedItem = {
       name: item.name,

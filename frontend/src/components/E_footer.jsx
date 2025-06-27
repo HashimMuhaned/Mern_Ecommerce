@@ -36,7 +36,7 @@ const E_footer = () => {
         </div>
       </div>
 
-      <div class="col">
+      <div className="col">
         <h4>About</h4>
         <NavLink to="#">About Us</NavLink>
         <NavLink to="#">Delivery Information</NavLink>
@@ -45,7 +45,7 @@ const E_footer = () => {
         <NavLink to="/ethereal/contact">Contact Us</NavLink>
       </div>
 
-      <div class="col">
+      <div className="col">
         <h4>My Acount</h4>
         <NavLink to="/ethereal/login">Sign in</NavLink>
         <NavLink to="/ethereal/cart">View Cart</NavLink>
@@ -54,10 +54,10 @@ const E_footer = () => {
         <NavLink to="/ethereal/contact">Help</NavLink>
       </div>
 
-      <div class="col install">
+      <div className="col install">
         <h4>Install Our App</h4>
         <p>From Google Play or App Store</p>
-        <div class="row">
+        <div className="row">
           <img src={payApp} alt="" />
           <img src={payPlay} alt="" />
         </div>
@@ -65,7 +65,7 @@ const E_footer = () => {
         <img src={payPay} alt="" />
       </div>
 
-      <div class="copyright">
+      <div className="copyright">
         <p>&copy;Hashim Gurashi Internship Project</p>
       </div>
     </footer>

@@ -9,7 +9,7 @@ const EcommerceRoutes = require("./routes/EcommerceRoutes.js");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-// const PORT = process.env.PORT || 8080;
+// const PORT = 3000;
 // const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 
@@ -59,6 +59,7 @@ app.use((req, res, next) => {
 });
 
 // connecting to the database
+// mongoose.connect("mongodb://localhost:27017/todolist")
 connectDB()
   .then(() => {
     console.log("Database connected successfully.");

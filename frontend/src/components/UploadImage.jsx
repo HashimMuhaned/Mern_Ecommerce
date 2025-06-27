@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import axios from "axios";
 import "../UploadItemForm.css";
 import { toast } from "react-toastify";
@@ -34,6 +34,14 @@ const AddItemForm = () => {
     image4: null,
     image5: null,
   });
+
+  const fileInputRefs = {
+    image1: useRef(null),
+    image2: useRef(null),
+    image3: useRef(null),
+    image4: useRef(null),
+    image5: useRef(null),
+  };
 
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
   const cloudinary_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -81,7 +89,7 @@ const AddItemForm = () => {
     reader.onloadend = () => {
       setFormData((prevData) => ({
         ...prevData,
-        [imageField]: reader.result, // preview only
+        [imageField]: { url: reader.result, public_id: "" },
       }));
     };
     reader.readAsDataURL(file);
@@ -99,8 +107,12 @@ const AddItemForm = () => {
     );
 
     const data = await response.json();
-    if (!data.secure_url) throw new Error("Cloudinary upload failed");
-    return data.secure_url;
+    if (!data.secure_url || !data.public_id) throw new Error("Upload failed");
+
+    return {
+      url: data.secure_url,
+      public_id: data.public_id,
+    };
   };
 
   if (isLoggedin === false) {
@@ -130,11 +142,11 @@ const AddItemForm = () => {
     subCategory: "Top Wear",
     size: [],
     isBestseller: false,
-    image1: "",
-    image2: "",
-    image3: "",
-    image4: "",
-    image5: "",
+    image1: { url: "", public_id: "" },
+    image2: { url: "", public_id: "" },
+    image3: { url: "", public_id: "" },
+    image4: { url: "", public_id: "" },
+    image5: { url: "", public_id: "" },
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -196,6 +208,11 @@ const AddItemForm = () => {
     }
   };
 
+  // const extractPublicId = (url = "") => {
+  //   const matches = url.match(/\/upload\/v\d+\/([^\.]+)/);
+  //   return matches ? matches[1] : "";
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -205,20 +222,42 @@ const AddItemForm = () => {
       const updatedFormData = { ...formData };
 
       // Upload selected image files and replace their values in formData
-      for (const key of Object.keys(selectedImages)) {
-        const file = selectedImages[key];
-        if (file) {
-          try {
-            const url = await uploadImageToCloudinary(file);
-            updatedFormData[key] = url; // update the image field
-          } catch (err) {
-            toast.error(`Failed to upload ${key}`);
-            setLoading(false);
-            return;
+      for (const key of Object.keys(formData)) {
+        if (key.startsWith("image")) {
+          const image = formData[key];
+
+          // Check if image exists and URL is base64 (not Cloudinary)
+          if (image?.url?.startsWith("data:")) {
+            const file = selectedImages[key];
+
+            if (!file) {
+              toast.error(`Please reselect ${key} image.`);
+              setLoading(false);
+              return;
+            }
+
+            try {
+              const result = await uploadImageToCloudinary(file);
+              updatedFormData[key] = {
+                url: result.url,
+                public_id: result.public_id,
+              };
+            } catch (err) {
+              toast.error(`Failed to upload ${key}`);
+              setLoading(false);
+              return;
+            }
           }
         }
       }
 
+      if (!updatedFormData.image1?.url) {
+        toast.error("Main image is required.");
+        setLoading(false);
+        return;
+      }
+
+      console.log("Sending form data:", updatedFormData);
       // Now submit the full formData with updated image URLs
       const response = await axios.post(
         `${process.env.BACKEND_API}/upload-item`,
@@ -254,11 +293,11 @@ const AddItemForm = () => {
       subCategory: "Top Wear",
       size: [],
       isBestseller: false,
-      image1: "",
-      image2: "",
-      image3: "",
-      image4: "",
-      image5: "",
+      image1: { url: "", public_id: "" },
+      image2: { url: "", public_id: "" },
+      image3: { url: "", public_id: "" },
+      image4: { url: "", public_id: "" },
+      image5: { url: "", public_id: "" },
     });
 
     setSelectedImages({
@@ -267,6 +306,13 @@ const AddItemForm = () => {
       image3: null,
       image4: null,
       image5: null,
+    });
+
+    // 🔁 Reset file input values manually
+    Object.keys(fileInputRefs).forEach((key) => {
+      if (fileInputRefs[key].current) {
+        fileInputRefs[key].current.value = null;
+      }
     });
 
     localStorage.removeItem("formData");
@@ -293,9 +339,9 @@ const AddItemForm = () => {
                   <div className="spinner-overlay">
                     <SpinnersForUploadFiles />
                   </div>
-                ) : formData[`image${num}`] ? (
+                ) : formData[`image${num}`]?.url ? (
                   <img
-                    src={formData[`image${num}`]}
+                    src={formData[`image${num}`].url}
                     alt={`Preview ${num}`}
                     className="image-preview"
                   />
@@ -305,6 +351,7 @@ const AddItemForm = () => {
               </label>
               <input
                 type="file"
+                ref={fileInputRefs[`image${num}`]}
                 id={`file-upload-${num}`}
                 style={{ display: "none" }}
                 onChange={(e) => handleImageSelect(e, `image${num}`)}

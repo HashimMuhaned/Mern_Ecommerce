@@ -55,10 +55,10 @@ const ContactPage = () => {
   };
 
   return (
-    <section class="contact">
-      <div class="container contact__container">
-        <aside class="contact__aside">
-          <div class="aside__image">
+    <section className="contact">
+      <div className="container contact__container">
+        <aside className="contact__aside">
+          <div className="aside__image">
             <img src={contactImage} alt="" />
           </div>
           <p style={{ marginTop: "10px" }}>
@@ -66,7 +66,7 @@ const ContactPage = () => {
             Repellendus, repellat quos aperiam quo ut suscipit. Vel eveniet
             repellat exercitationem temporibus.
           </p>
-          <ul class="contact__details">
+          <ul className="contact__details">
             <li>
               <FaPhoneAlt />
               <h5>+0464326 6363576 67535</h5>
@@ -81,7 +81,7 @@ const ContactPage = () => {
             </li>
           </ul>
 
-          <ul class="contact__socials">
+          <ul className="contact__socials">
             <li>
               <a href="#">
                 <FaFacebook />
@@ -107,12 +107,12 @@ const ContactPage = () => {
         <form
           action="https://formspree.io/f/mayvkoqy"
           method="POST"
-          class="contact__form"
+          className="contact__form"
         >
           <div id="contact_title">
             <p>Contact</p>
           </div>
-          <div class="form__name">
+          <div className="form__name">
             <input
               type="text"
               name="First Name"
@@ -142,7 +142,7 @@ const ContactPage = () => {
             id="message_contact"
             required
           ></textarea>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" className="btn btn-primary">
             Send Message
           </button>
         </form>

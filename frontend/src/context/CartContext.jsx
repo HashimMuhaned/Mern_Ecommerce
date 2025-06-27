@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const fetchCartItems = async () => {
       if (isLoggedin) {
-        try {
+        try { 
           const response = await axios.get(`${process.env.BACKEND_API}/cart`, {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -10,7 +10,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import ContactPage from "./pages/ContactPage";
 import CategoryListingPage from "./pages/CategoryListingPage";
 import ProductDisplay from "./pages/ProductDisplay";
-import ScrollToTop from "./components/ScrollToTop";
+// import ScrollToTop from "./components/ScrollToTop";
 import CartPage from "./pages/CartPage";
 import FavoritePage from "./pages/FavoritePage";
 import ProfilePage from "./pages/ProfilePage";
@@ -33,7 +33,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
+      {/* <ScrollToTop /> */}
       <Routes>
         {/* <ChatBotLayout /> */}
         <Route path="/" element={<MainLayout />}>

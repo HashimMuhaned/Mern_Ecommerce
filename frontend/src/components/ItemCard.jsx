@@ -44,7 +44,8 @@ const ItemCard = ({ item }) => {
               : null
           }
         >
-          <img src={item.image1} alt={item.name} id="itemCardImage" />
+          {console.log("items data:", item)}
+          <img src={item.image1?.url} alt={item.name} id="itemCardImage" />
           <div className="des">
             <h5>
               {item.name.length > 30

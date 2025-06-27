@@ -26,19 +26,24 @@ const itemSchema = new mongoose.Schema({
     default: false,
   },
   image1: {
-    type: String,
+    url: { type: String, required: false },
+    public_id: { type: String, required: false },
   },
   image2: {
-    type: String,
+    url: { type: String, required: false },
+    public_id: { type: String, required: false },
   },
   image3: {
-    type: String,
+    url: { type: String, required: false },
+    public_id: { type: String, required: false },
   },
   image4: {
-    type: String,
+    url: { type: String, required: false },
+    public_id: { type: String, required: false },
   },
   image5: {
-    type: String,
+    url: { type: String, required: false },
+    public_id: { type: String, required: false },
   },
   size: [{ type: String }], // Array of strings
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
