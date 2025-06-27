@@ -39,8 +39,8 @@ const ProductDisplay = () => {
         }
         const data = await res.json();
         setProduct(data);
-        setMainImage(data.image1); // Set the main image when new product data is fetched
-        setInitialImage(data.image1); // Store the original main image (image1)
+        setMainImage(data.image1.url); // Set the main image when new product data is fetched
+        setInitialImage(data.image1.url); // Store the original main image (image1)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -72,42 +72,42 @@ const ProductDisplay = () => {
                 alt="Small Product"
               />
             </div>
-            {product.image2 && (
+            {product.image2.url && (
               <div className="small-img-col">
                 <img
-                  src={product.image2}
+                  src={product.image2.url}
                   className="small-img"
-                  onClick={() => handleImageClick(product.image2)}
+                  onClick={() => handleImageClick(product.image2.url)}
                   alt="Small Product"
                 />
               </div>
             )}
-            {product.image3 && (
+            {product.image3.url && (
               <div className="small-img-col">
                 <img
-                  src={product.image3}
+                  src={product.image3.url}
                   className="small-img"
-                  onClick={() => handleImageClick(product.image3)}
+                  onClick={() => handleImageClick(product.image3.url)}
                   alt="Small Product"
                 />
               </div>
             )}
-            {product.image4 && (
+            {product.image4.url && (
               <div className="small-img-col">
                 <img
-                  src={product.image4}
+                  src={product.image4.url}
                   className="small-img"
-                  onClick={() => handleImageClick(product.image4)}
+                  onClick={() => handleImageClick(product.image4.url)}
                   alt="Small Product"
                 />
               </div>
             )}
-            {product.image5 && (
+            {product.image5.url && (
               <div className="small-img-col">
                 <img
-                  src={product.image5}
+                  src={product.image5.url}
                   className="small-img"
-                  onClick={() => handleImageClick(product.image5)}
+                  onClick={() => handleImageClick(product.image5.url)}
                   alt="Small Product"
                 />
               </div>
@@ -144,9 +144,9 @@ const ProductDisplay = () => {
             {product.image2 && (
               <div className="small-img-col-mobile">
                 <img
-                  src={product.image2}
+                  src={product.image2.url}
                   className="small-img-mobile"
-                  onClick={() => handleImageClick(product.image2)}
+                  onClick={() => handleImageClick(product.image2.url)}
                   alt="Small Product"
                 />
               </div>
@@ -154,9 +154,9 @@ const ProductDisplay = () => {
             {product.image3 && (
               <div className="small-img-col-mobile">
                 <img
-                  src={product.image3}
+                  src={product.image3.url}
                   className="small-img-mobile"
-                  onClick={() => handleImageClick(product.image3)}
+                  onClick={() => handleImageClick(product.image3.url)}
                   alt="Small Product"
                 />
               </div>
@@ -164,9 +164,9 @@ const ProductDisplay = () => {
             {product.image4 && (
               <div className="small-img-col-mobile">
                 <img
-                  src={product.image4}
+                  src={product.image4.url}
                   className="small-img-mobile"
-                  onClick={() => handleImageClick(product.image4)}
+                  onClick={() => handleImageClick(product.image4.url)}
                   alt="Small Product"
                 />
               </div>
@@ -174,9 +174,9 @@ const ProductDisplay = () => {
             {product.image5 && (
               <div className="small-img-col-mobile">
                 <img
-                  src={product.image5}
+                  src={product.image5.url}
                   className="small-img-mobile"
-                  onClick={() => handleImageClick(product.image5)}
+                  onClick={() => handleImageClick(product.image5.url)}
                   alt="Small Product"
                 />
               </div>
