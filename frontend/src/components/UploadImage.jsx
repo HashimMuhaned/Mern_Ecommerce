@@ -218,7 +218,7 @@ const AddItemForm = () => {
       console.log("Sending form data:", updatedFormData);
 
       const response = await axios.post(
-        `http://localhost:3000/api/upload-item`,
+        `${import.meta.env.VITE_BACKEND_API}/upload-item`,
         updatedFormData,
         {
           headers: {
