@@ -25,7 +25,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_API}/login`,
+        `${process.env.VITE_BACKEND_API}/login`,
         formData,
         {
           headers: {
@@ -45,7 +45,7 @@ const LoginPage = () => {
 
       // Fetch user details immediately after login
       const userResponse = await axios.get(
-        `${import.meta.env.VITE_BACKEND_API}/user-details`,
+        `${process.env.VITE_BACKEND_API}/user-details`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
