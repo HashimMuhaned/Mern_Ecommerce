@@ -24,7 +24,7 @@ export const CheckUserProvider = ({ children }) => {
 
       // Validate the token with the backend
       const response = await axios.get(
-        `${process.env.VITE_BACKEND_API}/validate-user`,
+        `${import.meta.env.VITE_BACKEND_API}/validate-user`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Token sent via Authorization header
@@ -37,7 +37,7 @@ export const CheckUserProvider = ({ children }) => {
 
         // Fetch user details if the token is valid
         const userResponse = await axios.get(
-          `${process.env.VITE_BACKEND_API}/user-details`,
+          `${import.meta.env.VITE_BACKEND_API}/user-details`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Token sent with every authenticated request
@@ -108,7 +108,7 @@ export const CheckUserProvider = ({ children }) => {
   const handleSignOut = async (toast, navigate) => {
     try {
       const response = await axios.get(
-        `${process.env.VITE_BACKEND_API}/auth/signout`,
+        `${import.meta.env.VITE_BACKEND_API}/auth/signout`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { CheckUserContext } from "../context/CheckUserToken";
 import registerImage from "../assets/registerImage.jpg";
 
+
 const LoginPage = () => {
   const { setIsLoggedin, setUserInfo } = useContext(CheckUserContext);
   // const { fetchMessages } = useChat(); 
@@ -25,7 +26,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.VITE_BACKEND_API}/login`,
+        `${import.meta.env.VITE_BACKEND_API}/login`,
         formData,
         {
           headers: {
@@ -45,7 +46,7 @@ const LoginPage = () => {
 
       // Fetch user details immediately after login
       const userResponse = await axios.get(
-        `${process.env.VITE_BACKEND_API}/user-details`,
+        `${import.meta.env.VITE_BACKEND_API}/user-details`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
