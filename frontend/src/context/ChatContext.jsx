@@ -14,7 +14,7 @@ export const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     if (userInfo?._id && userInfo?.fname && messages.length === 0) {
-      const url = `http://localhost:8000/chat_boot?user_id=${userInfo._id}&fname=${userInfo.fname}`;
+      const url = `https://mern-ecommerce-chatbot.vercel.app/chat_boot?user_id=${userInfo._id}&fname=${userInfo.fname}`;
 
       axios
         .get(url)

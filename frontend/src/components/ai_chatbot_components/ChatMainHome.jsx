@@ -66,7 +66,7 @@ const ChatMainHome = () => {
         ]);
 
         // Create URL with checkpoint ID if it exists
-        let url = `http://localhost:8000/chat_stream/${encodeURIComponent(
+        let url = `https://mern-ecommerce-chatbot.vercel.app/chat_stream/${encodeURIComponent(
           userInput
         )}`;
         if (userId) {

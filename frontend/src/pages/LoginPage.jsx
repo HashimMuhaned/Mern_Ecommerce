@@ -5,7 +5,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { CheckUserContext } from "../context/CheckUserToken";
 import registerImage from "../assets/registerImage.jpg";
-import { useChat } from "../context/ChatContext";
 
 const LoginPage = () => {
   const { setIsLoggedin, setUserInfo } = useContext(CheckUserContext);

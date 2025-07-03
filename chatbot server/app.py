@@ -132,7 +132,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://mern-ecommerce-frontend-of3877ez1-hashims-projects-1d68b3df.vercel.app",
+        "https://mern-ecommerce-frontend-jcmqogpn4-hashims-projects-1d68b3df.vercel.app",
+        "https://mern-ecommerce-frontend-git-main-hashims-projects-1d68b3df.vercel.app",
+        "https://mern-ecommerce-frontend-eta-ten.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
