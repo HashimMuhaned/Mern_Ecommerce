@@ -18,6 +18,7 @@ const allowedOrigins = [
   "https://mern-ecommerce-frontend-jcmqogpn4-hashims-projects-1d68b3df.vercel.app",
   "https://mern-ecommerce-frontend-git-main-hashims-projects-1d68b3df.vercel.app",
   "https://mern-ecommerce-frontend-eta-ten.vercel.app",
+  "https://mern-ecommerce-frontend-kh2omv3p7-hashims-projects-1d68b3df.vercel.app",
   "http://localhost:5173",
 ];
 
