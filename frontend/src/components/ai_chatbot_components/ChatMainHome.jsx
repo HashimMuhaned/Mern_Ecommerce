@@ -1,25 +1,22 @@
 import InputBar from "../ai_chatbot_components/InputBar";
 import MessageArea from "../ai_chatbot_components/MessageArea";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TbMessageChatbot } from "react-icons/tb";
+import { CheckUserContext } from "../../context/CheckUserToken";
+import { useChat } from "../../context/ChatContext";
 
 const ChatMainHome = () => {
   const [isOpen, setIsOpen] = useState(false);
   //  State Definitions
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      // Initializes with a welcome message from the AI.
-      content: "Hi there, how can I help you?",
-      isUser: false,
-      type: "message",
-    },
-  ]);
+  const { messages, setMessages } = useChat();
   // Holds the text currently being typed into the input box.
   const [currentMessage, setCurrentMessage] = useState("");
+
   // Used for contextual memory — stores a checkpoint ID returned by the backend.
   // Passed in the URL on future messages to help the backend understand the conversation history.
   const [checkpointId, setCheckpointId] = useState(null);
+  const { userInfo } = useContext(CheckUserContext);
+  const userId = userInfo?._id;
 
   const handleSubmit = async (e) => {
     // Prevents the default form submission behavior (which would reload the page).
@@ -72,9 +69,11 @@ const ChatMainHome = () => {
         let url = `http://localhost:8000/chat_stream/${encodeURIComponent(
           userInput
         )}`;
-        if (checkpointId) {
-          url += `?checkpoint_id=${encodeURIComponent(checkpointId)}`;
+        if (userId) {
+          url += `?user_id=${encodeURIComponent(userId)}`;
         }
+
+        // const url = `http://localhost:8000/chat_stream/${userInput}?user_id=${userInfo._id}&fname=${userInfo.fname}`;
 
         // Connect to SSE endpoint using EventSource
         const eventSource = new EventSource(url);
@@ -294,21 +293,7 @@ const ChatMainHome = () => {
         {isOpen ? (
           <span className="close-icon">&times;</span>
         ) : (
-          // <svg
-          //   className="chat-icon"
-          //   xmlns="http://www.w3.org/2000/svg"
-          //   fill="none"
-          //   viewBox="0 0 24 24"
-          //   stroke="white"
-          // >
-          //   <path
-          //     strokeLinecap="round"
-          //     strokeLinejoin="round"
-          //     strokeWidth="2"
-          //     d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          //   />
-          // </svg>
-          <TbMessageChatbot className="chat-icon"/>
+          <TbMessageChatbot className="chat-icon" />
         )}
       </button>
     </div>

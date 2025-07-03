@@ -51,7 +51,7 @@ const NavBar = () => {
   const fetchSuggestions = async (query) => {
     // Replace with actual API call or filtering logic
     const response = await fetch(
-      `${process.env.BACKEND_API}/suggestions?query=${query}`
+      `${import.meta.env.VITE_BACKEND_API}/suggestions?query=${query}`
     );
     const data = await response.json();
     setSuggestions(data);

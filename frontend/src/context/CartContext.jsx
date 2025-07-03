@@ -21,7 +21,7 @@ export const CartProvider = ({ children }) => {
     const fetchCartItems = async () => {
       if (isLoggedin) {
         try { 
-          const response = await axios.get(`${process.env.BACKEND_API}/cart`, {
+          const response = await axios.get(`${import.meta.env.VITE_BACKEND_API}/cart`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },

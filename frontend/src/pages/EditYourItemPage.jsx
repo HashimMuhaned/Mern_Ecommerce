@@ -19,15 +19,9 @@ const EditYourItemPage = () => {
   const { id } = useParams();
   const token = localStorage.getItem("authToken");
 
-    useEffect(() => {
-    setOldImages({
-      image1: formData.image1,
-      image2: formData.image2,
-      image3: formData.image3,
-      image4: formData.image4,
-      image5: formData.image5,
-    });
-  }, [formData]);
+  // saving to localstorage only when the use make a manual change.
+  const [shouldSyncToLocalStorage, setShouldSyncToLocalStorage] =
+    useState(false);
 
   // Initial form data structure
   const initialFormData = {
@@ -45,11 +39,20 @@ const EditYourItemPage = () => {
     image5: { url: "", public_id: "" },
   };
 
-  const [formData, setFormData] = useState(
-    JSON.parse(localStorage.getItem("formDataEdit")) || initialFormData
-  );
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem(`formDataEdit_${id}`);
+    return saved ? JSON.parse(saved) : initialFormData;
+  });
 
-
+  useEffect(() => {
+    setOldImages({
+      image1: formData.image1,
+      image2: formData.image2,
+      image3: formData.image3,
+      image4: formData.image4,
+      image5: formData.image5,
+    });
+  }, [formData]);
 
   const [originalFormData, setOriginalFormData] = useState(null); // To store the original fetched data
 
@@ -57,8 +60,25 @@ const EditYourItemPage = () => {
   useEffect(() => {
     const fillEditFormWithExistingItemData = async () => {
       try {
+        const localData = JSON.parse(
+          localStorage.getItem(`formDataEdit_${id}`)
+        );
+        const localOriginal = JSON.parse(
+          localStorage.getItem(`originalFormDataEdit_${id}`)
+        );
+
+        if (localData && localOriginal) {
+          const parsedFormData = JSON.parse(localData);
+          const parsedOriginalData = JSON.parse(localOriginal);
+          setFormData(parsedFormData);
+          setOriginalFormData(parsedOriginalData);
+          setShouldSyncToLocalStorage(true);
+          return; // ✅ Skip fetching
+        }
+
+        // Otherwise, fetch from backend
         const response = await axios.get(
-          `${process.env.BACKEND_API}/getYourItemToEdit/${id}`,
+          `${import.meta.env.VITE_BACKEND_API}/getYourItemToEdit/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -67,6 +87,8 @@ const EditYourItemPage = () => {
         );
 
         const itemData = response.data;
+        const fallbackImage = { url: "", public_id: "" };
+
         const fetchedData = {
           name: itemData.name || "",
           description: itemData.description || "",
@@ -74,44 +96,35 @@ const EditYourItemPage = () => {
           category: itemData.category || "men",
           subCategory: itemData.subCategory || "Topwear",
           size: itemData.size || [],
-          isBestseller: itemData.isBestseller || false,
-          image1: {
-            url: itemData.image1 || "",
-            public_id: itemData.image1_public_id || "",
-          },
-          image2: {
-            url: itemData.image2 || "",
-            public_id: itemData.image2_public_id || "",
-          },
-          image3: {
-            url: itemData.image3 || "",
-            public_id: itemData.image3_public_id || "",
-          },
-          image4: {
-            url: itemData.image4 || "",
-            public_id: itemData.image4_public_id || "",
-          },
-          image5: {
-            url: itemData.image5 || "",
-            public_id: itemData.image5_public_id || "",
-          },
+          isBestseller: itemData.isBestseller ?? false,
+          image1: itemData.image1 || fallbackImage,
+          image2: itemData.image2 || fallbackImage,
+          image3: itemData.image3 || fallbackImage,
+          image4: itemData.image4 || fallbackImage,
+          image5: itemData.image5 || fallbackImage,
         };
 
-        setFormData(fetchedData); // Set form data for editing
-        setOriginalFormData(fetchedData); // Store the original data
-        localStorage.setItem("formDataEdit", JSON.stringify(fetchedData)); // Update localStorage
+        setFormData(fetchedData);
+        setOriginalFormData(fetchedData);
+
+        // ✅ Save both versions to localStorage
+        localStorage.setItem(`formDataEdit_${id}`, JSON.stringify(fetchedData));
+        localStorage.setItem(
+          `originalFormDataEdit_${id}`,
+          JSON.stringify(fetchedData)
+        );
+        setShouldSyncToLocalStorage(true);
       } catch (error) {
         console.log("There was an error", error);
       }
     };
 
-    // Always fetch the data, even if there's data in localStorage
     fillEditFormWithExistingItemData();
-  }, [id]);
+  }, [id, token]);
 
   // Persist form data in localStorage when formData changes
   useEffect(() => {
-    localStorage.setItem("formDataEdit", JSON.stringify(formData));
+    localStorage.setItem(`formDataEdit_${id}`, JSON.stringify(formData));
   }, [formData]);
 
   // Handle form field changes
@@ -192,28 +205,29 @@ const EditYourItemPage = () => {
     }));
   };
 
-  const uploadImageToCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-    );
-    formData.append("folder", "product-images");
+  // const uploadImageToCloudinary = async (file) => {
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append(
+  //     "upload_preset",
+  //     import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+  //   );
+  //   formData.append("folder", "product-images");
 
-    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+  //   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  //   const response = await fetch(
+  //     `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+  //     {
+  //       method: "POST",
+  //       body: formData,
+  //     }
+  //   );
 
-    const data = await response.json();
-    if (!data.secure_url || !data.public_id) throw new Error("Upload failed");
-    return data;
-  };
+  //   const data = await response.json();
+  //   console.log("📦 Cloudinary response:", data); // <-- ADD THIS
+  //   if (!data.secure_url || !data.public_id) throw new Error("Upload failed");
+  //   return data;
+  // };
 
   useEffect(() => {
     console.log("Updated formData:", formData);
@@ -225,73 +239,104 @@ const EditYourItemPage = () => {
 
     const updatedFormData = { ...formData };
 
-    for (const key of Object.keys(selectedImages)) {
-      const file = selectedImages[key];
-      if (file) {
-        const cloudinaryResult = await uploadImageToCloudinary(file);
+    for (const key of Object.keys(formData)) {
+      if (key.startsWith("image")) {
+        const image = formData[key];
 
-        // Delete old Cloudinary image (compare public_id)
-        const oldPublicId = formData[key].public_id;
-        if (oldPublicId && oldPublicId !== cloudinaryResult.public_id) {
-          await cloudinary.uploader.destroy(oldPublicId);
+        // If the image was updated (base64), upload it
+        if (image?.url?.startsWith("data:")) {
+          try {
+            const cloudinaryForm = new FormData();
+            cloudinaryForm.append("file", image.url);
+            cloudinaryForm.append(
+              "upload_preset",
+              import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+            );
+            cloudinaryForm.append("folder", "product-images");
+
+            const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+            const res = await fetch(
+              `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+              {
+                method: "POST",
+                body: cloudinaryForm,
+              }
+            );
+
+            const data = await res.json();
+
+            if (!data.secure_url || !data.public_id) {
+              throw new Error("Cloudinary upload failed");
+            }
+
+            updatedFormData[key] = {
+              url: data.secure_url,
+              public_id: data.public_id,
+            };
+          } catch (err) {
+            console.error(`Upload failed for ${key}:`, err);
+            toast.error(`Failed to upload ${key}`);
+            setLoading(false);
+            return;
+          }
+        } else {
+          updatedFormData[key] = {
+            url: image?.url || "",
+            public_id: image?.public_id || "",
+          };
         }
-
-        updatedFormData[key] = {
-          url: cloudinaryResult.secure_url,
-          public_id: cloudinaryResult.public_id,
-        };
       }
     }
 
+    if (!updatedFormData.image1?.url) {
+      toast.error("Main image is required.");
+      setLoading(false);
+      return;
+    }
+
     await axios
-      .put(`${process.env.BACKEND_API}/editYourItem/${id}`, updatedFormData, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .put(
+        `${import.meta.env.VITE_BACKEND_API}/editYourItem/${id}`,
+        updatedFormData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then(async (res) => {
         console.log("Item updated successfully:", res.data);
 
         // Clear the form data after successful submission
-        setFormData(originalFormData);
-        localStorage.setItem("formDataEdit", JSON.stringify(originalFormData));
+        // setFormData(originalFormData);
+        // setFormData(originalFormData);
+        localStorage.removeItem(
+          `formDataEdit_${id}`,
+          JSON.stringify(originalFormData)
+        );
+        localStorage.removeItem(
+          `originalFormDataEdit_${id}`,
+          JSON.stringify(originalFormData)
+        );
         navigate("/ethereal/profile/yourItems");
 
-        // Updating favorite items, cart, and your items
-        const updatedFavoriteItems = await axios.get(
-          `${process.env.BACKEND_API}/favorites/get`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setFavoriteItems(updatedFavoriteItems.data);
+        const [favorites, cart, yourItems, homeData] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_BACKEND_API}/favorites/get`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${import.meta.env.VITE_BACKEND_API}/cart`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${import.meta.env.VITE_BACKEND_API}/yourItems/get`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${import.meta.env.VITE_BACKEND_API}/`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
 
-        const updatedCartItems = await axios.get(
-          `${process.env.BACKEND_API}/cart`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setCartItems(updatedCartItems.data.items);
-
-        const updatedYourItems = await axios.get(
-          `${process.env.BACKEND_API}/yourItems/get`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setYourItems(updatedYourItems.data);
-
-        const updatedData = await axios.get(`${process.env.BACKEND_API}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setData(updatedData.data);
+        setFavoriteItems(favorites.data);
+        setCartItems(cart.data.items);
+        setYourItems(yourItems.data);
+        setData(homeData.data);
 
         toast.success("Item Updated Successfully");
       })
@@ -303,8 +348,22 @@ const EditYourItemPage = () => {
 
   // Reset changes by restoring the original fetched data
   const resetChanges = () => {
-    setFormData(originalFormData);
-    localStorage.setItem("formDataEdit", JSON.stringify(originalFormData));
+    const originalData = JSON.parse(
+      localStorage.getItem(`originalFormDataEdit_${id}`)
+    );
+    if (originalData) {
+      setShouldSyncToLocalStorage(false);
+      setFormData(originalData);
+      setOriginalFormData(originalData);
+      localStorage.setItem(
+        `originalFormDataEdit_${id}`,
+        JSON.stringify(fetchedData)
+      );
+
+      setTimeout(() => setShouldSyncToLocalStorage(true), 100);
+    } else {
+      toast.error("No original data to reset to.");
+    }
   };
 
   return (

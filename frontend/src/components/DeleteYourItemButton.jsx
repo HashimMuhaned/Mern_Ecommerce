@@ -16,7 +16,7 @@ const DeleteYourItemButton = ({ productId }) => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${process.env.BACKEND_API}/yourItem/delete/${productId}`,
+        `${import.meta.env.VITE_BACKEND_API}/yourItem/delete/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -33,7 +33,7 @@ const DeleteYourItemButton = ({ productId }) => {
 
       // updating the favorite Items to reflect the changes
       const updatedFavoriteItems = await axios.get(
-        `${process.env.BACKEND_API}/favorites/get`,
+        `${import.meta.env.VITE_BACKEND_API}/favorites/get`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +43,7 @@ const DeleteYourItemButton = ({ productId }) => {
       setFavoriteItems(updatedFavoriteItems.data);
 
       const updatedCartItems = await axios.get(
-        `${process.env.BACKEND_API}/cart`,
+        `${import.meta.env.VITE_BACKEND_API}/cart`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

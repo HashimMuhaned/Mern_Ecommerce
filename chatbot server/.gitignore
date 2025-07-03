@@ -1,0 +1,21 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+app.ipynb
+
+# Env files
+.env
+
+# IDE/editor settings
+.vscode/
+.idea/
+

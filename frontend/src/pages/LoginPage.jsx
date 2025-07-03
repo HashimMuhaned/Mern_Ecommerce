@@ -5,9 +5,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { CheckUserContext } from "../context/CheckUserToken";
 import registerImage from "../assets/registerImage.jpg";
+import { useChat } from "../context/ChatContext";
 
 const LoginPage = () => {
   const { setIsLoggedin, setUserInfo } = useContext(CheckUserContext);
+  // const { fetchMessages } = useChat(); 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -24,7 +26,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.BACKEND_API}/login`,
+        `${import.meta.env.VITE_BACKEND_API}/login`,
         formData,
         {
           headers: {
@@ -44,7 +46,7 @@ const LoginPage = () => {
 
       // Fetch user details immediately after login
       const userResponse = await axios.get(
-        `${process.env.BACKEND_API}/user-details`,
+        `${import.meta.env.VITE_BACKEND_API}/user-details`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -54,6 +56,10 @@ const LoginPage = () => {
 
       // Update userInfo in context
       setUserInfo(userResponse.data);
+
+      // if (userInfo?._id) {
+      //   fetchMessages(userInfo._id);
+      // }
 
       toast.success("Logged In Successfully");
 

@@ -32,15 +32,15 @@ const ProductDisplay = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `${process.env.BACKEND_API}/categories/${category}/${id}`
+          `${import.meta.env.VITE_BACKEND_API}/categories/${category}/${id}`
         );
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const data = await res.json();
         setProduct(data);
-        setMainImage(data.image1.url); // Set the main image when new product data is fetched
-        setInitialImage(data.image1.url); // Store the original main image (image1)
+        setMainImage(data.image1?.url); // Set the main image when new product data is fetched
+        setInitialImage(data.image1?.url); // Store the original main image (image1)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -72,7 +72,7 @@ const ProductDisplay = () => {
                 alt="Small Product"
               />
             </div>
-            {product.image2.url && (
+            {product.image2?.url && (
               <div className="small-img-col">
                 <img
                   src={product.image2.url}
@@ -82,7 +82,7 @@ const ProductDisplay = () => {
                 />
               </div>
             )}
-            {product.image3.url && (
+            {product.image3?.url && (
               <div className="small-img-col">
                 <img
                   src={product.image3.url}
@@ -92,7 +92,7 @@ const ProductDisplay = () => {
                 />
               </div>
             )}
-            {product.image4.url && (
+            {product.image4?.url && (
               <div className="small-img-col">
                 <img
                   src={product.image4.url}
@@ -102,7 +102,7 @@ const ProductDisplay = () => {
                 />
               </div>
             )}
-            {product.image5.url && (
+            {product.image5?.url && (
               <div className="small-img-col">
                 <img
                   src={product.image5.url}

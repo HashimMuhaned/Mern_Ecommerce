@@ -16,7 +16,7 @@ const AddToCartButton = ({ productId, quantity, sizeChosen }) => {
 
     try {
       const response = await axios.post(
-        `${process.env.BACKEND_API}/cart/add`,
+        `${import.meta.env.VITE_BACKEND_API}/cart/add`,
         { productId, quantity, sizeChosen },
         {
           headers: {

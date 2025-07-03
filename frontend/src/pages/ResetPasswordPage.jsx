@@ -49,7 +49,7 @@ const ResetPasswordPage = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.BACKEND_API}/reset-password/${token}`,
+        `${import.meta.env.VITE_BACKEND_API}/reset-password/${token}`,
         { newPassword },
         {
           headers: {

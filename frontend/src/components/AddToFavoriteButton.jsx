@@ -17,7 +17,7 @@ const AddToFavoriteButton = ({ productId }) => {
       if (isFavorite) {
         // Remove from favorites
         const response = await axios.post(
-          `${process.env.BACKEND_API}/favorites/remove`,
+          `${import.meta.env.VITE_BACKEND_API}/favorites/remove`,
           { productId }, // Payload
           {
             headers: {
@@ -31,7 +31,7 @@ const AddToFavoriteButton = ({ productId }) => {
       } else {
         // Add to favorites
         const response = await axios.post(
-          `${process.env.BACKEND_API}/favorites/add`,
+          `${import.meta.env.VITE_BACKEND_API}/favorites/add`,
           { productId },
           {
             headers: {

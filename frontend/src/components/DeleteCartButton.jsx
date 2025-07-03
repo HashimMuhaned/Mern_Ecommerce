@@ -13,7 +13,7 @@ const DeleteCartButton = ({ productId, cartItems, setCartItems }) => {
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        `${process.env.BACKEND_API}/cart/delete/${productId}`,
+        `${import.meta.env.VITE_BACKEND_API}/cart/delete/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

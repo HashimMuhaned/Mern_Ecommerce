@@ -20,7 +20,7 @@ const OrdersPage = () => {
   const fetchSellerOrders = async (sellerId) => {
     try {
       const response = await axios.get(
-        `${process.env.BACKEND_API}/orders?sellerId=${sellerId}`,
+        `${import.meta.env.VITE_BACKEND_API}/orders?sellerId=${sellerId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ const OrdersPage = () => {
     try {
       // Call your API to update the item's status
       await axios.patch(
-        `${process.env.BACKEND_API}/orders/${orderId}/items/${productId}/updateStatus`,
+        `${import.meta.env.VITE_BACKEND_API}/orders/${orderId}/items/${productId}/updateStatus`,
         {
           status: newStatus,
         },

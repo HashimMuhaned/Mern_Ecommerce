@@ -43,16 +43,6 @@ const AddItemForm = () => {
     image5: useRef(null),
   };
 
-  const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
-  const cloudinary_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-  if (!uploadPreset) {
-    console.warn("Missing Cloudinary upload preset!");
-  }
-
-  if (!cloudinary_name) {
-    console.warn("Missing Cloudinary upload preset!");
-  }
-
   const handleImageSelect = (e, imageField) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -95,46 +85,10 @@ const AddItemForm = () => {
     reader.readAsDataURL(file);
   };
 
-  const uploadImageToCloudinary = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
-    formData.append("folder", "product-images");
-
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudinary_name}/image/upload`,
-      { method: "POST", body: formData }
-    );
-
-    const data = await response.json();
-    if (!data.secure_url || !data.public_id) throw new Error("Upload failed");
-
-    return {
-      url: data.secure_url,
-      public_id: data.public_id,
-    };
-  };
-
-  if (isLoggedin === false) {
-    return (
-      <p id="login_to_view">
-        Please{" "}
-        <NavLink
-          to={"/ethereal/login"}
-          style={{ color: "blue", textDecoration: "underline" }}
-        >
-          Login.
-        </NavLink>
-      </p>
-    );
-  }
-
-  if (isLoggedin === undefined) {
-    return null; // or a loading spinner
-  }
-
   // Retrieve form data from local storage or set default values
-  const initialFormData = JSON.parse(localStorage.getItem("formData")) || {
+  const initialFormData = JSON.parse(
+    localStorage.getItem(`formData_${token}`)
+  ) || {
     name: "",
     description: "",
     price: "",
@@ -151,14 +105,9 @@ const AddItemForm = () => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  // Clear formDataEdit from local storage on component mount
-  useEffect(() => {
-    localStorage.removeItem("formDataEdit");
-  }, []);
-
   // Update local storage whenever formData changes
   useEffect(() => {
-    localStorage.setItem("formData", JSON.stringify(formData));
+    localStorage.setItem(`formData_${token}`, JSON.stringify(formData));
   }, [formData]);
 
   const handleInputChange = (e) => {
@@ -207,11 +156,6 @@ const AddItemForm = () => {
       console.log("Error fetching home page items", err);
     }
   };
-
-  // const extractPublicId = (url = "") => {
-  //   const matches = url.match(/\/upload\/v\d+\/([^\.]+)/);
-  //   return matches ? matches[1] : "";
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -271,10 +215,10 @@ const AddItemForm = () => {
         return;
       }
 
-      console.log("📤 Sending form data:", updatedFormData);
+      console.log("Sending form data:", updatedFormData);
 
       const response = await axios.post(
-        `${process.env.BACKEND_API}/upload-item`,
+        `http://localhost:3000/api/upload-item`,
         updatedFormData,
         {
           headers: {
@@ -329,8 +273,22 @@ const AddItemForm = () => {
       }
     });
 
-    localStorage.removeItem("formData");
+    localStorage.removeItem(`formData_${token}`);
   };
+
+  if (isLoggedin === false) {
+    return (
+      <p id="login_to_view">
+        Please{" "}
+        <NavLink
+          to={"/ethereal/login"}
+          style={{ color: "blue", textDecoration: "underline" }}
+        >
+          Login.
+        </NavLink>
+      </p>
+    );
+  }
 
   return (
     <div className="form-container">

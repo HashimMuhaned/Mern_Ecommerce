@@ -31,7 +31,7 @@ const ItemSalesChart = ({ itemId, filterDate }) => {
     const fetchSales = async () => {
       try {
         const response = await axios.get(
-          `${process.env.BACKEND_API}/getItemsTotalSalesByPeriod/${filterDate}/${itemId}`, // Adjusted API route
+          `${import.meta.env.VITE_BACKEND_API}/getItemsTotalSalesByPeriod/${filterDate}/${itemId}`, // Adjusted API route
           {
             headers: {
               Authorization: `Bearer ${token}`,

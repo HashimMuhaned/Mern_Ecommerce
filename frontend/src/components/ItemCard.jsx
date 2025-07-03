@@ -35,7 +35,9 @@ const ItemCard = ({ item }) => {
               ? async () => {
                   try {
                     await axios.patch(
-                      `${process.env.BACKEND_API}/increment-views/${item._id}`
+                      `${import.meta.env.VITE_BACKEND_API}/increment-views/${
+                        item._id
+                      }`
                     );
                   } catch (error) {
                     console.error("Error incrementing views", error);
@@ -44,7 +46,6 @@ const ItemCard = ({ item }) => {
               : null
           }
         >
-          {console.log("items data:", item)}
           <img src={item.image1?.url} alt={item.name} id="itemCardImage" />
           <div className="des">
             <h5>

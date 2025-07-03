@@ -38,11 +38,14 @@ const CartPage = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get(`${process.env.BACKEND_API}/cart`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_API}/cart`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setCartItems(response.data.items);
         setLoading(false); // Data has been fetched
       } catch (error) {
@@ -58,7 +61,7 @@ const CartPage = () => {
     try {
       setUpdating(true); // Set loading state
       const response = await axios.put(
-        `${process.env.BACKEND_API}/cart/itemQuantityUpdate`,
+        `${import.meta.env.VITE_BACKEND_API}/cart/itemQuantityUpdate`,
         { productId, quantity: newQuantity },
         {
           headers: {
@@ -86,7 +89,7 @@ const CartPage = () => {
     try {
       setUpdating(true); // Set loading state
       const response = await axios.put(
-        `${process.env.BACKEND_API}/cart/itemSizeUpdate`, // Ensure the correct URL is used
+        `${import.meta.env.VITE_BACKEND_API}/cart/itemSizeUpdate`, // Ensure the correct URL is used
         { productId, sizeChosen: selectedSize },
         {
           headers: {
@@ -165,7 +168,7 @@ const CartPage = () => {
                               objectFit: "cover",
                             }}
                             id="productImageCart"
-                            src={item.productId.image1}
+                            src={item.productId.image1.url}
                             alt={item.productId.name}
                           />
                           <div id="cartItemOptions">

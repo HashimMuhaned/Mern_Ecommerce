@@ -15,7 +15,7 @@ export const FavoriteProvider = ({ children }) => {
       if (isLoggedin) {
         try {
           const response = await axios.get(
-            `${process.env.BACKEND_API}/favorites/get`,
+            `${import.meta.env.VITE_BACKEND_API}/favorites/get`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

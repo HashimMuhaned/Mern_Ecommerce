@@ -54,7 +54,7 @@ const PasswordChangeForm = () => {
     try {
       // First, verify the current password
       const response = await axios.post(
-        `${process.env.BACKEND_API}/verify-password`,
+        `${import.meta.env.VITE_BACKEND_API}/verify-password`,
         {
           password: currentPassword,
         },
@@ -70,7 +70,7 @@ const PasswordChangeForm = () => {
 
         // If the password matches, only then proceed to update the password
         const updateResponse = await axios.post(
-          `${process.env.BACKEND_API}/update-password`,
+          `${import.meta.env.VITE_BACKEND_API}/update-password`,
           {
             newPassword,
           },

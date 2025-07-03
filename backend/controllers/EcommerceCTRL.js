@@ -28,23 +28,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// const checkUserToken = (req, res, next) => {
-//   const token = req.cookies.cookie; // Accessing the JWT from the cookie
-
-//   if (!token) {
-//     return res.status(401).json({ valid: false, message: "Token is missing" });
-//   }
-
-//   jwt.verify(token, token_SECRET_KEY, (err, decoded) => {
-//     if (err) {
-//       return res
-//         .status(401)
-//         .json({ valid: false, message: "Invalid or expired token" });
-//     }
-//     res.json({ valid: true, user: decoded });
-//     next()
-//   });
-// };
 
 const checkUserToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -853,14 +836,16 @@ const yourItems = async (req, res) => {
 };
 
 const extractPublicId = (url = "") => {
+  if (typeof url !== "string") return "";
   const matches = url.match(/\/upload\/v\d+\/([^\.]+)/);
   return matches ? matches[1] : "";
 };
 
-const formatImage = (url) => ({
-  url: url || "",
-  public_id: url ? extractPublicId(url) : "",
-});
+const formatImage = (imageObj) => {
+  const url = imageObj?.url || "";
+  const public_id = imageObj?.public_id || extractPublicId(url);
+  return { url, public_id };
+};
 
 const getYourItemToEdit = async (req, res) => {
   try {
@@ -946,19 +931,19 @@ const editYourItem = async (req, res) => {
     item.isBestseller =
       typeof isBestseller === "boolean" ? isBestseller : item.isBestseller;
 
-    // Update image URLs
-    item.image1 = image1?.url || item.image1;
-    item.image2 = image2?.url || item.image2;
-    item.image3 = image3?.url || item.image3;
-    item.image4 = image4?.url || item.image4;
-    item.image5 = image5?.url || item.image5;
-
     // Delete old Cloudinary images if public_id changed
     await deleteOldCloudinaryImage(oldImage1, image1);
     await deleteOldCloudinaryImage(oldImage2, image2);
     await deleteOldCloudinaryImage(oldImage3, image3);
     await deleteOldCloudinaryImage(oldImage4, image4);
     await deleteOldCloudinaryImage(oldImage5, image5);
+
+    // Update image URLs
+    item.image1 = image1 && image1.url ? image1 : item.image1;
+    item.image2 = image2 && image2.url ? image2 : item.image2;
+    item.image3 = image3 && image3.url ? image3 : item.image3;
+    item.image4 = image4 && image4.url ? image4 : item.image4;
+    item.image5 = image5 && image5.url ? image5 : item.image5;
 
     await item.save();
 

@@ -31,7 +31,7 @@ const ItemCartChart = ({ itemId, filterDate }) => {
     const fetchCarts = async () => {
       try {
         const response = await axios.get(
-          `${process.env.BACKEND_API}/getItemCartCountLast${filterDate}/${itemId}`,
+          `${import.meta.env.VITE_BACKEND_API}/getItemCartCountLast${filterDate}/${itemId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

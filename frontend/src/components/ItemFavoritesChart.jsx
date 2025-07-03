@@ -31,7 +31,7 @@ const ItemFavoritesChart = ({ itemId, filterDate }) => {
     const fetchFavorites = async () => {
       try {
         const response = await axios.get(
-          `${process.env.BACKEND_API}/getItemFavoritesLast${filterDate}/${itemId}`,
+          `${import.meta.env.VITE_BACKEND_API}/getItemFavoritesLast${filterDate}/${itemId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

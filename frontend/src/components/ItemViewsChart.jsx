@@ -31,7 +31,7 @@ const ItemViewsChart = ({ itemId, filterDate }) => {
     const fetchViews = async () => {
       try {
         const response = await axios.get(
-          `${process.env.BACKEND_API}/getItemViewsLast${filterDate}/${itemId}`,
+          `${import.meta.env.VITE_BACKEND_API}/getItemViewsLast${filterDate}/${itemId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

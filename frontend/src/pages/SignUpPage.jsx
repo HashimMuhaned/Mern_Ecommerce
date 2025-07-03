@@ -46,7 +46,7 @@ const SignUpPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.BACKEND_API}/signup`,
+        `${import.meta.env.VITE_BACKEND_API}/signup`,
         formData,
         {
           headers: {

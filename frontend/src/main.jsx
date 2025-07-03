@@ -8,6 +8,7 @@ import { CartProvider } from "./context/CartContext.jsx";
 import { FavoriteProvider } from "./context/FavoriteContext.jsx";
 import { ToastProvider } from "./context/ToastContext";
 import { YourItemsProvider } from "./context/YourItemsContext.jsx";
+import { ChatProvider } from "./context/ChatContext";
 
 console.log("App is mounting...");
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <FavoriteProvider>
           <YourItemsProvider>
             <ToastProvider>
-              <App />
+              <ChatProvider>
+                <App />
+              </ChatProvider>
             </ToastProvider>
           </YourItemsProvider>
         </FavoriteProvider>

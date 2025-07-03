@@ -15,7 +15,7 @@ export const YourItemsProvider = ({ children }) => {
       if (isLoggedin) {
         try {
           const res = await axios.get(
-            `${process.env.BACKEND_API}/yourItems/get`,
+            `${import.meta.env.VITE_BACKEND_API}/yourItems/get`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

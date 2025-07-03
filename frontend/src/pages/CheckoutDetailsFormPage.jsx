@@ -62,7 +62,7 @@ const CheckoutDetailsFormPage = () => {
     };
 
     try {
-      const response = await axios.post(`${process.env.BACKEND_API}/submitOrder`, order, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/submitOrder`, order, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

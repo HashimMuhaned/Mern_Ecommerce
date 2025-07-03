@@ -22,7 +22,7 @@ const BuyerOrderpage = () => {
   const fetchBuyerOrders = async (buyerId) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.BACKEND_API}/ordersBuyer?buyerId=${buyerId}`, {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_API}/ordersBuyer?buyerId=${buyerId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

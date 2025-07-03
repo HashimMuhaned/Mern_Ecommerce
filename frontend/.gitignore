@@ -31,3 +31,12 @@ dist-ssr
 # Environment Variables
 .env
 .vercel
+
+src/assets/Categories/Women.jpg
+src/assets/HeroMainImg.jpg
+src/assets/MenHeroSection.avif
+src/assets/MenHeroSection2.avif
+src/assets/banner/b17.jpg
+src/assets/banner/b18.jpg
+src/assets/banner/b4.jpg
+src/assets/banner/b7.jpg

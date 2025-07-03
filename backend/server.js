@@ -10,13 +10,13 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 // const PORT = 3000;
-// const MONGO_URL = process.env.MONGO_URL;
+const MONGO_URL = process.env.MONGO_URL;
 const app = express();
 
 const allowedOrigins = [
   "https://mern-ecommerce-frontend-of3877ez1-hashims-projects-1d68b3df.vercel.app",
   "https://mern-ecommerce-frontend-jcmqogpn4-hashims-projects-1d68b3df.vercel.app",
-  "https://mern-ecommerce-frontend-git-main-hashims-projects-1d68b3df.vercel.app/",
+  "https://mern-ecommerce-frontend-git-main-hashims-projects-1d68b3df.vercel.app",
   "https://mern-ecommerce-frontend-eta-ten.vercel.app",
   "http://localhost:5173",
 ];
@@ -59,7 +59,8 @@ app.use((req, res, next) => {
 });
 
 // connecting to the database
-// mongoose.connect("mongodb://localhost:27017/todolist")
+// "mongodb://localhost:27017/eCommerce"
+// mongoose
 connectDB()
   .then(() => {
     console.log("Database connected successfully.");
