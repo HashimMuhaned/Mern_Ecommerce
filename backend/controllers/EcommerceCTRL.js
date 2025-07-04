@@ -88,9 +88,6 @@ const createItem = async (req, res) => {
     }
 
     const userId = req.userId;
-
-    fs.writeFileSync("log.json", JSON.stringify(req.body, null, 2));
-
     const newItem = new ItemModel({
       name,
       description,
@@ -215,7 +212,7 @@ const createUser = async (req, res) => {
     };
 
     try {
-      // await sgMail.send(msg);
+      await sgMail.send(msg);
       console.log("Activation email sent successfully");
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
