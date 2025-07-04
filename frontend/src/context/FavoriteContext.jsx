@@ -22,7 +22,7 @@ export const FavoriteProvider = ({ children }) => {
               },
             }
           );
-          setFavoriteItems(response.data); // Assuming response.data is the array of favorite items
+          setFavoriteItems(response?.data); // Assuming response.data is the array of favorite items
         } catch (error) {
           console.error("Error fetching favorite items:", error);
         }

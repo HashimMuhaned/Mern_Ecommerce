@@ -24,7 +24,7 @@ const CartPage = () => {
     // Shuffle and pick 4 random items
     const getRandomItems = (items, count) => {
       const shuffled = [...items].sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, count);
+      return shuffled?.slice(0, count);
     };
 
     // Assuming NewArrivalsCart is your original array of items
@@ -46,7 +46,7 @@ const CartPage = () => {
             },
           }
         );
-        setCartItems(response.data.items);
+        setCartItems(response?.data?.items);
         setLoading(false); // Data has been fetched
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -148,9 +148,9 @@ const CartPage = () => {
         <div id="cart-page">
           <section id="cart-container">
             {cartItems ? (
-              cartItems.length > 0 ? (
+              cartItems?.length > 0 ? (
                 <ul id="cartList">
-                  {cartItems.map((item, index) => {
+                  {cartItems?.map((item, index) => {
                     const matchedProduct = data.find(
                       (product) => product._id === item.productId._id
                     );

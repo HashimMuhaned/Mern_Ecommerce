@@ -24,7 +24,7 @@ const FavoritePage = () => {
             },
           }
         );
-        setFavoriteItems(response.data);
+        setFavoriteItems(response?.data);
       } catch (error) {
         console.error("Error fetching favorite items:", error);
       } finally {
@@ -59,7 +59,7 @@ const FavoritePage = () => {
 
   return (
     <div>
-      {favoriteItems.length === 0 ? (
+      {favoriteItems?.length === 0 ? (
         <h2
           style={{ display: "flex", justifyContent: "center", padding: "20px" }}
         >
@@ -72,11 +72,11 @@ const FavoritePage = () => {
           Your Favorite Items
         </h2>
       )}
-      {favoriteItems.length > 0 ? (
+      {favoriteItems?.length > 0 ? (
         <section id="best_seller_section" style={{ paddingBottom: "30px" }}>
           <div id="itemsCard">
-            {favoriteItems.map((item) => (
-              <ItemCard key={item._id} item={item} />
+            {favoriteItems?.map((item) => (
+              <ItemCard key={item?._id} item={item} />
             ))}
           </div>
         </section>
