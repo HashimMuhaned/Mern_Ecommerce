@@ -267,5 +267,3 @@ async def chat_boot(user_id: str = Query(...), fname: Optional[str] = Query(None
 
 
 app.include_router(chat_router, prefix="/api")
-
-handler = Mangum(app)
