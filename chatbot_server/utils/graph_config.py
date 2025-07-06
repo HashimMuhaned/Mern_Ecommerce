@@ -6,7 +6,7 @@ from langchain_core.messages import (
 )
 from dotenv import load_dotenv
 import os
-from chatbot_server.utils.tools import rag_tool, search_tool
+from utils.tools import rag_tool, search_tool
 
 load_dotenv()
 

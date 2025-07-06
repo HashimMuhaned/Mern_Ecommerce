@@ -9,11 +9,11 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from chatbot_server.database import get_database
-from chatbot_server.routes.chat_routes import router as chat_router
+from database import get_database
+from routes.chat_routes import router as chat_router
 import json
-from chatbot_server.utils.memory_utils import summarize_messages, serialise_ai_message_chunk
-from chatbot_server.utils.graph_config import graph
+from utils.memory_utils import summarize_messages, serialise_ai_message_chunk
+from utils.graph_config import graph
 
 
 db = get_database()

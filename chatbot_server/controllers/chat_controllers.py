@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from bson import ObjectId
-from chatbot_server.database import get_database
+from database import get_database
 
 db = get_database()
 
