@@ -2,7 +2,7 @@ from langchain_core.messages import (
     HumanMessage,
     AIMessageChunk,
 )
-from graph_config import llm
+from chatbot_server.utils.graph_config import llm
 
 
 async def summarize_messages(messages: list):

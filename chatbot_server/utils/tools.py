@@ -1,4 +1,4 @@
-from RAG_config import retriever
+from chatbot_server.RAG_config import retriever
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.tools import tool
 

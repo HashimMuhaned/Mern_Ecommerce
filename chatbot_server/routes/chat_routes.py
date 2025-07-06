@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from controllers.chat_controllers import fetch_chat_messages
+from chatbot_server.controllers.chat_controllers import fetch_chat_messages
 
 router = APIRouter()
 
