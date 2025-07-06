@@ -9,12 +9,11 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from database import get_database
+from chatbot server.de import get_database
 from routes.chat_routes import router as chat_router
 import json
 from utils.memory_utils import summarize_messages, serialise_ai_message_chunk
 from utils.graph_config import graph
-from mangum import Mangum
 
 
 db = get_database()
